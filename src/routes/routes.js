@@ -5,10 +5,8 @@ import ConnectWalletPage from '../pages/connectWalletPage';
 import WalletPage from '../pages/walletPage';
 
 export const appRoutes = (
-  //<BrowserRouter>
-    <Routes>
-      <Route exact path="wallet" element={<WalletPage/>}/>
-      <Route exact path="*" element={<ConnectWalletPage/>}/>
-    </Routes>
- // </BrowserRouter>
+  <Routes>
+    <Route exact path="wallet" element={<WalletPage/>}/>
+    <Route exact path="*" element={<ConnectWalletPage/>}/>
+  </Routes>
 );

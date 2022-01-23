@@ -1,5 +1,6 @@
 import React from 'react'
 import AddTokenForm from '../components/token/addTokenForm'
+import Tokens from '../components/token/tokens'
 
 
 const WalletPage = () => {
@@ -7,7 +8,7 @@ const WalletPage = () => {
 
   return(
     <React.Fragment>
-      <AddTokenForm></AddTokenForm>
+      <Tokens></Tokens>
     </React.Fragment>
   )
 }

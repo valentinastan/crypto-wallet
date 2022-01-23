@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 import { useDispatch } from "../../state-management/stores/store";
 
 const ConnectWallet = () => {
-  const [currentAccount, setCurrentAccount] = useState(null);
+  const [currentAccount, setCurrentAccount] = useState(localStorage.getItem('address'));
   const dispatch = useDispatch()
 
   const checkWalletIsConnected = () => {
@@ -32,12 +32,10 @@ const ConnectWallet = () => {
       
       setCurrentAccount(accounts[0]) //!! de modificat
       const address = accounts[0]
-
-      dispatch({
-        type: '[WALLET] Set Address',
-        address
-      })
-
+        dispatch({
+          type: '[WALLET] Set Address',
+          address
+        })
     } catch (err) {
       console.log(err);
     }

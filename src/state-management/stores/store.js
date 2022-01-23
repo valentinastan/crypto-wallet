@@ -6,7 +6,9 @@ const initialState = {
   walletState: {
     address: ' '
   },
-  tokenState: {}
+  tokenState: {
+    tokens: []
+  }
 }
 
 const Store = React.createContext();
@@ -29,7 +31,7 @@ function StateProvider({ children }) {
   )
 }
 
-function useState() {
+function useGlobalState() {
   const context = React.useContext(Store)
   if (context === undefined) {
     throw new Error('useCountState must be used within a CountProvider')
@@ -46,6 +48,6 @@ function useDispatch() {
 }
 
 function useStore() {
-  return [useState(), useDispatch()]
+  return [useGlobalState(), useDispatch()]
 }
-export { StateProvider, useState, useDispatch, useStore }
+export { StateProvider, useGlobalState, useDispatch, useStore }
