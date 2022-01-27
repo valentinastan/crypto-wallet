@@ -3,13 +3,13 @@ import { deleteTokenRequest } from "../../requests/token";
 
 const Token = (props) => {
   const currentWallet = localStorage.getItem('address')
-
+console.log('props', props)
   const deleteToken = () => {
     deleteTokenRequest({
       currentWallet,
-      contract: props.contract
+      symbol: props.token.symbol
     }).then((result) => {
-      if (result == false) {
+      if (result === false) {
         console.log('No such document!');
       } else {
         props.deleteToken(props.index)
@@ -19,7 +19,8 @@ const Token = (props) => {
 
   return(
     <React.Fragment>
-      <div>token: {props.contract}</div>
+      <div>token: {props.token.symbol}</div>
+      <div>balance: {props.token.balance}</div>
       <button type='button' onClick={deleteToken}>Remove</button>
     </React.Fragment>
   );

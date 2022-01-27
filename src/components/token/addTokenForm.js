@@ -3,18 +3,18 @@ import { addTokenRequest } from '../../requests/token'
 
 const AddTokenForm = (props) => {
 
-  const [contract, setState] = useState('')
+  const [tokenSymbol, setState] = useState('')
   const walletAddress = localStorage.getItem('address')
  
   const importToken = () => {
     addTokenRequest({
       walletAddress,
-      contract,
+      tokenSymbol,
     }).then((data) => {
       if (false || !data.exists) {
         console.log('No such document!');
       } else {
-        props.addToken(data.data().contract)
+        props.addToken(data.data().tokenSymbol)
         setState('')
       }
     })
@@ -25,10 +25,10 @@ const AddTokenForm = (props) => {
     <React.Fragment>
       <div>Token Address</div>
       <input 
-        id="addContract" 
-        onChange={(event) => setState(event.target.value)}
+        id="addtokenSymbol" 
+        onChange={(event) => setState(event.target.value.toUpperCase())}
         placeholder="Add a new token..."
-        value={contract}
+        value={tokenSymbol}
         type="text"
       ></input> <br/>
       <button type='button' onClick={importToken}>Import</button>
