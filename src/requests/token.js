@@ -1,7 +1,7 @@
 import { doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
 import { dbStore } from "../config/firebase";
 import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
-import { get, getExternalAPI } from "./request";
+import { get, getExternal, getExternalAPI } from "./request";
 import { apiKeyHeader, requestOptions } from "./coinMarketCap";
 
 export async function addTokenRequest(params) {
@@ -37,8 +37,9 @@ export async function getTokensByWallet(params) {
 
 export async function deleteTokenRequest(params) {
   const walletsRef = collection(dbStore, "wallets");
+  console.log('params ', params)
 
-  const existingTokenForThisWallet = query(walletsRef, where("walletAddress", "==" , params.currentWallet), where("tokenSymbol", "==", params.tokenSymbol));
+  const existingTokenForThisWallet = query(walletsRef, where("walletAddress", "==" , params.currentWallet), where("tokenSymbol", "==", params.symbol));
   const querySnapshot = await getDocs(existingTokenForThisWallet);
 
   let deletedId = '';
@@ -51,15 +52,44 @@ export async function deleteTokenRequest(params) {
 }
 
 export async function getPricesRequest(params) {
-  console.log('my tokens:', params)
-  let symbols = params.reduce((symbolsList, symbol) => symbolsList + symbol + ',')
-  let response = await getExternalAPI(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/map?symbol=${symbols}`, {'X-CMC_PRO_API_KEY': 'ab728d41-328b-41c7-a25c-d3e814aef330'})
-  console.log('response', response)
+  //get all coins
+  let allCoins = await getExternal('https://api.coingecko.com/api/v3/coins/list')
+  allCoins = createCache(allCoins.data)
+
+  let myTokensIds = [];
+  params.forEach(myToken => {
+    if(allCoins.hasOwnProperty(myToken.toLowerCase())) {
+      return myTokensIds.push(allCoins[myToken.toLowerCase()])
+    }})
+  
+  myTokensIds = myTokensIds.filter((value, index, self) =>
+      index === self.findIndex((token) => (
+        token.toLowerCase() === value.toLowerCase()
+    ))
+  )
+  if(myTokensIds.length > 0) {
+    let mySymbolsList = myTokensIds.reduce((symbolsList, id) => symbolsList + id + ',', '')
+    console.log('my tokens', mySymbolsList)
+      //get my coins for their prices
+      let response = await getExternal(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${mySymbolsList}`)
+      let prices = []
+      response.data.map(token => prices.push({
+        price: token.current_price, 
+        symbol: token.symbol, 
+        name: token.name
+      }))
+      console.log('response final', prices)
+      return prices
+  } else {
+    return false
+  }
 }
 
-//Why did I receive a Access-Control-Allow-Origin error while trying to use the API?
-//A:This CORS error means you are trying to make HTTP requests directly to the API from 
-//JavaScript in the client-side of your application which is not supported. This restriction 
-//is to protect your API Key as anyone viewing your application could open their browser's Developer 
-//Tools to view your HTTP requests and steal your API Key. You should prevent your API Key from being 
-//visible on your client-side by proxying your requests through your own backend script.
+const createCache = (data) => {
+  let tokens = {}
+  data.forEach(token => {
+    tokens[token.symbol] = token.id
+  })
+
+ return tokens
+}

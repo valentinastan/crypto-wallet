@@ -17,6 +17,13 @@ export async function getExternalAPI(url, headers) {
   return response
 }
 
+
+export async function getExternal(url) {
+  let response = await axios.get(`${url}`)
+
+  return response
+}
+
 const axiosFormActionDefaults = ({ url, method, params = {}, headers = {} }) => ({
   method,
   url,
