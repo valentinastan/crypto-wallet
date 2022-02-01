@@ -13,7 +13,7 @@ const Token = (props) => {
       if (result === false) {
         console.log("No such document!");
       } else {
-        props.deleteToken(props.index);
+        props.deleteToken(props.token.symbol, props.index);
       }
     });
   };
