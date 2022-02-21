@@ -1,8 +1,7 @@
-import { doc, setDoc, getDoc, deleteDoc } from "firebase/firestore";
+import { doc, getDoc, deleteDoc } from "firebase/firestore";
 import { dbStore } from "../config/firebase";
 import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
-import { get, getExternal, getExternalAPI } from "./request";
-import { apiKeyHeader, requestOptions } from "./coinMarketCap";
+import { getExternal } from "./request";
 
 export async function addTokenRequest(params) {
   const walletsRef = collection(dbStore, "wallets");
@@ -46,7 +45,7 @@ export async function deleteTokenRequest(params) {
   querySnapshot.forEach((doc) => deletedId = doc.id);
 
   const result = await deleteDoc(doc(dbStore, "wallets",deletedId));
-  if(result == undefined) 
+  if(result === undefined) 
    return true 
    else return false
 }

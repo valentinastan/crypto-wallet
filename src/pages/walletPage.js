@@ -1,15 +1,11 @@
-import React from 'react'
-import AddTokenForm from '../components/token/addTokenForm'
-import Tokens from '../components/token/tokens'
-
+import React from "react";
+import Tokens from "../components/token/tokens";
 
 const WalletPage = () => {
-
-
-  return(
+  return (
     <React.Fragment>
       <Tokens></Tokens>
     </React.Fragment>
-  )
-}
-export default WalletPage
+  );
+};
+export default WalletPage;

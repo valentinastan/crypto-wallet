@@ -3,7 +3,7 @@ import ConnectWallet from '../components/wallet/connectWallet'
 import { useStore } from '../state-management/stores/store'
 
 const ConnectWalletPage = () => {
-  const [state, dispatch] = useStore()
+  const [state, ] = useStore()
   console.log('in pagina2: store este= ', state)
 
   return(

@@ -9,14 +9,16 @@ import { ethers } from "ethers";
 import Web3 from "web3";
 
 const Tokens = () => {
-  const [tokens, setState] = useState({
-    "": {
-      balance: null,
-      price: null,
-    },
-  });
+  // const [tokens, setState] = useState({
+  //   "": {
+  //     balance: null,
+  //     price: null,
+  //   },
+  // });
+  const [tokens, setState] = useState({});
+  console.log('se rerandeaza')
 
-  const [currentSymbolsState, setCurrentSymbols] = useState()
+  const [currentSymbolsState, setCurrentSymbols] = useState(Object.keys(tokens))
   // const [tokens, setState] = useState([
   //   {
   //     symbol: "",
@@ -38,13 +40,24 @@ const Tokens = () => {
         tokensSnapshot.forEach((token) => {
           tokensSymbol.push(token.data().tokenSymbol);
         });
-        setCurrentSymbols(tokensSymbol)
+        console.log('IN PRIMUL USE EFFECT')
+        
         saveTokens(tokensSymbol, 'INDEX')
-        refreshPrices(tokensSymbol)
-        //setTokensState(tokensSymbol, 'INDEX');
+        setCurrentSymbols(tokensSymbol)
+        //refreshPrices()
       }
     });
   }, []);
+
+  useEffect(() => {
+    if(currentSymbolsState.length > 0) {
+      let symbols = [...currentSymbolsState]
+      refreshPrices()
+    }
+    return () => {
+      clearInterval(nIntervId);
+    }
+  }, [currentSymbolsState]);
 
   const getBalance = async (tokenSymbol) => {
     var MyContract = new web3.eth.Contract(
@@ -62,7 +75,7 @@ const Tokens = () => {
   };
 
   const getPrices = async (tokens) => {
-    console.log(tokens)
+    console.log('IN GET PRICES', tokens)
     return await getPricesRequest(tokens);
   };
 
@@ -70,30 +83,33 @@ const Tokens = () => {
     delete tokens[symbolDeleted];
     console.log('DELETE', tokens)
     setState({...tokens});
-    //setCurrentSymbols(currentSymbolsState.splice(index, 1))
+    let symbols = Object.keys(tokens)
+    setCurrentSymbols([...symbols])
   };
 
   const addToken = (symbol) => {
-    saveTokens([symbol], 'ADD');
-    //setCurrentSymbols([currentSymbolsState, symbol])
+    console.log('ADD', symbol)
+    saveTokens([symbol], 'ADD').then(() => {
+
+    })
+    let currentSymbols = [...currentSymbolsState]
+    currentSymbols.push(symbol)
+    setCurrentSymbols([...currentSymbols])
   };
 
-  const refreshPrices = (symbols) => {
+  const refreshPrices = () => {
    if (!nIntervId) {
-      nIntervId = setInterval(() => {
-        saveTokens(symbols, 'INDEX')
-      }, 20000)
+      nIntervId = setTimeout(() => {
+        if(currentSymbolsState !== undefined && currentSymbolsState.length > 0) {
+          saveTokens(currentSymbolsState, 'INDEX')
+        }
+      }, 90000)
+    }
+    return () => {
+      clearInterval(nIntervId);
     }
   }
 
-  const setTokensState = async (tokensSymbol, action) => {
-    // refreshPrices(tokensSymbol)
-    // console.log('pricesInfoState: ', pricesInfoState)
- 
-    //  //console.log('update state',prices)
-    // // let prices = await refreshPrices(tokensSymbol)
-    // //let prices = await getPrices(tokensSymbol);
-  };
 
   const saveTokens = async (tokensSymbol, action) => {
     let prices = await getPrices(tokensSymbol);
@@ -104,30 +120,27 @@ const Tokens = () => {
       
       newValues[symbol] = {
         balance,
-        price: (priceInfo !== undefined && priceInfo.length > 0) ? priceInfo[0].price : (tokens.hasOwnProperty(symbol) && tokens[symbol].price !== null) ? tokens[symbol].price : null,
+        price: (priceInfo !== undefined && priceInfo.length > 0) ? priceInfo[0].price : (tokens?.hasOwnProperty(symbol) && tokens[symbol].price !== null) ? tokens[symbol].price : null,
       }
-      // newValues.push({
-      //   symbol,
-      //   balance,
-      //   price: (priceInfo !== undefined && priceInfo.length > 0) ? priceInfo[0].price : (tokens.hasOwnProperty(symbol) && tokens[symbol].price !== null) ? tokens[symbol].price : null,
-      // });
+
     }
-    console.log(newValues)
-   // setState({...newValues});
+    console.log('salvez in state', newValues)
 
     switch (action) {
       case 'INDEX':
         setState({...newValues});
-        break;
+        setCurrentSymbols(Object.keys(newValues))
 
+        break;
       case 'ADD':
-        console.log(tokens, newValues)
-        setState({...tokens, ...newValues});//de modif
+        setState({...tokens, ...newValues});
+        setCurrentSymbols([...Object.keys(tokens), ...Object.keys(newValues)])
 
         break;
-    
       default:
         setState({...tokens});
+        setCurrentSymbols(Object.keys(newValues))
+
         break;
     }
   }
