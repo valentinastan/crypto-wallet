@@ -7,6 +7,7 @@ import constants from "../../const";
 import { ethers } from "ethers";
 
 import Web3 from "web3";
+import TokensTable from "./tokensTable";
 
 const Tokens = () => {
   // const [tokens, setState] = useState({
@@ -145,9 +146,29 @@ const Tokens = () => {
     }
   }
 
+  const createData = (data) => {
+    const tableTokens = {}
+
+    Object.keys(data).filter(key => data[key].balance > 0.000005).map((key, i) => {
+      tableTokens[key] = {
+        id: i + 1,
+        index: i + 1,
+        token: {...data[key], symbol: key},
+        deleteToken: () => deleteToken()
+      }
+    })
+
+    return <TokensTable tokens={tableTokens}></TokensTable>
+}
+
   return (
     <React.Fragment>
       <AddTokenForm addToken={addToken}></AddTokenForm>
+
+      {(tokens !== undefined && Object.keys(tokens).length > 0) &&
+          createData(tokens)  
+      }
+
       {(tokens !== undefined && Object.keys(tokens).length > 0) &&
         Object.keys(tokens).map((key, i) => (
           <Token

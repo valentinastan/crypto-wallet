@@ -1,0 +1,14 @@
+.connect-wallet button{
+  color: whitesmoke;
+  border: 1px solid rgba(255, 246, 246, 0.23);
+}
+
+.connect-wallet {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0E0042;
+  background: linear-gradient(to left, rgba(62, 51, 103), rgba(14, 0, 66, 1));
+}

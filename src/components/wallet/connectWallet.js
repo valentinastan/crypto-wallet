@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useDispatch } from "../../state-management/stores/store";
+import Button from '@material-ui/core/Button';
+import './connectWallet.css'
 
 const ConnectWallet = () => {
   const [currentAccount, setCurrentAccount] = useState(localStorage.getItem('address'));
@@ -42,15 +44,19 @@ const ConnectWallet = () => {
   };
 
   const connectWalletButton = () => {
-    return <button onClick={connectWalletHandler}>Connect Wallet</button>;
-  };
+    return <div className="connect-wallet">
+      <Button onClick={connectWalletHandler} variant="outlined" /*color="primary"*/>
+        Connect Wallet
+      </Button>
+    </div>
+ };
 
   useEffect(() => {
     checkWalletIsConnected();
   }, []);
 
   return (
-    <React.Fragment>
+    <React.Fragment >
       {connectWalletButton()}
       {currentAccount && <Navigate to="/wallet" replace />}
     </React.Fragment>
