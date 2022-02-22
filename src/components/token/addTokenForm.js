@@ -31,6 +31,12 @@ const AddTokenForm = (props) => {
         value={tokenSymbol}
         type="text"
       ></input> <br/>
+      {/* <IconButton
+        colorScheme='teal'
+        aria-label='Add Token'
+        icon={<AddIcon />}
+      /> */}
+  
       <button type='button' onClick={importToken}>Import</button>
     </React.Fragment>
   )

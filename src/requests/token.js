@@ -72,10 +72,13 @@ export async function getPricesRequest(params) {
       //get my coins for their prices
       let response = await getExternal(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${mySymbolsList}`)
       let prices = []
+      console.log('data!!!: ', response.data)
       response.data.map(token => prices.push({
         price: token.current_price, 
         symbol: token.symbol, 
-        name: token.name
+        name: token.name,
+        image: token.image,
+        price_change_percentage_24h: token.price_change_percentage_24h
       }))
       console.log('response final', prices)
       return prices
