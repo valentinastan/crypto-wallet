@@ -20,7 +20,6 @@ const AddTokenForm = (props) => {
     })
   }
 
-
   return(
     <React.Fragment>
       <div>Token Address</div>

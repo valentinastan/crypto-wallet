@@ -9,6 +9,7 @@ import Web3 from "web3";
 
 import { Table, Thead, Tbody, Tr, Th, Button } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
+import AddTokenModal from "./addTokenModal";
 
 const Tokens = () => {
   // const [tokens, setState] = useState({
@@ -119,7 +120,7 @@ const Tokens = () => {
     const newValues = {};
 
     for (const symbol of tokensSymbol) {
-      let priceInfo = prices?.filter(
+      let priceInfo = (prices || []).filter(
         (token) => token.symbol.toUpperCase() === symbol.toUpperCase()
       );
       let balance = await getBalance(symbol);
@@ -177,16 +178,7 @@ const Tokens = () => {
   return (
     <React.Fragment>
       <AddTokenForm addToken={addToken}></AddTokenForm>
-      <Button
-        colorScheme="teal"
-        size="sm"
-        height="40px"
-        width="120px"
-        border="2px"
-        // borderColor='green.500'
-      >
-        <AddIcon />
-      </Button>
+      <AddTokenModal tokens={tokens}></AddTokenModal>
 
       <Table variant="simple" colorScheme="twitter">
         <Thead>

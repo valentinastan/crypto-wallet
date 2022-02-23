@@ -1,13 +1,14 @@
 import React from "react";
 import { deleteTokenRequest } from "../../requests/token";
+import DeleteTokenAlert from './deleteTokenAlert'
 import {
   Tr,
   Td,
   Avatar,
   IconButton,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { MinusIcon } from '@chakra-ui/icons'
-
 
 const Token = (props) => {
   const currentWallet = localStorage.getItem("address");
@@ -34,6 +35,14 @@ const Token = (props) => {
       return 0;
     }
   }
+
+  //const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const openDeleteTokenAlert = () => {
+  return <deleteAlert props='lala'></deleteAlert>
+    return <DeleteTokenAlert onOpen='true' deleteToken={deleteToken}></DeleteTokenAlert>
+  }
+
 
   return (
     <React.Fragment>
@@ -62,44 +71,18 @@ const Token = (props) => {
           {parseFloat(calculateTotal() || 0).toFixed(2)}
         </Td>
         <Td>
-         <IconButton 
-          onClick={deleteToken}
+          <DeleteTokenAlert show='true' deleteToken={deleteToken} token={{...props.token, index: props.index}}></DeleteTokenAlert>
+         {/* <IconButton 
+          onClick={() => <DeleteTokenAlert onOpen='true' deleteToken={deleteToken}></DeleteTokenAlert>}
           variant='ghost'
           colorScheme='red'
           aria-label='Delete Token' 
-          icon={<MinusIcon />} />
+          icon={<MinusIcon />} /> */}
           {/* <button type="button" onClick={deleteToken}>
             Remove
           </button> */}
         </Td>
       </Tr>
-      {/* <Tr>
-        <Td>{i + 1}</Td>
-        <Td>
-          <Avatar
-            // src={constants[key].logo}
-            src={tokens[key].token.image}
-            size="sm" //sau xs
-            name={key}
-            ml={-1}
-            mr={2}
-          />
-          {key}
-        </Td>
-        <Td isNumeric>
-          {tokens[key].token.price_change_percentage_24h ? (Math.round(tokens[key].token.price_change_percentage_24h * 100) / 100).toFixed(2) : 0}%
-        </Td>
-        <Td isNumeric>
-          {tokens[key].token.price ? (Math.round(tokens[key].token.price * 100) / 100).toFixed(4) : 0}
-        </Td>
-        <Td isNumeric>
-          { (Math.round(tokens[key].token.balance * 100) / 100).toFixed(2)}
-        </Td>
-        <Td isNumeric>
-          4
-        </Td>
-      </Tr> */}
-
 
 {/* 
       <div>token: {props.token.symbol}</div>

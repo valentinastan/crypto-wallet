@@ -3,6 +3,7 @@ import { dbStore } from "../config/firebase";
 import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { getExternal } from "./request";
 
+
 export async function addTokenRequest(params) {
   const walletsRef = collection(dbStore, "wallets");
   
@@ -50,10 +51,15 @@ export async function deleteTokenRequest(params) {
    else return false
 }
 
+async function getAllTokensRequest() {
+  console.log('****FAC AICI REQUEST')
+  const allCoins = await getExternal('https://api.coingecko.com/api/v3/coins/list')
+  return createCache(allCoins.data)
+}
+
+
 export async function getPricesRequest(params) {
-  //get all coins
-  let allCoins = await getExternal('https://api.coingecko.com/api/v3/coins/list')
-  allCoins = createCache(allCoins.data)
+  const allCoins = await getAllTokensRequest()
 
   let myTokensIds = [];
   params.forEach(myToken => {
@@ -95,3 +101,48 @@ const createCache = (data) => {
 
  return tokens
 }
+
+// export async function getAdditionalTokenDetailsRequest(params) {
+//   const allCoins = await getAllTokensRequest()
+//   console.log('all conins', allCoins, params)
+
+//   //return {'la': 'lala'}
+
+//   let myTokensIds = [];
+//   params.forEach(myToken => {
+//     if(allCoins.hasOwnProperty(myToken.toLowerCase())) {
+//       return myTokensIds.push(allCoins[myToken.toLowerCase()])
+//     }})
+
+//   console.log('my tokens ids', myTokensIds)
+  
+//   myTokensIds = myTokensIds.filter((value, index, self) =>
+//       index === self.findIndex((token) => (
+//         token.toLowerCase() === value.toLowerCase()
+//     ))
+//   )
+//   console.log('my tokens ids', myTokensIds)
+  
+
+//   if(myTokensIds.length > 0) {
+//     let mySymbolsList = myTokensIds.reduce((symbolsList, id) => symbolsList + id + ',', '')
+//     console.log('my tokens', mySymbolsList)
+  // }
+  //     //get my coins for their prices
+  //     let response = await getExternal(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${mySymbolsList}`)
+  //     let prices = []
+  //     console.log('data!!!: ', response.data)
+  //     response.data.map(token => prices.push({
+  //       price: token.current_price, 
+  //       symbol: token.symbol, 
+  //       name: token.name,
+  //       image: token.image,
+  //       price_change_percentage_24h: token.price_change_percentage_24h
+  //     }))
+  //     console.log('response final', prices)
+  //     return prices
+  // } else {
+  //   return false
+  // }
+// }
+
