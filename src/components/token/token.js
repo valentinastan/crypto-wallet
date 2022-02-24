@@ -1,17 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { deleteTokenRequest } from "../../requests/token";
 import DeleteTokenAlert from './deleteTokenAlert'
 import {
   Tr,
   Td,
   Avatar,
-  IconButton,
-  useDisclosure,
+  HStack,
+  useColorModeValue,
+  Tfoot,
 } from "@chakra-ui/react";
-import { MinusIcon } from '@chakra-ui/icons'
+import TokenToast from "../tokenToast";
+import './css/token.css'
 
 const Token = (props) => {
   const currentWallet = localStorage.getItem("address");
+  const [showDeleteToast, setShowDeleteToast] = useState(false);
   console.log("props", props);
  
 
@@ -23,7 +26,9 @@ const Token = (props) => {
       if (result === false) {
         console.log("No such document!");
       } else {
+        setShowDeleteToast(true)
         props.deleteToken(props.token.symbol, props.index);
+      
       }
     });
   };
@@ -36,19 +41,21 @@ const Token = (props) => {
     }
   }
 
-  //const { isOpen, onOpen, onClose } = useDisclosure()
-
-  const openDeleteTokenAlert = () => {
-  return <deleteAlert props='lala'></deleteAlert>
-    return <DeleteTokenAlert onOpen='true' deleteToken={deleteToken}></DeleteTokenAlert>
-  }
-
+  const bg = useColorModeValue('#EDF2F7', '#212938')
+  const color = useColorModeValue('#3182ce', 'white')
 
   return (
     <React.Fragment>
-      <Tr>
+      <Tr
+        _hover={{ 
+        bg:bg, 
+        color:color,
+        // borderRadius:'40px',
+        }}
+      >
         <Td>{props.index + 1}</Td>
         <Td>
+        <HStack spacing='5px'>
           <Avatar
             src={props.token.image}
             size="sm" //sau xs
@@ -56,9 +63,10 @@ const Token = (props) => {
             ml={-1}
             mr={2}
           />
-          {props.token.symbol}
+          <div className="token-symbol">{props.token.symbol}</div>
+          </HStack>
         </Td>
-        <Td isNumeric>
+        <Td isNumeric className={props?.token?.price_change_percentage_24h > 0 ? 'green-price' : props?.token?.price_change_percentage_24h < 0 ? 'red-price' : ''}>
           {parseFloat(props?.token?.price_change_percentage_24h || 0).toFixed(2)}%
         </Td>
         <Td isNumeric>
@@ -72,19 +80,16 @@ const Token = (props) => {
         </Td>
         <Td>
           <DeleteTokenAlert show='true' deleteToken={deleteToken} token={{...props.token, index: props.index}}></DeleteTokenAlert>
-         {/* <IconButton 
-          onClick={() => <DeleteTokenAlert onOpen='true' deleteToken={deleteToken}></DeleteTokenAlert>}
-          variant='ghost'
-          colorScheme='red'
-          aria-label='Delete Token' 
-          icon={<MinusIcon />} /> */}
-          {/* <button type="button" onClick={deleteToken}>
-            Remove
-          </button> */}
         </Td>
       </Tr>
-
-{/* 
+      {showDeleteToast && (
+        <TokenToast
+          actionStatus="error"
+          title="Token deleted."
+          description="We've deleted your token."
+        ></TokenToast>
+      )}
+      {/* 
       <div>token: {props.token.symbol}</div>
       <div>balance: {parseFloat(props?.token?.balance || 0).toFixed(2)}</div>
       <div>price: {parseFloat(props?.token?.price || 0).toFixed(2)} USD</div>

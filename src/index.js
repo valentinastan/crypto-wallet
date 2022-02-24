@@ -6,7 +6,6 @@ import reportWebVitals from './reportWebVitals';
 import { HashRouter } from 'react-router-dom'
 import { StateProvider } from './state-management/stores/store';
 
-
 ReactDOM.render(
   <HashRouter>
     <StateProvider> 

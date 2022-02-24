@@ -1,4 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
+import allTokens from "../../const";
+import UnimportedToken from "./unimportedToken";
+import { getPricesRequest } from "../../requests/token";
 import {
   Modal,
   ModalOverlay,
@@ -8,17 +11,14 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Text,
   Button,
   Input,
   FormControl,
   Table,
   Tbody,
+  Divider,
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
-import allTokens from "../../const";
-import UnimportedToken from "./unimportedTokensTable/unimportedToken";
-import { getPricesRequest } from "../../requests/token";
 
 const AddTokenModal = (props) => {
   console.log("proprs din modala", props);
@@ -30,7 +30,6 @@ const AddTokenModal = (props) => {
 
   const userTokens = props.tokens;
   let searchResultTokens = [];
-  // let unimportedTokensWithDetails
   const [unimportedTokensWithDetails, setUnimportedTokensWithDetails] =
     useState();
 
@@ -87,7 +86,7 @@ const AddTokenModal = (props) => {
       <Modal
         isCentered
         finalFocusRef={finalRef}
-        initialFocusRef={initialRef} //la deschidere focus pe input   <Input ref={initialRef} placeholder='First name' />
+        initialFocusRef={initialRef}
         scrollBehavior={scrollBehavior}
         isOpen={isOpen}
         onClose={() => {
@@ -97,11 +96,10 @@ const AddTokenModal = (props) => {
       >
         {overlay}
         <ModalContent>
-          <ModalHeader>Add a new token</ModalHeader>
+          <ModalHeader>Add token</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <FormControl>
-              <Text mb="8px">Value: {value}</Text>
               <Input
                 value={value}
                 onChange={(event) => setValue(event.target.value.toUpperCase())}
@@ -110,19 +108,8 @@ const AddTokenModal = (props) => {
                 placeholder="Search token..."
               />
             </FormControl>
-            <Text>Custom backdrop filters!</Text>
+            <Divider height="22px" />
             <Table variant="unstyled" colorScheme="twitter">
-              {/* <Thead>
-                <Tr>
-                  <Th>Index</Th>
-                  <Th>Symbol</Th>
-                  <Th isNumeric>% 24h</Th>
-                  <Th isNumeric>Price</Th>
-                  <Th isNumeric>Balance</Th>
-                  <Th isNumeric>Amount</Th>
-                  <Th></Th>
-                </Tr>
-              </Thead> */}
               <Tbody>
                 {searchResultTokens !== undefined &&
                   unimportedTokensWithDetails !== undefined &&
@@ -135,17 +122,22 @@ const AddTokenModal = (props) => {
                         ...unimportedTokensWithDetails[token],
                         symbol: token,
                       }}
-                      //deleteToken={deleteToken}
+                      addToken={props.addToken}
+                      onClose={onClose}
                     ></UnimportedToken>
                   ))}
               </Tbody>
             </Table>
           </ModalBody>
           <ModalFooter>
-            <Button onClick={() => {
-               onClose();
-               setValue("");
-            }}>Close</Button>
+            <Button
+              onClick={() => {
+                onClose();
+                setValue("");
+              }}
+            >
+              Close
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

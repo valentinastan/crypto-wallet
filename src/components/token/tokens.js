@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { getPricesRequest, getTokensByWallet } from "../../requests/token";
-import AddTokenForm from "./addTokenForm";
 import Token from "./token";
 
 import constants from "../../const";
 import { ethers } from "ethers";
 import Web3 from "web3";
 
-import { Table, Thead, Tbody, Tr, Th, Button } from "@chakra-ui/react";
-import { AddIcon } from "@chakra-ui/icons";
+import { Table, Thead, Tbody, Tr, Th } from "@chakra-ui/react";
 import AddTokenModal from "./addTokenModal";
 
 const Tokens = () => {
@@ -18,8 +16,8 @@ const Tokens = () => {
   //     price: null,
   //   },
   // });
+  
   const [tokens, setState] = useState({});
-
   const [currentSymbolsState, setCurrentSymbols] = useState(
     Object.keys(tokens)
   );
@@ -72,10 +70,14 @@ const Tokens = () => {
       }
     );
 
-    const tokenBalance = await MyContract.methods
-      .balanceOf(currentWallet)
-      .call();
-    return ethers.utils.formatEther(tokenBalance);
+    try {
+      const tokenBalance = await MyContract.methods
+        .balanceOf(currentWallet)
+        .call();
+      return ethers.utils.formatEther(tokenBalance);
+    } catch(ex) {
+      alert(ex)
+    }
   };
 
   const getPrices = async (tokens) => {
@@ -177,8 +179,8 @@ const Tokens = () => {
 
   return (
     <React.Fragment>
-      <AddTokenForm addToken={addToken}></AddTokenForm>
-      <AddTokenModal tokens={tokens}></AddTokenModal>
+      {/* <AddTokenForm addToken={addToken}></AddTokenForm> */}
+      <AddTokenModal tokens={tokens} addToken={addToken}></AddTokenModal>
 
       <Table variant="simple" colorScheme="twitter">
         <Thead>

@@ -5,8 +5,9 @@ const AddTokenForm = (props) => {
 
   const [tokenSymbol, setState] = useState('')
   const walletAddress = localStorage.getItem('address')
- 
+
   const importToken = () => {
+
     addTokenRequest({
       walletAddress,
       tokenSymbol,

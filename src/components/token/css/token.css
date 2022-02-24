@@ -1,0 +1,16 @@
+.token-symbol {
+  font-weight: 600;
+}
+
+.token-name {
+  font-weight: 100;
+  font-size: small;
+}
+
+.green-price {
+  color: green;
+}
+
+.red-price {
+  color: brown;
+}
