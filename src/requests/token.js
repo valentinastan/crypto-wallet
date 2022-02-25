@@ -54,27 +54,101 @@ export async function deleteTokenRequest(params) {
 async function getAllTokensRequest() {
   console.log('****FAC AICI REQUEST')
   const allCoins = await getExternal('https://api.coingecko.com/api/v3/coins/list')
-  return createCache(allCoins.data)
+  //return createCache(allCoins.data)
+  return allCoins
+}
+
+function filterDuplicatedSymbolTokens(myTokens) {
+  let results = {}
+  let duplicatedTokens = []
+  let tokensToBeFiltered = [...myTokens]
+  //let regex = new RegExp('(-token)|(-lala)$')
+
+  for (let i = 0; i < tokensToBeFiltered.length - 1; i++) {
+    if (tokensToBeFiltered[i + 1].symbol === tokensToBeFiltered[i].symbol) {
+      duplicatedTokens.push(tokensToBeFiltered[i].symbol)
+
+      if(tokensToBeFiltered[i].id.endsWith('-token')) {
+     
+        results[tokensToBeFiltered[i].symbol] = tokensToBeFiltered[i].id
+      } else {
+  
+        if(tokensToBeFiltered[i+1].id.endsWith('-token')) {
+          results[tokensToBeFiltered[i+1].symbol] = tokensToBeFiltered[i+1].id
+        } else {
+         
+          if(tokensToBeFiltered[i].id.toUpperCase() === tokensToBeFiltered[i].symbol.toUpperCase()) {
+            if(!results.hasOwnProperty(tokensToBeFiltered[i].symbol))
+              results[tokensToBeFiltered[i].symbol] = tokensToBeFiltered[i].id
+          } else {
+           
+            if(tokensToBeFiltered[i+1].id.toUpperCase() === tokensToBeFiltered[i+1].symbol.toUpperCase()) {
+              if(!results.hasOwnProperty(tokensToBeFiltered[i+1].symbol))
+                results[tokensToBeFiltered[i+1].symbol] = tokensToBeFiltered[i+1].id
+            } else {
+            
+              if(!results.hasOwnProperty(tokensToBeFiltered[i].symbol) && !tokensToBeFiltered[i].id.endsWith('-wormhole')) {
+                results[tokensToBeFiltered[i].symbol] = tokensToBeFiltered[i].id
+              } else {
+
+                if(!results.hasOwnProperty(tokensToBeFiltered[i+1].symbol) && !tokensToBeFiltered[i+1].id.endsWith('-wormhole')) {
+                  results[tokensToBeFiltered[i+1].symbol] = tokensToBeFiltered[i+1].id
+                }
+              }
+            }  
+          }  
+        }
+      } 
+    } 
+  }
+
+  myTokens = myTokens.filter(token => !duplicatedTokens.includes(token.symbol))
+  console.log('token fara duplicate', myTokens)
+  console.log('token cu duplicate, filtrat', results)
+
+  let resultsWithoutDup = {}
+
+  myTokens.map(tokenObj => {
+    resultsWithoutDup[tokenObj.symbol] = tokenObj.id
+  })
+
+  return {...resultsWithoutDup, ...results}
 }
 
 
 export async function getPricesRequest(params) {
   const allCoins = await getAllTokensRequest()
 
-  let myTokensIds = [];
-  params.forEach(myToken => {
-    if(allCoins.hasOwnProperty(myToken.toLowerCase())) {
-      return myTokensIds.push(allCoins[myToken.toLowerCase()])
-    }})
+  let myTokens = [];
+
+  //get only my tokens
+  myTokens = allCoins.data.filter(externalToken => {
+    return params.includes(externalToken.symbol.toUpperCase())
+  })
+  console.log('mytokens ids', myTokens)
+
+  //get filtered tokens
+  let filteredTokens = filterDuplicatedSymbolTokens(myTokens)
+  console.log('filtered all', filteredTokens)
+ 
   
-  myTokensIds = myTokensIds.filter((value, index, self) =>
-      index === self.findIndex((token) => (
-        token.toLowerCase() === value.toLowerCase()
-    ))
-  )
-  if(myTokensIds.length > 0) {
-    let mySymbolsList = myTokensIds.reduce((symbolsList, id) => symbolsList + id + ',', '')
-    console.log('my tokens', mySymbolsList)
+  // myTokensIds = myTokensIds.filter((value, index, self) =>
+  //     index === self.findIndex((token) => {
+  //       console.log('compar asta', token, value, token.id, regex.test(token.id))
+  //       if(token.symbol.toLowerCase() === value.symbol.toLowerCase()  &&
+  //         value.id.endsWith('-token') === true) {
+  //             return true
+  //           } else {
+  //             return false
+  //           }
+  //     }
+  //   )
+  // )
+
+  //get token's details
+  if(Object.keys(filteredTokens).length > 0) {
+    let mySymbolsList = Object.keys(filteredTokens).reduce((symbolsList, key) => symbolsList + filteredTokens[key] + ',', '') //filteredTokens.ley = id
+    console.log('my tokens list', mySymbolsList)
       //get my coins for their prices
       let response = await getExternal(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${mySymbolsList}`)
       let prices = []
@@ -93,14 +167,15 @@ export async function getPricesRequest(params) {
   }
 }
 
-const createCache = (data) => {
-  let tokens = {}
-  data.forEach(token => {
-    tokens[token.symbol] = token.id
-  })
-
- return tokens
-}
+// const createCache = (data) => {
+//   let tokens = {}
+//   data.forEach(token => {
+//     if(Object.hasOwnProperty(token.symbol))
+//     tokens[token.symbol] = token.id.toLowerCase()
+//   })
+  
+//  return tokens
+// }
 
 // export async function getAdditionalTokenDetailsRequest(params) {
 //   const allCoins = await getAllTokensRequest()
