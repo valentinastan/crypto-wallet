@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { getPricesRequest, getTokensByWallet } from "../../requests/token";
+import { deleteTokenRequest, getPricesRequest, getTokensByWallet } from "../../requests/token";
 import Token from "./token";
 
 import constants from "../../const";
 import { ethers } from "ethers";
 import Web3 from "web3";
 
-import { Table, Thead, Tbody, Tr, Th } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, useDisclosure } from "@chakra-ui/react";
 import AddTokenModal from "./addTokenModal";
+import DeleteTokenAlert from "./deleteTokenAlert";
+import TokenToast from "../tokenToast";
 
 const Tokens = () => {
   // const [tokens, setState] = useState({
@@ -21,6 +23,9 @@ const Tokens = () => {
   const [currentSymbolsState, setCurrentSymbols] = useState(
     Object.keys(tokens)
   );
+  const [showDeleteModal, setShowDeleteModal] = useState({symbol: ''});
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [showDeleteToast, setShowDeleteToast] = useState(false);
   // const [tokens, setState] = useState([
   //   {
   //     symbol: "",
@@ -85,13 +90,31 @@ const Tokens = () => {
     return await getPricesRequest(tokens);
   };
 
-  const deleteToken = (symbolDeleted, index) => {
-    delete tokens[symbolDeleted];
-    console.log("DELETE", tokens, symbolDeleted);
-    setState({ ...tokens });
-    let symbols = Object.keys(tokens);
-    setCurrentSymbols([...symbols]);
+  const deleteToken = () => {
+    deleteTokenRequest({
+      currentWallet,
+      symbol: showDeleteModal.symbol,
+    }).then((result) => {
+      if (result === false) {
+        console.log("No such document!");
+      } else {
+        delete tokens[showDeleteModal.symbol];
+        console.log("DELETE", tokens, showDeleteModal);
+        setState({ ...tokens });
+        let symbols = Object.keys(tokens);
+        setCurrentSymbols([...symbols]);
+        
+        setShowDeleteModal({symbol: ''})        
+        setShowDeleteToast(true)
+      }
+    });
   };
+
+  const deletePressed = (symbol) => {
+    setShowDeleteToast(false)
+    setShowDeleteModal({symbol})
+    onOpen()
+  }
 
   const addToken = (symbol) => {
     console.log("ADD", symbol);
@@ -104,6 +127,7 @@ const Tokens = () => {
   const refreshPrices = () => {
     if (!nIntervId) {
       nIntervId = setTimeout(() => {
+        setShowDeleteToast(false)
         if (
           currentSymbolsState !== undefined &&
           currentSymbolsState.length > 0
@@ -203,11 +227,19 @@ const Tokens = () => {
                 index={i}
                 token={{ ...tokens[key], symbol: key }}
                 deleteToken={deleteToken}
+                deletePressed={deletePressed}
               ></Token>
             ))}
         </Tbody>
       </Table>
-
+      <DeleteTokenAlert deleteToken={deleteToken} symbol={showDeleteModal.symbol} onClose={onClose} isOpen={isOpen}></DeleteTokenAlert>
+      {showDeleteToast && (
+        <TokenToast
+          actionStatus="error"
+          title="Token deleted."
+          description="We've deleted your token."
+        ></TokenToast>
+      )}
       {/* {(tokens !== undefined && Object.keys(tokens).length > 0) &&
         Object.keys(tokens).map((key, i) => (
           <Token

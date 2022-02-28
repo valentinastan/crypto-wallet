@@ -18,8 +18,9 @@ const UnimportedToken = (props) => {
         console.log("No such document!");
       } else {
         props.addToken(data.data().tokenSymbol);
-        props.onClose();
+      
         setShowSuccessToast(true);
+        props.onClose();
       }
     });
   };

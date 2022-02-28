@@ -2,6 +2,7 @@ import { doc, getDoc, deleteDoc } from "firebase/firestore";
 import { dbStore } from "../config/firebase";
 import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { getExternal } from "./request";
+import constants from '../const'
 
 
 export async function addTokenRequest(params) {
@@ -117,37 +118,25 @@ function filterDuplicatedSymbolTokens(myTokens) {
 
 
 export async function getPricesRequest(params) {
-  const allCoins = await getAllTokensRequest()
+  // const allCoins = await getAllTokensRequest()
 
-  let myTokens = [];
+  // let myTokens = [];
 
-  //get only my tokens
-  myTokens = allCoins.data.filter(externalToken => {
-    return params.includes(externalToken.symbol.toUpperCase())
-  })
-  console.log('mytokens ids', myTokens)
+  // //get only my tokens
+  // myTokens = allCoins.data.filter(externalToken => {
+  //   return params.includes(externalToken.symbol.toUpperCase())
+  // })
+  // console.log('mytokens ids', myTokens)
 
-  //get filtered tokens
-  let filteredTokens = filterDuplicatedSymbolTokens(myTokens)
-  console.log('filtered all', filteredTokens)
+  // //get filtered tokens
+  // let filteredTokens = filterDuplicatedSymbolTokens(myTokens)
+  // console.log('filtered all', filteredTokens)
  
-  
-  // myTokensIds = myTokensIds.filter((value, index, self) =>
-  //     index === self.findIndex((token) => {
-  //       console.log('compar asta', token, value, token.id, regex.test(token.id))
-  //       if(token.symbol.toLowerCase() === value.symbol.toLowerCase()  &&
-  //         value.id.endsWith('-token') === true) {
-  //             return true
-  //           } else {
-  //             return false
-  //           }
-  //     }
-  //   )
-  // )
+  console.log('constants',Object.keys(constants))
 
   //get token's details
-  if(Object.keys(filteredTokens).length > 0) {
-    let mySymbolsList = Object.keys(filteredTokens).reduce((symbolsList, key) => symbolsList + filteredTokens[key] + ',', '') //filteredTokens.ley = id
+  if(Object.keys(constants).length > 0) {
+    let mySymbolsList = Object.keys(constants).reduce((symbolsList, key) => symbolsList + constants[key].coingeckoId + ',', '') //filteredTokens.ley = id
     console.log('my tokens list', mySymbolsList)
       //get my coins for their prices
       let response = await getExternal(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${mySymbolsList}`)
@@ -173,51 +162,9 @@ export async function getPricesRequest(params) {
 //     if(Object.hasOwnProperty(token.symbol))
 //     tokens[token.symbol] = token.id.toLowerCase()
 //   })
-  
-//  return tokens
-// }
 
-// export async function getAdditionalTokenDetailsRequest(params) {
-//   const allCoins = await getAllTokensRequest()
-//   console.log('all conins', allCoins, params)
+export async function getHistoricalMarketData(params) {
+//token-id, data up to number of days ago, Data interval:daily
+//https://api.coingecko.com/api/v3/coins/gnosis/market_chart?vs_currency=usd&days=1&interval=daily
 
-//   //return {'la': 'lala'}
-
-//   let myTokensIds = [];
-//   params.forEach(myToken => {
-//     if(allCoins.hasOwnProperty(myToken.toLowerCase())) {
-//       return myTokensIds.push(allCoins[myToken.toLowerCase()])
-//     }})
-
-//   console.log('my tokens ids', myTokensIds)
-  
-//   myTokensIds = myTokensIds.filter((value, index, self) =>
-//       index === self.findIndex((token) => (
-//         token.toLowerCase() === value.toLowerCase()
-//     ))
-//   )
-//   console.log('my tokens ids', myTokensIds)
-  
-
-//   if(myTokensIds.length > 0) {
-//     let mySymbolsList = myTokensIds.reduce((symbolsList, id) => symbolsList + id + ',', '')
-//     console.log('my tokens', mySymbolsList)
-  // }
-  //     //get my coins for their prices
-  //     let response = await getExternal(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${mySymbolsList}`)
-  //     let prices = []
-  //     console.log('data!!!: ', response.data)
-  //     response.data.map(token => prices.push({
-  //       price: token.current_price, 
-  //       symbol: token.symbol, 
-  //       name: token.name,
-  //       image: token.image,
-  //       price_change_percentage_24h: token.price_change_percentage_24h
-  //     }))
-  //     console.log('response final', prices)
-  //     return prices
-  // } else {
-  //   return false
-  // }
-// }
-
+}

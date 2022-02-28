@@ -15,16 +15,25 @@ const TokenToast = (props) => {
     status = 'success' :
       status = 'error'
 
+  const displayToast = () => {
+    toast({
+      title,
+      description,
+      status,
+      duration: 900,
+      isClosable: true,
+      variant: 'left-accent',
+    })
+  }
+
   return (
-    (!toast.isActive(id)) && 
-      toast({
-        title,
-        description,
-        status,
-        duration: 9000,
-        isClosable: true,
-        variant: 'left-accent',
-      })
+    <React.Fragment>
+      {
+        !toast.isActive(id) && 
+        displayToast()
+      }
+    </React.Fragment>
   )
+
 }
 export default TokenToast
