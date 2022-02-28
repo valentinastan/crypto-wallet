@@ -8,30 +8,31 @@ import {
   HStack,
   useColorModeValue,
   Tfoot,
+  IconButton
 } from "@chakra-ui/react";
-import TokenToast from "../tokenToast";
+import { MinusIcon } from "@chakra-ui/icons";
 import './css/token.css'
 
 const Token = (props) => {
   const currentWallet = localStorage.getItem("address");
   const [showDeleteToast, setShowDeleteToast] = useState(false);
   console.log("props", props);
- 
 
-  const deleteToken = () => {
-    deleteTokenRequest({
-      currentWallet,
-      symbol: props.token.symbol,
-    }).then((result) => {
-      if (result === false) {
-        console.log("No such document!");
-      } else {
-        setShowDeleteToast(true)
-        props.deleteToken(props.token.symbol, props.index);
-      
-      }
-    });
-  };
+
+  // const deleteToken = () => {
+  //   deleteTokenRequest({
+  //     currentWallet,
+  //     symbol: props.token.symbol,
+  //   }).then((result) => {
+  //     if (result === false) {
+  //       console.log("No such document!");
+  //     } else {
+  //       setShowDeleteToast(true)
+  //       props.deleteToken(props.token.symbol, props.index);
+
+  //     }
+  //   });
+  // };
 
   const calculateTotal = () => {
     if(parseFloat(props.token.balance) > 0 && props.token.price > 0 ){
@@ -47,8 +48,8 @@ const Token = (props) => {
   return (
     <React.Fragment>
       <Tr
-        _hover={{ 
-        bg:bg, 
+        _hover={{
+        bg:bg,
         color:color,
         // borderRadius:'40px',
         }}
@@ -79,17 +80,19 @@ const Token = (props) => {
           {parseFloat(calculateTotal() || 0).toFixed(2)}
         </Td>
         <Td>
-          <DeleteTokenAlert show='true' deleteToken={deleteToken} token={{...props.token, index: props.index}}></DeleteTokenAlert>
+          <IconButton
+            onClick={() => props.deletePressed(props?.token?.symbol)}
+            variant="ghost"
+            colorScheme="red"
+            aria-label="Delete Token"
+            icon={<MinusIcon />}
+          />
+          {/* <div onClick={() => props.deletePressed(token, index)} ></div> */}
+
         </Td>
       </Tr>
-      {showDeleteToast && (
-        <TokenToast
-          actionStatus="error"
-          title="Token deleted."
-          description="We've deleted your token."
-        ></TokenToast>
-      )}
-      {/* 
+
+      {/*
       <div>token: {props.token.symbol}</div>
       <div>balance: {parseFloat(props?.token?.balance || 0).toFixed(2)}</div>
       <div>price: {parseFloat(props?.token?.price || 0).toFixed(2)} USD</div>

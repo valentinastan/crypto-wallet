@@ -14,7 +14,7 @@ import {
 import { MinusIcon } from "@chakra-ui/icons";
 
 const DeleteTokenAlert = (props) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  // const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
   console.log("ALERTA", props);
 
@@ -22,19 +22,19 @@ const DeleteTokenAlert = (props) => {
     <React.Fragment>
       {/* <Button onClick={onOpen}>Discard</Button> */}
 
-      <IconButton
+      {/* <IconButton
         onClick={onOpen}
         variant="ghost"
         colorScheme="red"
         aria-label="Delete Token"
         icon={<MinusIcon />}
-      />
+      /> */}
 
       <AlertDialog
         motionPreset="slideInBottom"
         leastDestructiveRef={cancelRef}
-        onClose={onClose}
-        isOpen={isOpen}
+        onClose={props.onClose}
+        isOpen={props.isOpen}
         isCentered
       >
         <AlertDialogOverlay />
@@ -43,17 +43,17 @@ const DeleteTokenAlert = (props) => {
           <AlertDialogHeader>Discard Changes?</AlertDialogHeader>
           <AlertDialogCloseButton />
           <AlertDialogBody>
-            Are you sure you want to delete {props.token.symbol} token?
+            Are you sure you want to delete {props.symbol} token?
           </AlertDialogBody>
           <AlertDialogFooter>
-            <Button ref={cancelRef} onClick={onClose}>
+            <Button ref={cancelRef} onClick={props.onClose}>
               No
             </Button>
             <Button
               colorScheme="red"
               ml={3}
               onClick={() => {
-                return props.deleteToken(), onClose();
+                return props.deleteToken(), props.onClose();
               }}
             >
               Yes

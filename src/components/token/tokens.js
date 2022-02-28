@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { getPricesRequest, getTokensByWallet } from "../../requests/token";
+import { deleteTokenRequest, getPricesRequest, getTokensByWallet } from "../../requests/token";
 import Token from "./token";
 
 import constants from "../../const";
 import { ethers } from "ethers";
 import Web3 from "web3";
 
-import { Table, Thead, Tbody, Tr, Th } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, useDisclosure } from "@chakra-ui/react";
 import AddTokenModal from "./addTokenModal";
+import DeleteTokenAlert from "./deleteTokenAlert";
+import TokenToast from "../tokenToast";
 
 const Tokens = () => {
   // const [tokens, setState] = useState({
@@ -16,7 +18,7 @@ const Tokens = () => {
   //     price: null,
   //   },
   // });
-  
+
   const [tokens, setState] = useState({});
   const [currentSymbolsState, setCurrentSymbols] = useState(
     Object.keys(tokens)
@@ -31,6 +33,12 @@ const Tokens = () => {
   const currentWallet = localStorage.getItem("address");
   const web3 = new Web3(Web3.givenProvider);
   let nIntervId;
+
+
+  const [showDeleteModal, setShowDeleteModal] = useState({symbol: ''});
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [showDeleteToast, setShowDeleteToast] = useState(false);
+
 
   useEffect(() => {
     getTokensByWallet(currentWallet).then((tokensSnapshot) => {
@@ -76,7 +84,8 @@ const Tokens = () => {
         .call();
       return ethers.utils.formatEther(tokenBalance);
     } catch(ex) {
-      alert(ex)
+      // alert(ex)
+      console.log(ex)
     }
   };
 
@@ -85,13 +94,34 @@ const Tokens = () => {
     return await getPricesRequest(tokens);
   };
 
-  const deleteToken = (symbolDeleted, index) => {
-    delete tokens[symbolDeleted];
-    console.log("DELETE", tokens, symbolDeleted);
-    setState({ ...tokens });
-    let symbols = Object.keys(tokens);
-    setCurrentSymbols([...symbols]);
+  const deleteToken = () => {
+    deleteTokenRequest({
+      currentWallet,
+      symbol: showDeleteModal.symbol,
+    }).then((result) => {
+      if (result === false) {
+        console.log("No such document!");
+      } else {
+        //setShowDeleteToast(true)
+        delete tokens[showDeleteModal.symbol];
+        console.log("DELETE", tokens, showDeleteModal.symbol);
+        setState({ ...tokens });
+        let symbols = Object.keys(tokens);
+        setCurrentSymbols([...symbols]);
+        setShowDeleteModal({
+          symbol: ''
+        })
+        setShowDeleteToast(true)
+      }
+    });
+
   };
+
+  const deletePressed = (symbol) => {
+    setShowDeleteToast(false)
+    setShowDeleteModal({symbol})
+    onOpen()
+  }
 
   const addToken = (symbol) => {
     console.log("ADD", symbol);
@@ -104,13 +134,14 @@ const Tokens = () => {
   const refreshPrices = () => {
     if (!nIntervId) {
       nIntervId = setTimeout(() => {
+        setShowDeleteToast(false)
         if (
           currentSymbolsState !== undefined &&
           currentSymbolsState.length > 0
         ) {
           saveTokens(currentSymbolsState, "INDEX");
         }
-      }, 90000);
+      }, 30000);
     }
     return () => {
       clearInterval(nIntervId);
@@ -177,6 +208,8 @@ const Tokens = () => {
     }
   };
 
+
+  console.log('MA RERANDEZ')
   return (
     <React.Fragment>
       {/* <AddTokenForm addToken={addToken}></AddTokenForm> */}
@@ -203,10 +236,20 @@ const Tokens = () => {
                 index={i}
                 token={{ ...tokens[key], symbol: key }}
                 deleteToken={deleteToken}
+                deletePressed={deletePressed}
               ></Token>
             ))}
         </Tbody>
       </Table>
+
+      <DeleteTokenAlert deleteToken={deleteToken} isOpen={isOpen} onClose={onClose} symbol={showDeleteModal.symbol}></DeleteTokenAlert>
+      {showDeleteToast && (
+        <TokenToast
+          actionStatus="error"
+          title="Token deleted."
+          description="We've deleted your token."
+        ></TokenToast>
+      )}
 
       {/* {(tokens !== undefined && Object.keys(tokens).length > 0) &&
         Object.keys(tokens).map((key, i) => (
