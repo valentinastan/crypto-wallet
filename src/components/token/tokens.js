@@ -206,7 +206,7 @@ const Tokens = () => {
       {/* <AddTokenForm addToken={addToken}></AddTokenForm> */}
       <AddTokenModal tokens={tokens} addToken={addToken}></AddTokenModal>
 
-      <Table variant="simple" colorScheme="twitter">
+      <Table variant="simple" colorScheme="teal">
         <Thead>
           <Tr>
             <Th>Index</Th>

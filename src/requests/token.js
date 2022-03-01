@@ -132,7 +132,7 @@ export async function getPricesRequest(params) {
   // let filteredTokens = filterDuplicatedSymbolTokens(myTokens)
   // console.log('filtered all', filteredTokens)
  
-  console.log('constants',Object.keys(constants))
+  // console.log('constants',Object.keys(constants))
 
   //get token's details
   if(Object.keys(constants).length > 0) {
@@ -141,7 +141,7 @@ export async function getPricesRequest(params) {
       //get my coins for their prices
       let response = await getExternal(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${mySymbolsList}`)
       let prices = []
-      console.log('data!!!: ', response.data)
+      // console.log('data!!!: ', response.data)
       response.data.map(token => prices.push({
         price: token.current_price, 
         symbol: token.symbol, 
@@ -149,7 +149,7 @@ export async function getPricesRequest(params) {
         image: token.image,
         price_change_percentage_24h: token.price_change_percentage_24h
       }))
-      console.log('response final', prices)
+      // console.log('response final', prices)
       return prices
   } else {
     return false
@@ -163,8 +163,14 @@ export async function getPricesRequest(params) {
 //     tokens[token.symbol] = token.id.toLowerCase()
 //   })
 
-export async function getHistoricalMarketData(params) {
+export async function getHistoricalMarketDataRequest(params) {
 //token-id, data up to number of days ago, Data interval:daily
 //https://api.coingecko.com/api/v3/coins/gnosis/market_chart?vs_currency=usd&days=1&interval=daily
+//params: symbol, days:7, 14, fara interval:daily
+  
+  let historicalData = await getExternal(`https://api.coingecko.com/api/v3/coins/${params.symbol}/market_chart?vs_currency=usd&days=${params.days}`) 
 
+  console.log(historicalData.data)
+
+  return historicalData.data.prices
 }

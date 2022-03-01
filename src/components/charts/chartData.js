@@ -1,48 +1,23 @@
-export const lineChartDataCharts2 = [
-  {
-    name: "Mobile apps",
-    data:  
-    [
-      [
-        1645488000000,
-        319.9144052527248
-      ],
-      [
-        1645574400000,
-        322.803630891756
-      ],
-      [
-        1645660800000,
-        319.953995761761
-      ],
-      [
-        1645747200000,
-        318.8140655219259
-      ],
-      [
-        1645833600000,
-        340.8071783045407
-      ],
-      [
-        1645920000000,
-        340.7409390590354
-      ],
-      [
-        1646006400000,
-        320.76537045757277
-      ],
-      [
-        1646070001000,
-        338.1332523121792
-      ]
-    ]
-   
-  },
-  // {
-  //   name: "Websites",
-  //   data: [400, 500, 40, 140, 290, 290, 340, 230, 400]
-  // }
-];
+// export const lineChartDataCharts2 = [
+//   {
+//     name: "set1",
+//     data:  
+//     [
+//       [
+//         1645488000000,
+//         319.9144052527248
+//       ],
+//       [
+//         1645574400000,
+//         322.803630891756
+//       ],
+//     ]
+//   },
+//   // {
+//   //   name: "set2",
+//   //   data: []
+//   // }
+// ];
 
 
 export const lineChartOptionsCharts2 = {
@@ -61,7 +36,8 @@ export const lineChartOptionsCharts2 = {
     enabled: false
   },
   stroke: {
-    curve: "smooth"
+    curve: "smooth",
+    width: 3,
   },
   xaxis: {
     type: "datetime",
@@ -90,7 +66,7 @@ export const lineChartOptionsCharts2 = {
     strokeDashArray: 5,
     yaxis: {
       lines: {
-        show: false
+        show: false,
       }
     },
     xaxis: {
