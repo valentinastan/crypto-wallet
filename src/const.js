@@ -11,6 +11,7 @@ import contractATOM from './contracts/contract-ATOM.json'
 import contractLEO from './contracts/contract-LEO.json'
 import contractFTT from './contracts/contract-FTT.json'
 import contractLINK from './contracts/contract-LINK.json'
+import contractSAND from './contracts/contract-SAND.json'
 
 export default {
   GNO: {
@@ -77,5 +78,10 @@ export default {
     coingeckoId: 'chainlink',
     tokenAddress: '0x514910771af9ca656af840dff83e8264ecf986ca',
     tokenABI: contractLINK
+  },
+  SAND: {
+    coingeckoId: 'the-sandbox',
+    tokenAddress: '0x3845badAde8e6dFF049820680d1F14bD3903a5d0',
+    tokenABI: contractSAND
   }
 }

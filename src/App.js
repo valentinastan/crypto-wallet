@@ -7,10 +7,13 @@ import theme from "./theme";
 
 function App() {
   return (
+    <React.Fragment>
+    <ColorModeScript initialColorMode='dark'/>
     <ChakraProvider>
-      <ColorModeScript initialColorMode={theme.config.initialColorMode} />
+
       {appRoutes}
     </ChakraProvider>
+    </React.Fragment>
   );
 }
 

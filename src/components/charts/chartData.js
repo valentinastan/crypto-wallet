@@ -22,8 +22,10 @@
 
 export const lineChartOptionsCharts2 = {
   chart: {
-    toolbar: {
-      show: true
+    id: 'mainChart',
+    toolbar: { //incons +/-
+     show: true,
+     autoSelected: 'pan',
     },
     zoom: {
       autoScaleYaxis: true
@@ -91,3 +93,62 @@ export const lineChartOptionsCharts2 = {
   },
   colors: ["#4FD1C5", "#2D3748"]
 };
+
+// var date = new Date()
+// const yesterday = new Date(date)
+// yesterday.setDate(yesterday.getDate() - 1)
+let maxDate = new Date(8640000000000000);
+let minDate = new Date(-8640000000000000);
+
+export const optionsLine = {
+  chart: {
+    id: 'selectionChart',
+    type: 'bar', //bar
+    foreColor: "#ccc",
+    brush:{
+      target: 'mainChart',
+      enabled: true
+    },
+    selection: {
+      enabled: true,
+      fill: {
+        color: "#fff",
+        opacity: 0.4
+      },
+      xaxis: {
+        min: new Date(minDate.getTime()),
+        max: new Date(maxDate.getTime())
+      }
+    },
+  },
+  colors: ['#FF0080'],
+  stroke: {
+    width: 2
+  },
+  grid: {
+    borderColor: "#444"
+  },
+  markers: {
+    size: 0
+  },
+  // fill: {
+  //   type: 'pink'
+  //   // type: 'gradient',
+  //   // gradient: {
+  //   //   opacityFrom: 0.91,
+  //   //   opacityTo: 0.1,
+  //   // }
+  // },
+  xaxis: {
+    type: 'datetime',
+    tooltip: {
+      enabled: false
+    }
+  },
+  yaxis: {
+    labels: {
+      formatter: (val) => {return parseFloat(val).toFixed(2);},
+    },
+    tickAmount: 2
+  }
+} 
