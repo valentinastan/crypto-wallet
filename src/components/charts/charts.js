@@ -21,12 +21,30 @@ const Charts = () => {
         console.log("No matching documents.");
         // return;
       } else {
-        setHistoricalPrices([{name: 'Prices', data: tokensSnapshot}])
+        setHistoricalPrices([{name: 'Total', data: tokensSnapshot}])
         // console.log('historical prices', historicalPrices)
       }
     });
   }, [daysAgo]);
 
+  // const getSelection = () => {
+  //   const selection = {}
+  //   if(historicalPrices[0].data.length > 0) {
+  //     selection = {
+  //       enabled: true,
+  //       fill: {
+  //         color: "#fff",
+  //         opacity: 0.4
+  //       },
+  //       xaxis: {
+  //         min: new Date(historicalPrices[0].data[0][0]).toLocaleString(),
+  //         max: new Date().getTime()
+  //       }
+  //     }
+  //   }
+
+  //   return selection
+  // }
 
   return (
     <React.Fragment>
@@ -64,7 +82,7 @@ const Charts = () => {
             series={historicalPrices}
             type="area"
             width="99%"
-            height="100%" 
+            height="500px" 
           />
   
       }
@@ -73,7 +91,19 @@ const Charts = () => {
         <ReactApexChart
           options={optionsLine}
           series={historicalPrices} 
+          type="area"
           height='130px'
+          // selection={{
+          //   enabled: true,
+          //   fill: {
+          //     color: "#fff",
+          //     opacity: 0.4
+          //   },
+          //   xaxis: {
+          //     min: new Date(historicalPrices[0].data[0][0]).toLocaleString(),
+          //     max: new Date().getTime()
+          //   }
+          // }}
         />
       }
       {/* <LineChart

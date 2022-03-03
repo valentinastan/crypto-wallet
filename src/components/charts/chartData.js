@@ -77,6 +77,12 @@ export const lineChartOptionsCharts2 = {
       }
     }
   },
+  markers: {
+    size: 0,
+    colors: ["#b85384"],
+    strokeColor: "#4FD1C5",
+    strokeWidth: 3 
+  },
   fill: {
     type: "gradient",
     gradient: {
@@ -103,7 +109,8 @@ let minDate = new Date(-8640000000000000);
 export const optionsLine = {
   chart: {
     id: 'selectionChart',
-    type: 'bar', //bar
+    // height: 130,
+    // type: 'bar', //bar
     foreColor: "#ccc",
     brush:{
       target: 'mainChart',
@@ -115,13 +122,21 @@ export const optionsLine = {
         color: "#fff",
         opacity: 0.4
       },
-      xaxis: {
-        min: new Date(minDate.getTime()),
-        max: new Date(maxDate.getTime())
-      }
+      // xaxis: {
+      //   min: new Date(minDate.getTime()),
+      //   max: new Date(maxDate.getTime())
+      // }
     },
   },
-  colors: ['#FF0080'],
+  colors: ['#b85384'],
+  fill: {
+    type: 'gradient',
+    gradient: {
+      type: "vertical",
+      opacityFrom: 0.75,
+      opacityTo: 0.1,
+    }
+  },
   stroke: {
     width: 2
   },
@@ -131,14 +146,6 @@ export const optionsLine = {
   markers: {
     size: 0
   },
-  // fill: {
-  //   type: 'pink'
-  //   // type: 'gradient',
-  //   // gradient: {
-  //   //   opacityFrom: 0.91,
-  //   //   opacityTo: 0.1,
-  //   // }
-  // },
   xaxis: {
     type: 'datetime',
     tooltip: {
