@@ -142,6 +142,7 @@ const Tokens = () => {
   };
 
   const saveTokens = async (tokensSymbol, action) => {
+    setShowDeleteToast(false)
     let prices = await getPrices(tokensSymbol);
     const newValues = {};
 
@@ -186,16 +187,19 @@ const Tokens = () => {
       case "INDEX":
         setState({ ...newValues });
         setCurrentSymbols(Object.keys(newValues));
+        // setShowDeleteToast(false)
 
         break;
       case "ADD":
         setState({ ...tokens, ...newValues });
         setCurrentSymbols([...Object.keys(tokens), ...Object.keys(newValues)]);
+        // setShowDeleteToast(false)
 
         break;
       default:
         setState({ ...tokens });
         setCurrentSymbols(Object.keys(newValues));
+        // setShowDeleteToast(false)
 
         break;
     }
