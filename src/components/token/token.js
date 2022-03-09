@@ -1,39 +1,18 @@
 import React, { useState } from "react";
-import { deleteTokenRequest } from "../../requests/token";
-import DeleteTokenAlert from './deleteTokenAlert'
 import {
   Tr,
   Td,
   Avatar,
   HStack,
   useColorModeValue,
-  Tfoot,
-  IconButton,
+  IconButton
 } from "@chakra-ui/react";
-import TokenToast from "../tokenToast";
 import './css/token.css'
-import { MinusIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, ChevronUpIcon, MinusIcon } from "@chakra-ui/icons";
+import Charts from "../charts/charts";
 
 const Token = (props) => {
- // const currentWallet = localStorage.getItem("address");
-  // const [showDeleteToast, setShowDeleteToast] = useState(false);
-  console.log("props", props);
- 
-
-  // const deleteToken = () => {
-  //   deleteTokenRequest({
-  //     currentWallet,
-  //     symbol: props.token.symbol,
-  //   }).then((result) => {
-  //     if (result === false) {
-  //       console.log("No such document!");
-  //     } else {
-  //       setShowDeleteToast(true)
-  //       props.deleteToken(props.token.symbol, props.index);
-      
-  //     }
-  //   });
-  // };
+  const [showChart, setShowChart] = useState(false)
 
   const calculateTotal = () => {
     if(parseFloat(props.token.balance) > 0 && props.token.price > 0 ){
@@ -41,6 +20,18 @@ const Token = (props) => {
     } else {
       return 0;
     }
+  }
+
+  const stylingDecimals = (numericValue) => {
+    if(numericValue) {
+      if(numericValue > 1 || numericValue === 0) {
+        return parseFloat(numericValue).toFixed(2)
+      } else if(numericValue > 0.0001) {
+        return parseFloat(numericValue).toFixed(4)
+      } else {
+        return parseFloat(numericValue).toFixed(6)
+      }
+    } else return 0
   }
 
   const bg = useColorModeValue('#EDF2F7', '#212938')
@@ -52,7 +43,6 @@ const Token = (props) => {
         _hover={{ 
         bg:bg, 
         color:color,
-        // borderRadius:'40px',
         }}
       >
         <Td>{props.index + 1}</Td>
@@ -60,7 +50,7 @@ const Token = (props) => {
         <HStack spacing='5px'>
           <Avatar
             src={props.token.image}
-            size="sm" //sau xs
+            size="sm" //or xs
             name={props.token.symbol}
             ml={-1}
             mr={2}
@@ -69,16 +59,16 @@ const Token = (props) => {
           </HStack>
         </Td>
         <Td isNumeric className={props?.token?.price_change_percentage_24h > 0 ? 'green-price' : props?.token?.price_change_percentage_24h < 0 ? 'red-price' : ''}>
-          {parseFloat(props?.token?.price_change_percentage_24h || 0).toFixed(2)}%
+          {stylingDecimals(props?.token?.price_change_percentage_24h || 0)}%
         </Td>
         <Td isNumeric>
-          {parseFloat(props?.token?.price || 0).toFixed(4)}
+          {stylingDecimals(props?.token?.price || 0)}
         </Td>
         <Td isNumeric>
-          {parseFloat(props?.token?.balance || 0).toFixed(2)}
+          {stylingDecimals(props?.token?.balance || 0)}
         </Td>
         <Td isNumeric>
-          {parseFloat(calculateTotal() || 0).toFixed(2)}
+          {stylingDecimals(calculateTotal() || 0)}
         </Td>
         <Td>
           <IconButton
@@ -89,22 +79,24 @@ const Token = (props) => {
             icon={<MinusIcon />}
           />
         </Td>
+        <Td>
+          <IconButton
+            onClick={() => {
+              return setShowChart(!showChart)}}
+            variant="ghost"
+            colorScheme="teal"
+            aria-label="View Token"
+            icon={!showChart ? <ChevronDownIcon /> : <ChevronUpIcon />}
+          />
+        </Td>
       </Tr>
-      {/* {showDeleteToast && (
-        <TokenToast
-          actionStatus="error"
-          title="Token deleted."
-          description="We've deleted your token."
-        ></TokenToast>
-      )} */}
-      {/* 
-      <div>token: {props.token.symbol}</div>
-      <div>balance: {parseFloat(props?.token?.balance || 0).toFixed(2)}</div>
-      <div>price: {parseFloat(props?.token?.price || 0).toFixed(2)} USD</div>
-      <div>total: {calculateTotal()} USD</div>
-      <button type="button" onClick={deleteToken}>
-        Remove
-      </button> */}
+      {showChart &&  
+        <Tr>
+          <Td colSpan='8'>
+          <Charts tokenSymbol={props.token.symbol}></Charts>
+          </Td>
+        </Tr>
+      }
     </React.Fragment>
   );
 };

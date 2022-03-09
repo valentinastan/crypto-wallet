@@ -34,7 +34,8 @@ const Tokens = () => {
   //   },
   // ]);
   const currentWallet = localStorage.getItem("address");
-  const web3 = new Web3(Web3.givenProvider);
+  const web3 = new Web3(Web3.givenProvider); //tr vazut cand se schimba val asta  x network
+  // console.log('******* WEB3: ', web3)
   let nIntervId;
 
   useEffect(() => {
@@ -207,7 +208,6 @@ const Tokens = () => {
 
   return (
     <React.Fragment>
-      {/* <AddTokenForm addToken={addToken}></AddTokenForm> */}
       <AddTokenModal tokens={tokens} addToken={addToken}></AddTokenModal>
 
       <Table variant="simple" colorScheme="teal">
@@ -219,6 +219,7 @@ const Tokens = () => {
             <Th isNumeric>Price</Th>
             <Th isNumeric>Balance</Th>
             <Th isNumeric>Amount</Th>
+            <Th></Th>
             <Th></Th>
           </Tr>
         </Thead>

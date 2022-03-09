@@ -3,8 +3,9 @@ import { lineChartOptionsCharts2, optionsLine } from "./chartData";
 import ReactApexChart from "react-apexcharts";
 import { Button, Stack } from "@chakra-ui/react";
 import {getHistoricalMarketDataRequest} from '../../requests/token'
+import constants from '../../const'
 
-const Charts = () => {
+const Charts = (props) => {
   const [historicalPrices, setHistoricalPrices] = useState([{
     name: '',
     data: []
@@ -14,37 +15,17 @@ const Charts = () => {
 
   useEffect(() => {
     getHistoricalMarketDataRequest({
-      symbol: 'gnosis',
+      symbol: constants[props.tokenSymbol].coingeckoId,
       days: daysAgo,
     }).then((tokensSnapshot) => {
       if (tokensSnapshot.empty) {
         console.log("No matching documents.");
         // return;
       } else {
-        setHistoricalPrices([{name: 'Total', data: tokensSnapshot}])
-        // console.log('historical prices', historicalPrices)
+        setHistoricalPrices([{name: `${props.tokenSymbol} price`, data: tokensSnapshot}])
       }
     });
   }, [daysAgo]);
-
-  // const getSelection = () => {
-  //   const selection = {}
-  //   if(historicalPrices[0].data.length > 0) {
-  //     selection = {
-  //       enabled: true,
-  //       fill: {
-  //         color: "#fff",
-  //         opacity: 0.4
-  //       },
-  //       xaxis: {
-  //         min: new Date(historicalPrices[0].data[0][0]).toLocaleString(),
-  //         max: new Date().getTime()
-  //       }
-  //     }
-  //   }
-
-  //   return selection
-  // }
 
   return (
     <React.Fragment>
@@ -93,23 +74,8 @@ const Charts = () => {
           series={historicalPrices} 
           type="area"
           height='130px'
-          // selection={{
-          //   enabled: true,
-          //   fill: {
-          //     color: "#fff",
-          //     opacity: 0.4
-          //   },
-          //   xaxis: {
-          //     min: new Date(historicalPrices[0].data[0][0]).toLocaleString(),
-          //     max: new Date().getTime()
-          //   }
-          // }}
         />
       }
-      {/* <LineChart
-        // chartData={historicalPrices}
-        // chartOptions={lineChartOptionsCharts2}
-        // /> */}
     </React.Fragment>
   );
 };
