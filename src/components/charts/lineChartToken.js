@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { lineChartOptionsCharts2, optionsLine } from "./chartData";
+import { lineChartOptions, optionsLine } from "./lineChartTokenOptions";
 import ReactApexChart from "react-apexcharts";
 import { Button, Stack } from "@chakra-ui/react";
 import {getHistoricalMarketDataRequest} from '../../requests/token'
@@ -57,24 +57,22 @@ const Charts = (props) => {
       </Stack>
       {
         historicalPrices[0].data.length > 0 &&
- 
           <ReactApexChart
-            options={lineChartOptionsCharts2}
+            options={lineChartOptions}
             series={historicalPrices}
             type="area"
             width="99%"
             height="500px" 
           />
-  
       }
       {
         historicalPrices[0].data.length > 0 &&
-        <ReactApexChart
-          options={optionsLine}
-          series={historicalPrices} 
-          type="area"
-          height='130px'
-        />
+          <ReactApexChart
+            options={optionsLine}
+            series={historicalPrices} 
+            type="area"
+            height='130px'
+          />
       }
     </React.Fragment>
   );

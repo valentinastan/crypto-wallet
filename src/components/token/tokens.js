@@ -6,10 +6,11 @@ import constants from "../../const";
 import { ethers } from "ethers";
 import Web3 from "web3";
 
-import { Table, Thead, Tbody, Tr, Th, useDisclosure } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, useDisclosure, Divider } from "@chakra-ui/react";
 import AddTokenModal from "./addTokenModal";
 import DeleteTokenAlert from "./deleteTokenAlert";
 import TokenToast from "../tokenToast";
+import DonutChartWallet from "../charts/donutChartWallet";
 
 const Tokens = () => {
   // const [tokens, setState] = useState({
@@ -119,10 +120,11 @@ const Tokens = () => {
 
   const addToken = (symbol) => {
     console.log("ADD", symbol);
-    saveTokens([symbol], "ADD").then(() => {});
-    let currentSymbols = [...currentSymbolsState];
-    currentSymbols.push(symbol);
-    setCurrentSymbols([...currentSymbols]);
+    saveTokens([symbol], "ADD").then(() => {
+      let currentSymbols = [...currentSymbolsState];
+      currentSymbols.push(symbol);
+      setCurrentSymbols([...currentSymbols]);
+    });
   };
 
   const refreshPrices = () => {
@@ -188,19 +190,16 @@ const Tokens = () => {
       case "INDEX":
         setState({ ...newValues });
         setCurrentSymbols(Object.keys(newValues));
-        // setShowDeleteToast(false)
 
         break;
       case "ADD":
         setState({ ...tokens, ...newValues });
         setCurrentSymbols([...Object.keys(tokens), ...Object.keys(newValues)]);
-        // setShowDeleteToast(false)
 
         break;
       default:
         setState({ ...tokens });
         setCurrentSymbols(Object.keys(newValues));
-        // setShowDeleteToast(false)
 
         break;
     }
@@ -208,6 +207,7 @@ const Tokens = () => {
 
   return (
     <React.Fragment>
+      <DonutChartWallet tokens={tokens}></DonutChartWallet>
       <AddTokenModal tokens={tokens} addToken={addToken}></AddTokenModal>
 
       <Table variant="simple" colorScheme="teal">

@@ -12,6 +12,8 @@ import contractLEO from './contracts/contract-LEO.json'
 import contractFTT from './contracts/contract-FTT.json'
 import contractLINK from './contracts/contract-LINK.json'
 import contractSAND from './contracts/contract-SAND.json'
+import contractXP from './contracts/contract-XP.json'
+import contractLQTY from './contracts/contract-LQTY.json'
 
 export default {
   GNO: {
@@ -83,5 +85,15 @@ export default {
     coingeckoId: 'the-sandbox',
     tokenAddress: '0x3845badAde8e6dFF049820680d1F14bD3903a5d0',
     tokenABI: contractSAND
+  },
+  XP: {
+    coingeckoId: 'polkafantasy',
+    tokenAddress: '0x948c70Dc6169Bfb10028FdBE96cbC72E9562b2Ac',
+    tokenABI: contractXP
+  },
+  LQTY: {
+    coingeckoId: 'liquity',
+    tokenAddress: '0x6dea81c8171d0ba574754ef6f8b412f2ed88c54d',
+    tokenABI: contractLQTY
   }
 }

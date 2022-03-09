@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import './css/token.css'
 import { ChevronDownIcon, ChevronUpIcon, MinusIcon } from "@chakra-ui/icons";
-import Charts from "../charts/charts";
+import Charts from "../charts/lineChartToken";
 
 const Token = (props) => {
   const [showChart, setShowChart] = useState(false)
@@ -62,15 +62,15 @@ const Token = (props) => {
           {stylingDecimals(props?.token?.price_change_percentage_24h || 0)}%
         </Td>
         <Td isNumeric>
-          {stylingDecimals(props?.token?.price || 0)}
+          {stylingDecimals(props?.token?.price || 0)} $
         </Td>
         <Td isNumeric>
           {stylingDecimals(props?.token?.balance || 0)}
         </Td>
         <Td isNumeric>
-          {stylingDecimals(calculateTotal() || 0)}
+          {stylingDecimals(calculateTotal() || 0)} $
         </Td>
-        <Td>
+        <Td isNumeric>
           <IconButton
             onClick={() => props.deletePressed(props?.token?.symbol)}
             variant="ghost"

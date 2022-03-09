@@ -1,26 +1,4 @@
-// export const lineChartDataCharts2 = [
-//   {
-//     name: "set1",
-//     data:  
-//     [
-//       [
-//         1645488000000,
-//         319.9144052527248
-//       ],
-//       [
-//         1645574400000,
-//         322.803630891756
-//       ],
-//     ]
-//   },
-//   // {
-//   //   name: "set2",
-//   //   data: []
-//   // }
-// ];
-
-
-export const lineChartOptionsCharts2 = {
+export const lineChartOptions= {
   chart: {
     id: 'mainChart',
     toolbar: { //incons +/-
@@ -99,12 +77,6 @@ export const lineChartOptionsCharts2 = {
   },
   colors: ["#4FD1C5", "#2D3748"]
 };
-
-// var date = new Date()
-// const yesterday = new Date(date)
-// yesterday.setDate(yesterday.getDate() - 1)
-let maxDate = new Date(8640000000000000);
-let minDate = new Date(-8640000000000000);
 
 export const optionsLine = {
   chart: {

@@ -3,6 +3,7 @@ import SwitchTheme from "../components/switchTheme";
 import Tokens from "../components/token/tokens";
 import NavBar from "../components/navBar/navBar";
 import './pages.css'
+import DonutChartWallet from "../components/charts/donutChartWallet";
 
 const WalletPage = () => {
   return (
