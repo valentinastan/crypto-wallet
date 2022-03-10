@@ -10,21 +10,14 @@ import {
 import './css/token.css'
 import { ChevronDownIcon, ChevronUpIcon, MinusIcon } from "@chakra-ui/icons";
 import Charts from "../charts/lineChartToken";
+import { calculateTokenAmount } from "./token-helpers";
 
 const Token = (props) => {
   const [showChart, setShowChart] = useState(false)
 
-  const calculateTotal = () => {
-    if(parseFloat(props.token.balance) > 0 && props.token.price > 0 ){
-      return (parseFloat(props.token.balance)*props.token.price).toFixed(2)
-    } else {
-      return 0;
-    }
-  }
-
   const stylingDecimals = (numericValue) => {
     if(numericValue) {
-      if(numericValue > 1 || numericValue === 0) {
+      if(numericValue > 1) {
         return parseFloat(numericValue).toFixed(2)
       } else if(numericValue > 0.0001) {
         return parseFloat(numericValue).toFixed(4)
@@ -44,6 +37,7 @@ const Token = (props) => {
         bg:bg, 
         color:color,
         }}
+        opacity={(!props.token.balance || props.token.balance <= 0.00001) ? 0.33 : 1}
       >
         <Td>{props.index + 1}</Td>
         <Td>
@@ -59,7 +53,7 @@ const Token = (props) => {
           </HStack>
         </Td>
         <Td isNumeric className={props?.token?.price_change_percentage_24h > 0 ? 'green-price' : props?.token?.price_change_percentage_24h < 0 ? 'red-price' : ''}>
-          {stylingDecimals(props?.token?.price_change_percentage_24h || 0)}%
+          {parseFloat(props?.token?.price_change_percentage_24h || 0).toFixed(2)}%
         </Td>
         <Td isNumeric>
           {stylingDecimals(props?.token?.price || 0)} $
@@ -68,7 +62,7 @@ const Token = (props) => {
           {stylingDecimals(props?.token?.balance || 0)}
         </Td>
         <Td isNumeric>
-          {stylingDecimals(calculateTotal() || 0)} $
+          {stylingDecimals(calculateTokenAmount(props.token.balance, props.token.price) || 0)} $
         </Td>
         <Td isNumeric>
           <IconButton

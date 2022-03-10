@@ -2,20 +2,29 @@ import React, { useEffect, useState } from "react";
 import { donutChartOptions } from "./donutChartWalletOptions";
 import ReactApexChart from "react-apexcharts";
 import { Center } from "@chakra-ui/react";
+import { calculateTokenAmount, calculateTokenPercentage, calculateWalletAmount } from "../token/token-helpers";
 
 const DonutChartWallet = (props) => {
-  console.log('donut', props)
   const tokensSymbol = Object.keys(props.tokens)
+  let tokensLabel = []
+  let tokensAmount = []
 
+  tokensAmount = tokensSymbol
+    .map(symbol => {
+      let amount = parseFloat(calculateTokenAmount(props.tokens[symbol].balance, props.tokens[symbol].price))
+      if(amount > 0) {
+        tokensLabel.push(symbol)
+        return amount
+      }
+    })
+    .filter(tokenAmount => tokenAmount !== undefined)
 
-  const getAmounts = () => {
-    let amounts = []
-    amounts = tokensSymbol.map(symbol => props.tokens[symbol]?.amount).filter(el => el !== undefined)
-    return amounts
-  }
+  let walletAmount = calculateWalletAmount(tokensAmount)
+  let tokensAmountPercentage = tokensAmount.map(amount => parseFloat(calculateTokenPercentage(amount, walletAmount).toFixed(2)))
 
-const donutChartData = getAmounts()
-const label = tokensSymbol
+  console.log(tokensAmountPercentage)
+  const donutChartData = tokensAmountPercentage
+  const label = tokensLabel
 
   return (
     <React.Fragment>
