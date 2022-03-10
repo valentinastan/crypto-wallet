@@ -21,7 +21,6 @@ import {
 import { AddIcon } from "@chakra-ui/icons";
 
 const AddTokenModal = (props) => {
-  console.log("proprs din modala", props);
   const [value, setValue] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [scrollBehavior, setScrollBehavior] = useState("inside");

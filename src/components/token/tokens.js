@@ -11,52 +11,47 @@ import AddTokenModal from "./addTokenModal";
 import DeleteTokenAlert from "./deleteTokenAlert";
 import TokenToast from "../tokenToast";
 import DonutChartWallet from "../charts/donutChartWallet";
+import { useGlobalState } from "../../state-management/stores/store";
 
 const Tokens = () => {
-  // const [tokens, setState] = useState({
-  //   "": {
-  //     balance: null,
-  //     price: null,
-  //   },
-  // });
-  
+  const currentWallet = localStorage.getItem("address");
   const [tokens, setState] = useState({});
   const [currentSymbolsState, setCurrentSymbols] = useState(
     Object.keys(tokens)
   );
+
   const [showDeleteModal, setShowDeleteModal] = useState({symbol: ''});
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showDeleteToast, setShowDeleteToast] = useState(false);
-  // const [tokens, setState] = useState([
-  //   {
-  //     symbol: "",
-  //     balance: null,
-  //     price: null,
-  //   },
-  // ]);
-  const currentWallet = localStorage.getItem("address");
-  const web3 = new Web3(Web3.givenProvider); //tr vazut cand se schimba val asta  x network
-  // console.log('******* WEB3: ', web3)
+
+  const web3 = new Web3(Web3.givenProvider); 
+  const networkId = useGlobalState().walletState.networkId
+  console.log('ma rerandez', networkId)
+ 
+
   let nIntervId;
 
   useEffect(() => {
-    getTokensByWallet(currentWallet).then((tokensSnapshot) => {
+    if(networkId) {
+    getTokensByWallet({currentWallet, networkId}).then((tokensSnapshot) => {
       if (tokensSnapshot.empty) {
         console.log("No matching documents.");
+        setState({})
         // return;
       } else {
         const tokensSymbol = [];
         tokensSnapshot.forEach((token) => {
           tokensSymbol.push(token.data().tokenSymbol);
         });
-        console.log("IN PRIMUL USE EFFECT");
+        console.log("IN PRIMUL USE EFFECT", tokensSymbol);
 
         saveTokens(tokensSymbol, "INDEX");
         setCurrentSymbols(tokensSymbol);
         //refreshPrices()
       }
     });
-  }, []);
+  }
+  }, [networkId]);
 
   useEffect(() => {
     if (currentSymbolsState.length > 0) {
@@ -69,22 +64,49 @@ const Tokens = () => {
   }, [currentSymbolsState]);
 
   const getBalance = async (tokenSymbol) => {
-    var MyContract = new web3.eth.Contract(
-      constants[tokenSymbol].tokenABI,
-      constants[tokenSymbol].tokenAddress,
-      {
-        from: currentWallet,
+    console.log('caut monede noi?', networkId)
+    if(networkId) {
+      var MyContract
+      switch (networkId) {
+        case 1: //eth chain
+          MyContract = new web3.eth.Contract(
+            constants[tokenSymbol].tokenABI,
+            constants[tokenSymbol].tokenAddress,
+            {
+              from: currentWallet,
+            }
+          );
+          
+          break;
+        case 56: //binance chain
+        
+          break;
+        case 137: //polygon chain
+        
+          break;
+      
+        default:
+          break;
       }
-    );
+      try {
+        const tokenBalance = await MyContract.methods
+          .balanceOf(currentWallet)
+          .call();
+        return ethers.utils.formatEther(tokenBalance);
+      } catch(ex) {
+        console.log(ex)
+      }
 
-    try {
-      const tokenBalance = await MyContract.methods
-        .balanceOf(currentWallet)
-        .call();
-      return ethers.utils.formatEther(tokenBalance);
-    } catch(ex) {
-      alert(ex)
     }
+ 
+    // var MyContract = new web3.eth.Contract(
+    //   constants[tokenSymbol].tokenABI,
+    //   constants[tokenSymbol].tokenAddress,
+    //   {
+    //     from: currentWallet,
+    //   }
+    // );
+
   };
 
   const getPrices = async (tokens) => {
@@ -96,6 +118,7 @@ const Tokens = () => {
     deleteTokenRequest({
       currentWallet,
       symbol: showDeleteModal.symbol,
+      networkId,
     }).then((result) => {
       if (result === false) {
         console.log("No such document!");

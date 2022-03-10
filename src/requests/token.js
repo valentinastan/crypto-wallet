@@ -9,13 +9,14 @@ export async function addTokenRequest(params) {
   const walletsRef = collection(dbStore, "wallets");
   
   //Check if this token already exists
-  const existingTokenForThisWallet = query(walletsRef, where("walletAddress", "==" , params.walletAddress), where("tokenSymbol", "==", params.tokenSymbol));
+  const existingTokenForThisWallet = query(walletsRef, where("walletAddress", "==" , params.walletAddress), where("tokenSymbol", "==", params.tokenSymbol), where("networkId", "==", parseInt(params.networkId)));
   const querySnapshot = await getDocs(existingTokenForThisWallet);
   
   if(querySnapshot.empty) {
     const docRef = await addDoc(walletsRef, {
       walletAddress: params.walletAddress,
       tokenSymbol: params.tokenSymbol,
+      networkId: params.networkId
     });
     console.log("Document written with ID: ", docRef.id);
   
@@ -29,10 +30,10 @@ export async function addTokenRequest(params) {
 
 export async function getTokensByWallet(params) {
   const walletsRef = collection(dbStore, "wallets");
-
-  const currentWalletTokens = query(walletsRef, where("walletAddress", "==" , params));
+console.log('params', params)
+  const currentWalletTokens = query(walletsRef, where("walletAddress", "==" , params.currentWallet), where("networkId", "==", parseInt(params.networkId)));
   const querySnapshot = await getDocs(currentWalletTokens);
-  
+  console.log(querySnapshot)
   return querySnapshot
 }
 
@@ -40,17 +41,43 @@ export async function deleteTokenRequest(params) {
   const walletsRef = collection(dbStore, "wallets");
   console.log('params ', params)
 
-  const existingTokenForThisWallet = query(walletsRef, where("walletAddress", "==" , params.currentWallet), where("tokenSymbol", "==", params.symbol));
+  const existingTokenForThisWallet = query(walletsRef, where("walletAddress", "==" , params.currentWallet), where("tokenSymbol", "==", params.symbol), where("networkId", "==", parseInt(params.networkId)));
   const querySnapshot = await getDocs(existingTokenForThisWallet);
 
   let deletedId = '';
   querySnapshot.forEach((doc) => deletedId = doc.id);
 
-  const result = await deleteDoc(doc(dbStore, "wallets",deletedId));
+  const result = await deleteDoc(doc(dbStore, "wallets", deletedId));
   if(result === undefined) 
    return true 
    else return false
 }
+
+export async function getPricesRequest(params) {
+  if(Object.keys(constants).length > 0) {
+    let mySymbolsList = Object.keys(constants).reduce((symbolsList, key) => symbolsList + constants[key].coingeckoId + ',', '') //filteredTokens.ley = id
+    let response = await getExternal(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${mySymbolsList}`)
+    let prices = []
+  
+    response.data.map(token => prices.push({
+      price: token.current_price, 
+      symbol: token.symbol, 
+      name: token.name,
+      image: token.image,
+      price_change_percentage_24h: token.price_change_percentage_24h
+    }))
+    return prices
+  } else {
+    return false
+  }
+}
+
+export async function getHistoricalMarketDataRequest(params) {
+  let historicalData = await getExternal(`https://api.coingecko.com/api/v3/coins/${params.symbol}/market_chart?vs_currency=usd&days=${params.days}`) 
+  
+  return historicalData.data.prices
+}
+
 
 async function getAllTokensRequest() {
   console.log('****FAC AICI REQUEST')
@@ -114,63 +141,4 @@ function filterDuplicatedSymbolTokens(myTokens) {
   })
 
   return {...resultsWithoutDup, ...results}
-}
-
-
-export async function getPricesRequest(params) {
-  // const allCoins = await getAllTokensRequest()
-
-  // let myTokens = [];
-
-  // //get only my tokens
-  // myTokens = allCoins.data.filter(externalToken => {
-  //   return params.includes(externalToken.symbol.toUpperCase())
-  // })
-  // console.log('mytokens ids', myTokens)
-
-  // //get filtered tokens
-  // let filteredTokens = filterDuplicatedSymbolTokens(myTokens)
-  // console.log('filtered all', filteredTokens)
- 
-  // console.log('constants',Object.keys(constants))
-
-  //get token's details
-  if(Object.keys(constants).length > 0) {
-    let mySymbolsList = Object.keys(constants).reduce((symbolsList, key) => symbolsList + constants[key].coingeckoId + ',', '') //filteredTokens.ley = id
-    console.log('my tokens list', mySymbolsList)
-      //get my coins for their prices
-      let response = await getExternal(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${mySymbolsList}`)
-      let prices = []
-      // console.log('data!!!: ', response.data)
-      response.data.map(token => prices.push({
-        price: token.current_price, 
-        symbol: token.symbol, 
-        name: token.name,
-        image: token.image,
-        price_change_percentage_24h: token.price_change_percentage_24h
-      }))
-      // console.log('response final', prices)
-      return prices
-  } else {
-    return false
-  }
-}
-
-// const createCache = (data) => {
-//   let tokens = {}
-//   data.forEach(token => {
-//     if(Object.hasOwnProperty(token.symbol))
-//     tokens[token.symbol] = token.id.toLowerCase()
-//   })
-
-export async function getHistoricalMarketDataRequest(params) {
-//token-id, data up to number of days ago, Data interval:daily
-//https://api.coingecko.com/api/v3/coins/gnosis/market_chart?vs_currency=usd&days=1&interval=daily
-//params: symbol, days:7, 14, fara interval:daily
-  
-  let historicalData = await getExternal(`https://api.coingecko.com/api/v3/coins/${params.symbol}/market_chart?vs_currency=usd&days=${params.days}`) 
-
-  console.log(historicalData.data)
-
-  return historicalData.data.prices
 }

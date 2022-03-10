@@ -16,7 +16,6 @@ import { MinusIcon } from "@chakra-ui/icons";
 const DeleteTokenAlert = (props) => {
   // const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
-  console.log("ALERTA", props);
 
   return (
     <React.Fragment>

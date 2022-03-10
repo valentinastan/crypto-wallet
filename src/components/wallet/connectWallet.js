@@ -10,7 +10,7 @@ const ConnectWallet = () => {
 
   const checkWalletIsConnected = () => {
     const { ethereum } = window;
-
+console.log('heloooooooooo')
     if (!ethereum) {
       console.log("Make sure you have Metamask installed!");
       return;

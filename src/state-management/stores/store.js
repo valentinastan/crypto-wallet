@@ -4,13 +4,14 @@ import walletReducer from '../reducers/walletReducer';
 
 const initialState = {
   walletState: {
-    address: ' '
+    address: ' ',
+    networkId: null,
   },
   tokenState: {
     tokens: []
   }
 }
-
+ console.log('STATE', initialState)
 const Store = React.createContext();
 const Dispatch = React.createContext();
 

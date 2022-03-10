@@ -4,15 +4,18 @@ import { addTokenRequest } from "../../requests/token";
 import { Flex, HStack } from "@chakra-ui/react";
 import "./css/token.css";
 import TokenToast from "../tokenToast";
+import { useGlobalState } from "../../state-management/stores/store";
 
 const UnimportedToken = (props) => {
   const walletAddress = localStorage.getItem("address");
   const [showSuccessToast, setShowSuccessToast] = useState(false);
+  const networkId = useGlobalState().walletState.networkId
 
   const importToken = () => {
     addTokenRequest({
       walletAddress,
       tokenSymbol: props.token.symbol,
+      networkId,
     }).then((data) => {
       if (false || !data.exists) {
         console.log("No such document!");
