@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { deleteTokenRequest, getPricesRequest, getTokensByWallet } from "../../requests/token";
 import Token from "./token";
 
-import constants from "../../const";
+import ethConstants from "../../constants/ethChain/const";
+import bnbConstants from "../../constants/bnbChain/const";
 import { ethers } from "ethers";
 import Web3 from "web3";
 
-import { Table, Thead, Tbody, Tr, Th, useDisclosure, Divider } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, useDisclosure } from "@chakra-ui/react";
 import AddTokenModal from "./addTokenModal";
 import DeleteTokenAlert from "./deleteTokenAlert";
 import TokenToast from "../tokenToast";
@@ -25,7 +26,8 @@ const Tokens = () => {
   const [showDeleteToast, setShowDeleteToast] = useState(false);
 
   const web3 = new Web3(Web3.givenProvider); 
-  const networkId = useGlobalState().walletState.networkId
+  const walletState = useGlobalState().walletState
+  const networkId  = walletState.networkId
   console.log('ma rerandez', networkId)
  
 
@@ -51,7 +53,7 @@ const Tokens = () => {
       }
     });
   }
-  }, [networkId]);
+  }, [walletState.address, networkId]);
 
   useEffect(() => {
     if (currentSymbolsState.length > 0) {
@@ -66,19 +68,44 @@ const Tokens = () => {
   const getBalance = async (tokenSymbol) => {
     console.log('caut monede noi?', networkId)
     if(networkId) {
-      var MyContract
+      let MyContract
       switch (networkId) {
         case 1: //eth chain
           MyContract = new web3.eth.Contract(
-            constants[tokenSymbol].tokenABI,
-            constants[tokenSymbol].tokenAddress,
+            ethConstants[tokenSymbol].tokenABI,
+            ethConstants[tokenSymbol].tokenAddress,
             {
               from: currentWallet,
             }
           );
+
+          try {
+            const tokenBalance = await MyContract.methods
+              .balanceOf(currentWallet)
+              .call();
+            return ethers.utils.formatEther(tokenBalance);
+          } catch(ex) {
+            console.log(ex) //he doesn't have this token
+          }
           
           break;
         case 56: //binance chain
+        MyContract = new web3.eth.Contract(
+          bnbConstants[tokenSymbol].tokenABI,
+          bnbConstants[tokenSymbol].tokenAddress,
+          {
+            from: currentWallet,
+          }
+        );
+
+        try {
+          const tokenBalance = await MyContract.methods
+            .balanceOf(currentWallet)
+            .call();
+          return ethers.utils.formatEther(tokenBalance);
+        } catch(ex) {
+          console.log(ex)
+        }
         
           break;
         case 137: //polygon chain
@@ -88,15 +115,6 @@ const Tokens = () => {
         default:
           break;
       }
-      try {
-        const tokenBalance = await MyContract.methods
-          .balanceOf(currentWallet)
-          .call();
-        return ethers.utils.formatEther(tokenBalance);
-      } catch(ex) {
-        console.log(ex)
-      }
-
     }
  
     // var MyContract = new web3.eth.Contract(
@@ -111,7 +129,9 @@ const Tokens = () => {
 
   const getPrices = async (tokens) => {
     console.log("IN GET PRICES", tokens);
-    return await getPricesRequest(tokens);
+    if(networkId)
+      return await getPricesRequest({tokens, networkId})
+    
   };
 
   const deleteToken = () => {
@@ -231,7 +251,9 @@ const Tokens = () => {
   return (
     <React.Fragment>
       <DonutChartWallet tokens={tokens}></DonutChartWallet>
-      <AddTokenModal tokens={tokens} addToken={addToken}></AddTokenModal>
+      {/* {tokens !== undefined && Object.keys(tokens).length > 0 && */}
+        <AddTokenModal tokens={tokens} addToken={addToken}></AddTokenModal>
+      {/* } */}
 
       <Table variant="simple" colorScheme="teal">
         <Thead>

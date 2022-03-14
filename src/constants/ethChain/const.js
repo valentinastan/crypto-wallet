@@ -32,12 +32,12 @@ export default {
     tokenABI: contractBYTES,
   },
   LUNA: {
-    coingeckoId: 'wrapped-terra',
+    coingeckoId: 'terra-luna',
     tokenAddress: '0xbd31ea8212119f94a611fa969881cba3ea06fa3d',
     tokenABI: contractLUNA,
   },
   UNI: {
-    coingeckoId: 'universe-token',
+    coingeckoId: 'uniswap',
     tokenAddress: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
     tokenABI: contractUNI,
   },

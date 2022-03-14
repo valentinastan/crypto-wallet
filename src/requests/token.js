@@ -2,8 +2,8 @@ import { doc, getDoc, deleteDoc } from "firebase/firestore";
 import { dbStore } from "../config/firebase";
 import { collection, addDoc, query, where, getDocs } from "firebase/firestore";
 import { getExternal } from "./request";
-import constants from '../const'
-
+import ethConstants from '../constants/ethChain/const'
+import bnbConstants from '../constants/bnbChain/const'
 
 export async function addTokenRequest(params) {
   const walletsRef = collection(dbStore, "wallets");
@@ -54,8 +54,23 @@ export async function deleteTokenRequest(params) {
 }
 
 export async function getPricesRequest(params) {
-  if(Object.keys(constants).length > 0) {
-    let mySymbolsList = Object.keys(constants).reduce((symbolsList, key) => symbolsList + constants[key].coingeckoId + ',', '') //filteredTokens.ley = id
+  console.log('params', params)
+
+  let mySymbolsList = ''
+  if(params.tokens.length > 0) {
+    switch (params.networkId) {
+      case 1:
+        mySymbolsList = params.tokens.reduce((symbolsList, key) =>
+          symbolsList + ethConstants[key].coingeckoId + ',', '')
+        break;
+      case 56:
+        mySymbolsList = params.tokens.reduce((symbolsList, key) =>
+        symbolsList + bnbConstants[key].coingeckoId + ',', '')
+      break;
+      default:
+        break;
+    }
+
     let response = await getExternal(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${mySymbolsList}`)
     let prices = []
   
@@ -66,6 +81,7 @@ export async function getPricesRequest(params) {
       image: token.image,
       price_change_percentage_24h: token.price_change_percentage_24h
     }))
+    console.log('prices', prices)
     return prices
   } else {
     return false

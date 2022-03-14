@@ -3,7 +3,7 @@ import { lineChartOptions, optionsLine } from "./lineChartTokenOptions";
 import ReactApexChart from "react-apexcharts";
 import { Button, Stack } from "@chakra-ui/react";
 import {getHistoricalMarketDataRequest} from '../../requests/token'
-import constants from '../../const'
+import constants from '../../constants/ethChain/const'
 
 const Charts = (props) => {
   const [historicalPrices, setHistoricalPrices] = useState([{

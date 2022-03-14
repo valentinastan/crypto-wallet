@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-import allTokens from "../../const";
+import allEthTokens from "../../constants/ethChain/const";
+import allBnbTokens from "../../constants/bnbChain/const";
 import UnimportedToken from "./unimportedToken";
 import { getPricesRequest } from "../../requests/token";
 import {
@@ -19,8 +20,10 @@ import {
   Divider,
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
+import { useGlobalState } from "../../state-management/stores/store";
 
 const AddTokenModal = (props) => {
+  const networkId = useGlobalState().walletState.networkId
   const [value, setValue] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [scrollBehavior, setScrollBehavior] = useState("inside");
@@ -32,26 +35,50 @@ const AddTokenModal = (props) => {
   const [unimportedTokensWithDetails, setUnimportedTokensWithDetails] =
     useState();
 
-  //show unimported tokens
-  const unimportedTokens = Object.keys(allTokens).filter(
-    (key) => !(key in userTokens)
-  );
+  const [filteredTokens, setFilteredTokens] = useState([]);
+
+  console.log('props', props)
 
   useEffect(() => {
-    let newVal = {};
-    getPricesRequest(unimportedTokens).then((res) => {
-      if (res !== undefined && res.length > 0) {
-        res.map((token) => {
-          newVal[token.symbol.toUpperCase()] = { ...token };
-        });
+    if(networkId) {
+      updateUnimportedTokens()
+    }
+  }, [networkId, userTokens]);
+
+  const updateUnimportedTokens = () => {
+    if(networkId) {
+      switch (networkId) {
+        case 1:
+          return setFilteredTokens(Object.keys(allEthTokens).filter((key) => !(key in userTokens)));
+        case 56:
+          return setFilteredTokens(Object.keys(allBnbTokens).filter((key) => !(key in userTokens)));
+        default:
+          return [];
       }
-      setUnimportedTokensWithDetails({ ...newVal });
-    });
-  }, []);
+
+    }
+  }
+
+  useEffect(() => {
+    if(userTokens && networkId) {
+      let newVal = {};
+      getPricesRequest({
+        tokens: filteredTokens, 
+        networkId,
+      }).then((res) => {
+        if (res !== undefined && res.length > 0) {
+          res.map((token) => {
+            return newVal[token.symbol.toUpperCase()] = { ...token };
+          });
+        }
+        setUnimportedTokensWithDetails(newVal);
+      });
+    }
+  }, [filteredTokens]);
 
   value === ""
-    ? (searchResultTokens = unimportedTokens)
-    : (searchResultTokens = unimportedTokens.filter((key) =>
+    ? (searchResultTokens = filteredTokens)
+    : (searchResultTokens = filteredTokens.filter((key) =>
         key.includes(value)
       ));
 
