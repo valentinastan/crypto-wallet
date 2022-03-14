@@ -95,66 +95,66 @@ export async function getHistoricalMarketDataRequest(params) {
 }
 
 
-async function getAllTokensRequest() {
-  console.log('****FAC AICI REQUEST')
-  const allCoins = await getExternal('https://api.coingecko.com/api/v3/coins/list')
-  //return createCache(allCoins.data)
-  return allCoins
-}
+// async function getAllTokensRequest() {
+//   console.log('****FAC AICI REQUEST')
+//   const allCoins = await getExternal('https://api.coingecko.com/api/v3/coins/list')
+//   //return createCache(allCoins.data)
+//   return allCoins
+// }
 
-function filterDuplicatedSymbolTokens(myTokens) {
-  let results = {}
-  let duplicatedTokens = []
-  let tokensToBeFiltered = [...myTokens]
-  //let regex = new RegExp('(-token)|(-lala)$')
+// function filterDuplicatedSymbolTokens(myTokens) {
+//   let results = {}
+//   let duplicatedTokens = []
+//   let tokensToBeFiltered = [...myTokens]
+//   //let regex = new RegExp('(-token)|(-lala)$')
 
-  for (let i = 0; i < tokensToBeFiltered.length - 1; i++) {
-    if (tokensToBeFiltered[i + 1].symbol === tokensToBeFiltered[i].symbol) {
-      duplicatedTokens.push(tokensToBeFiltered[i].symbol)
+//   for (let i = 0; i < tokensToBeFiltered.length - 1; i++) {
+//     if (tokensToBeFiltered[i + 1].symbol === tokensToBeFiltered[i].symbol) {
+//       duplicatedTokens.push(tokensToBeFiltered[i].symbol)
 
-      if(tokensToBeFiltered[i].id.endsWith('-token')) {
+//       if(tokensToBeFiltered[i].id.endsWith('-token')) {
      
-        results[tokensToBeFiltered[i].symbol] = tokensToBeFiltered[i].id
-      } else {
+//         results[tokensToBeFiltered[i].symbol] = tokensToBeFiltered[i].id
+//       } else {
   
-        if(tokensToBeFiltered[i+1].id.endsWith('-token')) {
-          results[tokensToBeFiltered[i+1].symbol] = tokensToBeFiltered[i+1].id
-        } else {
+//         if(tokensToBeFiltered[i+1].id.endsWith('-token')) {
+//           results[tokensToBeFiltered[i+1].symbol] = tokensToBeFiltered[i+1].id
+//         } else {
          
-          if(tokensToBeFiltered[i].id.toUpperCase() === tokensToBeFiltered[i].symbol.toUpperCase()) {
-            if(!results.hasOwnProperty(tokensToBeFiltered[i].symbol))
-              results[tokensToBeFiltered[i].symbol] = tokensToBeFiltered[i].id
-          } else {
+//           if(tokensToBeFiltered[i].id.toUpperCase() === tokensToBeFiltered[i].symbol.toUpperCase()) {
+//             if(!results.hasOwnProperty(tokensToBeFiltered[i].symbol))
+//               results[tokensToBeFiltered[i].symbol] = tokensToBeFiltered[i].id
+//           } else {
            
-            if(tokensToBeFiltered[i+1].id.toUpperCase() === tokensToBeFiltered[i+1].symbol.toUpperCase()) {
-              if(!results.hasOwnProperty(tokensToBeFiltered[i+1].symbol))
-                results[tokensToBeFiltered[i+1].symbol] = tokensToBeFiltered[i+1].id
-            } else {
+//             if(tokensToBeFiltered[i+1].id.toUpperCase() === tokensToBeFiltered[i+1].symbol.toUpperCase()) {
+//               if(!results.hasOwnProperty(tokensToBeFiltered[i+1].symbol))
+//                 results[tokensToBeFiltered[i+1].symbol] = tokensToBeFiltered[i+1].id
+//             } else {
             
-              if(!results.hasOwnProperty(tokensToBeFiltered[i].symbol) && !tokensToBeFiltered[i].id.endsWith('-wormhole')) {
-                results[tokensToBeFiltered[i].symbol] = tokensToBeFiltered[i].id
-              } else {
+//               if(!results.hasOwnProperty(tokensToBeFiltered[i].symbol) && !tokensToBeFiltered[i].id.endsWith('-wormhole')) {
+//                 results[tokensToBeFiltered[i].symbol] = tokensToBeFiltered[i].id
+//               } else {
 
-                if(!results.hasOwnProperty(tokensToBeFiltered[i+1].symbol) && !tokensToBeFiltered[i+1].id.endsWith('-wormhole')) {
-                  results[tokensToBeFiltered[i+1].symbol] = tokensToBeFiltered[i+1].id
-                }
-              }
-            }  
-          }  
-        }
-      } 
-    } 
-  }
+//                 if(!results.hasOwnProperty(tokensToBeFiltered[i+1].symbol) && !tokensToBeFiltered[i+1].id.endsWith('-wormhole')) {
+//                   results[tokensToBeFiltered[i+1].symbol] = tokensToBeFiltered[i+1].id
+//                 }
+//               }
+//             }  
+//           }  
+//         }
+//       } 
+//     } 
+//   }
 
-  myTokens = myTokens.filter(token => !duplicatedTokens.includes(token.symbol))
-  console.log('token fara duplicate', myTokens)
-  console.log('token cu duplicate, filtrat', results)
+//   myTokens = myTokens.filter(token => !duplicatedTokens.includes(token.symbol))
+//   console.log('token fara duplicate', myTokens)
+//   console.log('token cu duplicate, filtrat', results)
 
-  let resultsWithoutDup = {}
+//   let resultsWithoutDup = {}
 
-  myTokens.map(tokenObj => {
-    resultsWithoutDup[tokenObj.symbol] = tokenObj.id
-  })
+//   myTokens.map(tokenObj => {
+//     resultsWithoutDup[tokenObj.symbol] = tokenObj.id
+//   })
 
-  return {...resultsWithoutDup, ...results}
-}
+//   return {...resultsWithoutDup, ...results}
+// }

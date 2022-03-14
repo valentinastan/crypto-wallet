@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import SwitchTheme from "../components/switchTheme";
 import Tokens from "../components/token/tokens";
 import NavBar from "../components/navBar/navBar";
 import './pages.css'
-import Web3 from "web3";
 import { useDispatch } from "../state-management/stores/store";
 
 
@@ -23,7 +22,7 @@ const WalletPage = () => {
     })
 
   });
-  
+
   window.ethereum.on('chainChanged', function (networkId) {
     console.log('llalal', networkId)
     dispatch({

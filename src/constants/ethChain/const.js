@@ -14,8 +14,11 @@ import contractLINK from './contracts/contract-LINK.json'
 import contractSAND from './contracts/contract-SAND.json'
 import contractXP from './contracts/contract-XP.json'
 import contractLQTY from './contracts/contract-LQTY.json'
+import contractDON from './contracts/contract-DON.json'
+import contractSUPER from './contracts/contract-SUPER.json'
+import contractPYR from './contracts/contract-PYR.json'
 
-export default {
+const constants = {
   GNO: {
     coingeckoId: 'gnosis',
     tokenAddress: '0x6810e776880c02933d47db1b9fc05908e5386b96',
@@ -95,5 +98,22 @@ export default {
     coingeckoId: 'liquity',
     tokenAddress: '0x6dea81c8171d0ba574754ef6f8b412f2ed88c54d',
     tokenABI: contractLQTY
-  }
+  },
+  DON: {
+    coingeckoId: 'don-key',
+    tokenAddress: '0x86B3F23B6e90F5bbfac59b5b2661134Ef8Ffd255',
+    tokenABI: contractDON
+  },
+  SUPER: {
+    coingeckoId: 'superfarm',
+    tokenAddress: '0xe53ec727dbdeb9e2d5456c3be40cff031ab40a55',
+    tokenABI: contractSUPER
+  },
+    PYR: {
+    coingeckoId: 'vulcan-forged',
+    tokenAddress: '0x430ef9263e76dae63c84292c3409d61c598e9682',
+    tokenABI: contractPYR
+  },
 }
+
+export default constants

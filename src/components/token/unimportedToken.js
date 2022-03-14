@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Tr, Td, Avatar, useColorModeValue, Tfoot } from "@chakra-ui/react";
+import { Tr, Td, Avatar, useColorModeValue } from "@chakra-ui/react";
 import { addTokenRequest } from "../../requests/token";
 import { Flex, HStack } from "@chakra-ui/react";
 import "./css/token.css";

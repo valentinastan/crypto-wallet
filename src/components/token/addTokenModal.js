@@ -26,7 +26,7 @@ const AddTokenModal = (props) => {
   const networkId = useGlobalState().walletState.networkId
   const [value, setValue] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [scrollBehavior, setScrollBehavior] = useState("inside");
+  const [scrollBehavior] = useState("inside");
   const finalRef = useRef();
   const initialRef = useRef();
 

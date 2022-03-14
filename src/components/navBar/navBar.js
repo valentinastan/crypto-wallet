@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Button, Stack, Divider } from "@chakra-ui/react";
 import { useNavigate } from 'react-router-dom';
 
@@ -13,9 +13,9 @@ const NavBar = () => {
   return (
     <React.Fragment>
       <Stack direction='row' spacing={4} align='center' justify='end' height='60px' >
-        <Button colorScheme='teal' variant='outline'>
+        {/* <Button colorScheme='teal' variant='outline'>
           Change wallet
-        </Button>        
+        </Button>         */}
         <Button colorScheme='teal' variant='outline' onClick={handleLogout}>
           Logout
         </Button>

@@ -7,14 +7,10 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   AlertDialogCloseButton,
-  Button,
-  useDisclosure,
-  IconButton,
+  Button
 } from "@chakra-ui/react";
-import { MinusIcon } from "@chakra-ui/icons";
 
 const DeleteTokenAlert = (props) => {
-  // const { isOpen, onOpen, onClose } = useDisclosure();
   const cancelRef = React.useRef();
 
   return (
@@ -52,7 +48,8 @@ const DeleteTokenAlert = (props) => {
               colorScheme="red"
               ml={3}
               onClick={() => {
-                return props.deleteToken(), props.onClose();
+                props.deleteToken() 
+                return props.onClose();
               }}
             >
               Yes

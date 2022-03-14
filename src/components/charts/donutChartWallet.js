@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { donutChartOptions } from "./donutChartWalletOptions";
 import ReactApexChart from "react-apexcharts";
 import { Center } from "@chakra-ui/react";
@@ -15,7 +15,7 @@ const DonutChartWallet = (props) => {
       if(amount > 0) {
         tokensLabel.push(symbol)
         return amount
-      }
+      } else return undefined
     })
     .filter(tokenAmount => tokenAmount !== undefined)
 

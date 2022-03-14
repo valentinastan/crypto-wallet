@@ -32,12 +32,13 @@ const ConnectWallet = () => {
       });
       console.log("Found an account! Address: ", accounts[0]);
       
-      setCurrentAccount(accounts[0]) //!! de modificat
+     
       const address = accounts[0]
         dispatch({
           type: '[WALLET] Set Address',
           address
         })
+        setCurrentAccount(accounts[0]) //!! de modificat
     } catch (err) {
       console.log(err);
     }
