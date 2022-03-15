@@ -11,21 +11,10 @@ import './css/token.css'
 import { ChevronDownIcon, ChevronUpIcon, MinusIcon } from "@chakra-ui/icons";
 import Charts from "../charts/lineChartToken";
 import { calculateTokenAmount } from "./token-helpers";
+import { stylingDecimals } from "./token-helpers";
 
 const Token = (props) => {
   const [showChart, setShowChart] = useState(false)
-
-  const stylingDecimals = (numericValue) => {
-    if(numericValue) {
-      if(numericValue > 1) {
-        return parseFloat(numericValue).toFixed(2)
-      } else if(numericValue > 0.0001) {
-        return parseFloat(numericValue).toFixed(4)
-      } else {
-        return parseFloat(numericValue).toFixed(6)
-      }
-    } else return 0
-  }
 
   const bg = useColorModeValue('#EDF2F7', '#212938')
   const color = useColorModeValue('#3182ce', 'white')

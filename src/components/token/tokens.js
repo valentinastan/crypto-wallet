@@ -25,12 +25,20 @@ const Tokens = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showDeleteToast, setShowDeleteToast] = useState(false);
 
+
   const web3 = new Web3(Web3.givenProvider); 
   const walletState = useGlobalState().walletState
-  const networkId  = walletState.networkId
-  console.log('ma rerandez', networkId)
- 
 
+  const getNetwork = () => {
+    if(walletState.networkId !== null) {
+      return walletState.networkId
+    } else {
+      const target_chain = Object.assign({}, web3.eth.Contract.currentProvider);
+      return parseInt(target_chain.networkVersion)
+    }
+  }
+
+  const networkId = getNetwork()
   let nIntervId;
 
   useEffect(() => {

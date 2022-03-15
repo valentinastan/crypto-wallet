@@ -70,7 +70,7 @@ export async function getPricesRequest(params) {
       default:
         break;
     }
-
+    console.log('my list', mySymbolsList)
     let response = await getExternal(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${mySymbolsList}`)
     let prices = []
   
