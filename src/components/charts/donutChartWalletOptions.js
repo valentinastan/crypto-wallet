@@ -1,6 +1,6 @@
-import { stylingDecimals } from "../token/token-helpers";
+import { calculateTokenPercentage, stylingDecimals } from "../token/token-helpers";
 
-export const getDonutChartOptions = (themeColor) => {
+export const getDonutChartOptions = (themeColor, walletAmount) => {
   return {
     colors: ["#00cdcd", "#009a9a", "#006767", "#004d4d", "#003434"],
     chart: {
@@ -14,10 +14,30 @@ export const getDonutChartOptions = (themeColor) => {
       }
     },
     legend: {
-      show: false
+      show: true,
+      fontSize: '13px',
+      labels: {
+        colors: themeColor,
+        useSeriesColors: false,
+      },
+      itemMargin: {
+        horizontal: 0,
+        vertical: 15
+      },
+      height: '100%',
+      formatter: function(val, option) {
+        const amount = stylingDecimals(calculateTokenPercentage(option.w.globals.series[option.seriesIndex], walletAmount))
+        return `${val}: ${amount} %`
+      },
+
     },
     dataLabels: {
       enabled: true,
+      formatter: function(val, option) {
+        console.log('val lala', val, option, option.w.globals.labels[option.seriesIndex])
+        return option.w.globals.labels[option.seriesIndex]
+      //  return `${option.w.globals.labels[option.seriesIndex]}\n${stylingDecimals(val)} %`
+      },
     },
     hover: { mode: null },
     plotOptions: {
@@ -25,12 +45,11 @@ export const getDonutChartOptions = (themeColor) => {
         expandOnClick: false,
         donut: {
           labels: {
-            show: false
+            show: true
           }
         }
       }
     },
-  
     fill: {
       colors: ["#00cdcd", "#009a9a", "#006767", "#004d4d", "#003434"]
     },
@@ -38,13 +57,13 @@ export const getDonutChartOptions = (themeColor) => {
       enabled: true,
       theme: "dark",
       y: {
-        // formatter: (amount) => {
-        //   console.log('amount', amount)
-        //  // return calculateTokenPercentage(amount, walletAmount) + ' %%'
-        // }
-        formatter: function(val) {
-          return val + " $"
-        },
+        formatter: (amount) => {
+          console.log('amount', amount)
+         return stylingDecimals(calculateTokenPercentage(amount, walletAmount)) + ' %'
+        }
+        // formatter: function(val) {
+        //   return val + " $"
+        // },
       },
     },
     plotOptions: {

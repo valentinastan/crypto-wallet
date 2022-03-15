@@ -2,7 +2,7 @@ import React from "react";
 import { getDonutChartOptions } from "./donutChartWalletOptions";
 import ReactApexChart from "react-apexcharts";
 import { Center, useColorModeValue } from "@chakra-ui/react";
-import { calculateTokenAmount } from "../token/token-helpers";
+import { calculateTokenAmount, calculateWalletAmount } from "../token/token-helpers";
 
 const DonutChartWallet = (props) => {
   const tokensSymbol = Object.keys(props.tokens)
@@ -19,7 +19,7 @@ const DonutChartWallet = (props) => {
     })
     .filter(tokenAmount => tokenAmount !== undefined)
 
-  // let walletAmount = calculateWalletAmount(tokensAmount)
+  let walletAmount = calculateWalletAmount(tokensAmount)
   // let tokensAmountPercentage = tokensAmount.map(amount => parseFloat(calculateTokenPercentage(amount, walletAmount).toFixed(3)))
   // const donutChartData = tokensAmountPercentage
 
@@ -39,7 +39,7 @@ const DonutChartWallet = (props) => {
       {
         donutChartData.length > 0 &&
           <ReactApexChart
-            options={{...getDonutChartOptions(themeColor), labels,
+            options={{...getDonutChartOptions(themeColor, walletAmount), labels,
               // tooltip: {
               //   enabled: true,
               //   theme: "dark",
