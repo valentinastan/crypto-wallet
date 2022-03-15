@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Stack, Divider } from "@chakra-ui/react";
 import { useNavigate } from 'react-router-dom';
+import SwitchTheme from "../switchTheme";
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const NavBar = () => {
         {/* <Button colorScheme='teal' variant='outline'>
           Change wallet
         </Button>         */}
+        <SwitchTheme></SwitchTheme>
         <Button colorScheme='teal' variant='outline' onClick={handleLogout}>
           Logout
         </Button>

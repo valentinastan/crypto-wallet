@@ -1,14 +1,19 @@
-import { Button, useColorMode } from "@chakra-ui/react"
-
+import React from "react";
+import { useColorMode } from "@chakra-ui/react";
+import { MdLightMode, MdModeNight } from "react-icons/md";
+import { IconButton } from "@chakra-ui/react";
 
 const SwitchTheme = () => {
-  const { colorMode, toggleColorMode } = useColorMode()
+  const { colorMode, toggleColorMode } = useColorMode();
+
   return (
-    <header>
-      <Button onClick={toggleColorMode}>
-        Toggle {colorMode === 'light' ? 'Dark' : 'Light'}
-      </Button>
-    </header>
-  )
-}
-export default SwitchTheme
+    <React.Fragment>
+      <IconButton
+        aria-label="Switch theme"
+        onClick={toggleColorMode}
+        icon={colorMode === "light" ? <MdModeNight /> : <MdLightMode />}
+      ></IconButton>
+    </React.Fragment>
+  );
+};
+export default SwitchTheme;

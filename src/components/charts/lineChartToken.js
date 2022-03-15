@@ -3,29 +3,36 @@ import { lineChartOptions, optionsLine } from "./lineChartTokenOptions";
 import ReactApexChart from "react-apexcharts";
 import { Button, Stack } from "@chakra-ui/react";
 import {getHistoricalMarketDataRequest} from '../../requests/token'
-import constants from '../../constants/ethChain/const'
+import ethConstants from '../../constants/ethChain/const'
+import bnbConstants from '../../constants/bnbChain/const'
+import { useGlobalState } from "../../state-management/stores/store";
 
-const Charts = (props) => {
+const LineChartToken = (props) => {
   const [historicalPrices, setHistoricalPrices] = useState([{
     name: '',
     data: []
   }])
-
   const [daysAgo, setDaysAgo] = useState('30')
+  const networkId = useGlobalState().walletState.networkId
 
   useEffect(() => {
-    getHistoricalMarketDataRequest({
-      symbol: constants[props.tokenSymbol].coingeckoId,
-      days: daysAgo,
-    }).then((tokensSnapshot) => {
-      if (tokensSnapshot.empty) {
-        console.log("No matching documents.");
-        // return;
-      } else {
-        setHistoricalPrices([{name: `${props.tokenSymbol} price`, data: tokensSnapshot}])
-      }
-    });
-  }, [daysAgo]);
+    console.log('nee', networkId)
+    if(networkId) {
+      getHistoricalMarketDataRequest({
+        symbol: networkId === 1 ? 
+          ethConstants[props.tokenSymbol].coingeckoId :
+          bnbConstants[props.tokenSymbol].coingeckoId,
+        days: daysAgo,
+      }).then((tokensSnapshot) => {
+        if (tokensSnapshot.empty) {
+          console.log("No matching documents.");
+          // return;
+        } else {
+          setHistoricalPrices([{name: `${props.tokenSymbol} price`, data: tokensSnapshot}])
+        }
+      });
+    }
+  }, [daysAgo, networkId]);
 
   return (
     <React.Fragment>
@@ -78,4 +85,4 @@ const Charts = (props) => {
   );
 };
 
-export default Charts;
+export default LineChartToken;

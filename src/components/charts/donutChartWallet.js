@@ -1,8 +1,8 @@
 import React from "react";
-import { donutChartOptions } from "./donutChartWalletOptions";
+import { getDonutChartOptions } from "./donutChartWalletOptions";
 import ReactApexChart from "react-apexcharts";
 import { Center, useColorModeValue } from "@chakra-ui/react";
-import { calculateTokenAmount, calculateWalletAmount, stylingDecimals } from "../token/token-helpers";
+import { calculateTokenAmount } from "../token/token-helpers";
 
 const DonutChartWallet = (props) => {
   const tokensSymbol = Object.keys(props.tokens)
@@ -19,63 +19,27 @@ const DonutChartWallet = (props) => {
     })
     .filter(tokenAmount => tokenAmount !== undefined)
 
-  let walletAmount = calculateWalletAmount(tokensAmount)
+  // let walletAmount = calculateWalletAmount(tokensAmount)
   // let tokensAmountPercentage = tokensAmount.map(amount => parseFloat(calculateTokenPercentage(amount, walletAmount).toFixed(3)))
   // const donutChartData = tokensAmountPercentage
 
-  const donutChartData = tokensAmount
+  let donutChartData = tokensAmount
   const labels = tokensLabel
 
-  const totalAmountColor = useColorModeValue('#4A5568', 'white')
+  const themeColor = useColorModeValue('#4A5568', 'white')
 
   return (
     <React.Fragment>
       {
         donutChartData.length === 0 &&
-          <Center bg='' h='100px' color='white'>
+          <Center bg='' h='100px' color={themeColor}>
             Add tokens to view your wallet's balance.
           </Center>
       }
       {
         donutChartData.length > 0 &&
           <ReactApexChart
-            options={{...donutChartOptions, labels,
-              plotOptions: {
-                pie: {
-                  // expandOnClick: false,
-                  donut: {
-                    labels: {
-                      show: true,
-                      name: {
-                        show: true,
-                        fontSize: '25px',
-                        offsetY: -15
-                      },
-                      value: {
-                        show: true,
-                        fontSize: '35px',
-                        color: totalAmountColor,
-                        offsetY: +15,
-                        formatter: function (val) {
-                            return stylingDecimals(parseFloat(val)) + ' $'
-                        }
-                      },
-                      total: {
-                        show: true,
-                        label: 'Total',
-                        fontSize: '25px',
-                        color: '#F0B90B', //'#ffa500',
-                        formatter: function (w) {
-                            const total = w.globals.seriesTotals.reduce((a, b) => {
-                                return a + b
-                            }, 0)
-                            return stylingDecimals(total) + ' $'
-                        }
-                      }
-                    }
-                  }
-                }
-              }
+            options={{...getDonutChartOptions(themeColor), labels,
               // tooltip: {
               //   enabled: true,
               //   theme: "dark",

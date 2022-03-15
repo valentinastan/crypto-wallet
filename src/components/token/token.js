@@ -5,11 +5,14 @@ import {
   Avatar,
   HStack,
   useColorModeValue,
-  IconButton
+  IconButton,
+  useDisclosure,
+  Fade,
+  Collapse
 } from "@chakra-ui/react";
 import './css/token.css'
 import { ChevronDownIcon, ChevronUpIcon, MinusIcon } from "@chakra-ui/icons";
-import Charts from "../charts/lineChartToken";
+import LineChartToken from "../charts/lineChartToken";
 import { calculateTokenAmount } from "./token-helpers";
 import { stylingDecimals } from "./token-helpers";
 
@@ -18,6 +21,8 @@ const Token = (props) => {
 
   const bg = useColorModeValue('#EDF2F7', '#212938')
   const color = useColorModeValue('#3182ce', 'white')
+
+  const { isOpen, onToggle } = useDisclosure()
 
   return (
     <React.Fragment>
@@ -65,6 +70,7 @@ const Token = (props) => {
         <Td>
           <IconButton
             onClick={() => {
+              onToggle()
               return setShowChart(!showChart)}}
             variant="ghost"
             colorScheme="teal"
@@ -76,7 +82,9 @@ const Token = (props) => {
       {showChart &&  
         <Tr>
           <Td colSpan='8'>
-          <Charts tokenSymbol={props.token.symbol}></Charts>
+          <Collapse in={isOpen} animateOpacity>
+            <LineChartToken tokenSymbol={props.token.symbol}></LineChartToken>
+          </Collapse>
           </Td>
         </Tr>
       }

@@ -89,6 +89,7 @@ export async function getPricesRequest(params) {
 }
 
 export async function getHistoricalMarketDataRequest(params) {
+  console.log('historical', params)
   let historicalData = await getExternal(`https://api.coingecko.com/api/v3/coins/${params.symbol}/market_chart?vs_currency=usd&days=${params.days}`) 
   
   return historicalData.data.prices
