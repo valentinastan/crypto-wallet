@@ -37,8 +37,6 @@ const AddTokenModal = (props) => {
 
   const [filteredTokens, setFilteredTokens] = useState([]);
 
-  console.log('props', props)
-
   useEffect(() => {
     if(networkId) {
       updateUnimportedTokens()

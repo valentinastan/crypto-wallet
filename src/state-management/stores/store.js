@@ -8,7 +8,8 @@ const initialState = {
     networkId: null,
   },
   tokenState: {
-    tokens: []
+    tokens: [],
+    sort: {},
   }
 }
  console.log('STATE', initialState)

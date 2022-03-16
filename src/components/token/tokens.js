@@ -7,12 +7,13 @@ import bnbConstants from "../../constants/bnbChain/const";
 import { ethers } from "ethers";
 import Web3 from "web3";
 
-import { Table, Thead, Tbody, Tr, Th, useDisclosure } from "@chakra-ui/react";
+import { Table, Thead, Tbody, Tr, Th, useDisclosure, IconButton, Flex } from "@chakra-ui/react";
 import AddTokenModal from "./addTokenModal";
 import DeleteTokenAlert from "./deleteTokenAlert";
 import TokenToast from "../tokenToast";
 import DonutChartWallet from "../charts/donutChartWallet";
-import { useGlobalState } from "../../state-management/stores/store";
+import { useGlobalState, useStore } from "../../state-management/stores/store";
+import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 
 const Tokens = () => {
   const currentWallet = localStorage.getItem("address");
@@ -28,6 +29,8 @@ const Tokens = () => {
 
   const web3 = new Web3(Web3.givenProvider); 
   const walletState = useGlobalState().walletState
+  const [store, dispatch] = useStore();
+  const sort = store.tokenState.sort
 
   const getNetwork = () => {
     if(walletState.networkId !== null) {
@@ -72,6 +75,10 @@ const Tokens = () => {
       clearInterval(nIntervId);
     };
   }, [currentSymbolsState]);
+
+  useEffect(() => {
+    sortTokens(tokens)
+  }, [sort])
 
   const getBalance = async (tokenSymbol) => {
     console.log('caut monede noi?', networkId)
@@ -152,7 +159,6 @@ const Tokens = () => {
         console.log("No such document!");
       } else {
         delete tokens[showDeleteModal.symbol];
-        console.log("DELETE", tokens, showDeleteModal);
         setState({ ...tokens });
         let symbols = Object.keys(tokens);
         setCurrentSymbols([...symbols]);
@@ -170,7 +176,6 @@ const Tokens = () => {
   }
 
   const addToken = (symbol) => {
-    console.log("ADD", symbol);
     saveTokens([symbol], "ADD").then(() => {
       let currentSymbols = [...currentSymbolsState];
       currentSymbols.push(symbol);
@@ -239,16 +244,19 @@ const Tokens = () => {
 
     switch (action) {
       case "INDEX":
-        setState({ ...newValues });
+        sortTokens({...newValues})
+      // setState({ ...newValues });
         setCurrentSymbols(Object.keys(newValues));
 
         break;
       case "ADD":
-        setState({ ...tokens, ...newValues });
+        sortTokens({...tokens, ...newValues})
+        // setState({ ...tokens, ...newValues });
         setCurrentSymbols([...Object.keys(tokens), ...Object.keys(newValues)]);
 
         break;
       default:
+        //sortTokens(sort.isAsc, sort.filter, { ...tokens })
         setState({ ...tokens });
         setCurrentSymbols(Object.keys(newValues));
 
@@ -256,6 +264,46 @@ const Tokens = () => {
     }
   };
 
+const sortTokens = (tokensList) => {
+  const {
+    isAsc,
+    filter
+  } = sort
+
+  console.log('aoco', isAsc, filter, tokensList)
+  if(filter !== undefined && isAsc !== undefined) {
+    switch (filter) {
+      case 'symbol':
+        if(isAsc === true) {
+          const ordered = Object.keys(tokensList).sort().reduce(
+            (obj, key) => { 
+              obj[key] = tokensList[key]; 
+              return obj;
+            },
+            {}
+          );
+          setState({...ordered})
+        } else if(isAsc === false) {
+          const orderedDesc = Object.keys(tokensList).sort().reverse().reduce(
+            (obj, key) => { 
+              obj[key] = tokensList[key]; 
+              return obj;
+            },
+            {}
+          );
+          setState({...orderedDesc})
+        }
+        break;
+    
+      default:
+        setState({...tokensList})
+    }
+  } else {
+    setState({...tokensList})
+  }
+}
+
+ 
   return (
     <React.Fragment>
       <DonutChartWallet tokens={tokens}></DonutChartWallet>
@@ -267,7 +315,27 @@ const Tokens = () => {
         <Thead>
           <Tr>
             <Th>Index</Th>
-            <Th>Symbol</Th>
+            <Th>
+              <Flex alignItems='center'>
+                <div>Symbol</div> 
+                <IconButton
+                  aria-label="sort"
+                  onClick={() => {
+                    dispatch({
+                      type: '[TOKEN] SET_SORT',
+                      sort: {
+                        isAsc: !sort.isAsc,
+                        filter: 'symbol'
+                      }
+                    })
+                    return sortTokens(tokens) 
+                  }} 
+                  variant="none"
+                  _focus={false}
+                  icon={sort.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />}
+              />
+              </Flex>
+            </Th>
             <Th isNumeric>% 24h</Th>
             <Th isNumeric>Price</Th>
             <Th isNumeric>Balance</Th>
