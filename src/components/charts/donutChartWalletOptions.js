@@ -34,7 +34,6 @@ export const getDonutChartOptions = (themeColor, walletAmount) => {
     dataLabels: {
       enabled: true,
       formatter: function(val, option) {
-        console.log('val lala', val, option, option.w.globals.labels[option.seriesIndex])
         return option.w.globals.labels[option.seriesIndex]
       //  return `${option.w.globals.labels[option.seriesIndex]}\n${stylingDecimals(val)} %`
       },
@@ -58,7 +57,6 @@ export const getDonutChartOptions = (themeColor, walletAmount) => {
       theme: "dark",
       y: {
         formatter: (amount) => {
-          console.log('amount', amount)
          return stylingDecimals(calculateTokenPercentage(amount, walletAmount)) + ' %'
         }
         // formatter: function(val) {
