@@ -54,8 +54,6 @@ export async function deleteTokenRequest(params) {
 }
 
 export async function getPricesRequest(params) {
-  console.log('params', params)
-
   let mySymbolsList = ''
   if(params.tokens.length > 0) {
     switch (params.networkId) {
@@ -70,7 +68,6 @@ export async function getPricesRequest(params) {
       default:
         break;
     }
-    console.log('my list', mySymbolsList)
     let response = await getExternal(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${mySymbolsList}`)
     let prices = []
   
@@ -81,7 +78,6 @@ export async function getPricesRequest(params) {
       image: token.image,
       price_change_percentage_24h: token.price_change_percentage_24h
     }))
-    console.log('prices', prices)
     return prices
   } else {
     return false
@@ -89,7 +85,6 @@ export async function getPricesRequest(params) {
 }
 
 export async function getHistoricalMarketDataRequest(params) {
-  console.log('historical', params)
   let historicalData = await getExternal(`https://api.coingecko.com/api/v3/coins/${params.symbol}/market_chart?vs_currency=usd&days=${params.days}`) 
   
   return historicalData.data.prices

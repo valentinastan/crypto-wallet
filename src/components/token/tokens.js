@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { deleteTokenRequest, getPricesRequest, getTokensByWallet } from "../../requests/token";
+import {
+  deleteTokenRequest,
+  getPricesRequest,
+  getTokensByWallet,
+} from "../../requests/token";
 import Token from "./token";
 
 import ethConstants from "../../constants/ethChain/const";
@@ -7,7 +11,16 @@ import bnbConstants from "../../constants/bnbChain/const";
 import { ethers } from "ethers";
 import Web3 from "web3";
 
-import { Table, Thead, Tbody, Tr, Th, useDisclosure, IconButton, Flex } from "@chakra-ui/react";
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  useDisclosure,
+  IconButton,
+  Flex,
+} from "@chakra-ui/react";
 import AddTokenModal from "./addTokenModal";
 import DeleteTokenAlert from "./deleteTokenAlert";
 import TokenToast from "../tokenToast";
@@ -18,52 +31,53 @@ import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 const Tokens = () => {
   const currentWallet = localStorage.getItem("address");
   const [tokens, setState] = useState({});
+  const [orderedTokens, setOrderedTokens] = useState([]);
   const [currentSymbolsState, setCurrentSymbols] = useState(
     Object.keys(tokens)
   );
 
-  const [showDeleteModal, setShowDeleteModal] = useState({symbol: ''});
+  const [showDeleteModal, setShowDeleteModal] = useState({ symbol: "" });
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showDeleteToast, setShowDeleteToast] = useState(false);
 
-
-  const web3 = new Web3(Web3.givenProvider); 
-  const walletState = useGlobalState().walletState
+  const web3 = new Web3(Web3.givenProvider);
+  const walletState = useGlobalState().walletState;
   const [store, dispatch] = useStore();
-  const sort = store.tokenState.sort
+  const sort = store.tokenState?.sort;
+  console.log("sort", sort);
 
   const getNetwork = () => {
-    if(walletState.networkId !== null) {
-      return walletState.networkId
+    if (walletState.networkId !== null) {
+      return walletState.networkId;
     } else {
       const target_chain = Object.assign({}, web3.eth.Contract.currentProvider);
-      return parseInt(target_chain.networkVersion)
+      return parseInt(target_chain.networkVersion);
     }
-  }
+  };
 
-  const networkId = getNetwork()
+  const networkId = getNetwork();
   let nIntervId;
 
   useEffect(() => {
-    if(networkId) {
-    getTokensByWallet({currentWallet, networkId}).then((tokensSnapshot) => {
-      if (tokensSnapshot.empty) {
-        console.log("No matching documents.");
-        setState({})
-        // return;
-      } else {
-        const tokensSymbol = [];
-        tokensSnapshot.forEach((token) => {
-          tokensSymbol.push(token.data().tokenSymbol);
-        });
-        console.log("IN PRIMUL USE EFFECT", tokensSymbol);
+    if (networkId) {
+      getTokensByWallet({ currentWallet, networkId }).then((tokensSnapshot) => {
+        if (tokensSnapshot.empty) {
+          console.log("No matching documents.");
+          setState({});
+          // return;
+        } else {
+          const tokensSymbol = [];
+          tokensSnapshot.forEach((token) => {
+            tokensSymbol.push(token.data().tokenSymbol);
+          });
+          console.log("IN PRIMUL USE EFFECT", tokensSymbol);
 
-        saveTokens(tokensSymbol, "INDEX");
-        setCurrentSymbols(tokensSymbol);
-        //refreshPrices()
-      }
-    });
-  }
+          saveTokens(tokensSymbol, "INDEX");
+          setCurrentSymbols(tokensSymbol);
+          //refreshPrices()
+        }
+      });
+    }
   }, [walletState.address, networkId]);
 
   useEffect(() => {
@@ -77,13 +91,12 @@ const Tokens = () => {
   }, [currentSymbolsState]);
 
   useEffect(() => {
-    sortTokens(tokens)
-  }, [sort])
+    sortTokens(tokens);
+  }, [sort, currentSymbolsState]);
 
   const getBalance = async (tokenSymbol) => {
-    console.log('caut monede noi?', networkId)
-    if(networkId) {
-      let MyContract
+    if (networkId) {
+      let MyContract;
       switch (networkId) {
         case 1: //eth chain
           MyContract = new web3.eth.Contract(
@@ -99,39 +112,38 @@ const Tokens = () => {
               .balanceOf(currentWallet)
               .call();
             return ethers.utils.formatEther(tokenBalance);
-          } catch(ex) {
-            console.log(ex) //he doesn't have this token
+          } catch (ex) {
+            console.log(ex); //he doesn't have this token
           }
-          
+
           break;
         case 56: //binance chain
-        MyContract = new web3.eth.Contract(
-          bnbConstants[tokenSymbol].tokenABI,
-          bnbConstants[tokenSymbol].tokenAddress,
-          {
-            from: currentWallet,
-          }
-        );
+          MyContract = new web3.eth.Contract(
+            bnbConstants[tokenSymbol].tokenABI,
+            bnbConstants[tokenSymbol].tokenAddress,
+            {
+              from: currentWallet,
+            }
+          );
 
-        try {
-          const tokenBalance = await MyContract.methods
-            .balanceOf(currentWallet)
-            .call();
-          return ethers.utils.formatEther(tokenBalance);
-        } catch(ex) {
-          console.log(ex)
-        }
-        
+          try {
+            const tokenBalance = await MyContract.methods
+              .balanceOf(currentWallet)
+              .call();
+            return ethers.utils.formatEther(tokenBalance);
+          } catch (ex) {
+            console.log(ex);
+          }
+
           break;
         case 137: //polygon chain
-        
           break;
-      
+
         default:
           break;
       }
     }
- 
+
     // var MyContract = new web3.eth.Contract(
     //   constants[tokenSymbol].tokenABI,
     //   constants[tokenSymbol].tokenAddress,
@@ -139,14 +151,11 @@ const Tokens = () => {
     //     from: currentWallet,
     //   }
     // );
-
   };
 
   const getPrices = async (tokens) => {
     console.log("IN GET PRICES", tokens);
-    if(networkId)
-      return await getPricesRequest({tokens, networkId})
-    
+    if (networkId) return await getPricesRequest({ tokens, networkId });
   };
 
   const deleteToken = () => {
@@ -162,18 +171,18 @@ const Tokens = () => {
         setState({ ...tokens });
         let symbols = Object.keys(tokens);
         setCurrentSymbols([...symbols]);
-        
-        setShowDeleteModal({symbol: ''})        
-        setShowDeleteToast(true)
+
+        setShowDeleteModal({ symbol: "" });
+        setShowDeleteToast(true);
       }
     });
   };
 
   const deletePressed = (symbol) => {
-    setShowDeleteToast(false)
-    setShowDeleteModal({symbol})
-    onOpen()
-  }
+    setShowDeleteToast(false);
+    setShowDeleteModal({ symbol });
+    onOpen();
+  };
 
   const addToken = (symbol) => {
     saveTokens([symbol], "ADD").then(() => {
@@ -186,14 +195,14 @@ const Tokens = () => {
   const refreshPrices = () => {
     if (!nIntervId) {
       nIntervId = setTimeout(() => {
-        setShowDeleteToast(false)
+        setShowDeleteToast(false);
         if (
           currentSymbolsState !== undefined &&
           currentSymbolsState.length > 0
         ) {
           saveTokens(currentSymbolsState, "INDEX");
         }
-      }, 90000);
+      }, 10000);
     }
     return () => {
       clearInterval(nIntervId);
@@ -201,7 +210,7 @@ const Tokens = () => {
   };
 
   const saveTokens = async (tokensSymbol, action) => {
-    setShowDeleteToast(false)
+    setShowDeleteToast(false);
     let prices = await getPrices(tokensSymbol);
     const newValues = {};
 
@@ -244,19 +253,16 @@ const Tokens = () => {
 
     switch (action) {
       case "INDEX":
-        sortTokens({...newValues})
-      // setState({ ...newValues });
+        setState({ ...newValues });
         setCurrentSymbols(Object.keys(newValues));
 
         break;
       case "ADD":
-        sortTokens({...tokens, ...newValues})
-        // setState({ ...tokens, ...newValues });
+        setState({ ...tokens, ...newValues });
         setCurrentSymbols([...Object.keys(tokens), ...Object.keys(newValues)]);
 
         break;
       default:
-        //sortTokens(sort.isAsc, sort.filter, { ...tokens })
         setState({ ...tokens });
         setCurrentSymbols(Object.keys(newValues));
 
@@ -264,79 +270,100 @@ const Tokens = () => {
     }
   };
 
-const sortTokens = (tokensList) => {
-  const {
-    isAsc,
-    filter
-  } = sort
+  const sortTokens = (tokensList) => {
+    console.log("intru in sort", sort);
+    if (sort !== undefined) {
+      const { isAsc, filter } = sort;
 
-  console.log('aoco', isAsc, filter, tokensList)
-  if(filter !== undefined && isAsc !== undefined) {
-    switch (filter) {
-      case 'symbol':
-        if(isAsc === true) {
-          const ordered = Object.keys(tokensList).sort().reduce(
-            (obj, key) => { 
-              obj[key] = tokensList[key]; 
-              return obj;
-            },
-            {}
-          );
-          setState({...ordered})
-        } else if(isAsc === false) {
-          const orderedDesc = Object.keys(tokensList).sort().reverse().reduce(
-            (obj, key) => { 
-              obj[key] = tokensList[key]; 
-              return obj;
-            },
-            {}
-          );
-          setState({...orderedDesc})
-        }
-        break;
-    
-      default:
-        setState({...tokensList})
+      switch (filter) {
+        case "symbol":
+          if (isAsc === true) {
+            const ordered = Object.keys(tokensList).sort();
+            setOrderedTokens(ordered);
+          } else if (isAsc === false) {
+            const orderedDesc = Object.keys(tokensList).sort().reverse();
+            setOrderedTokens(orderedDesc);
+          }
+          break;
+        case "24h_percentage":
+          if (isAsc === true) {
+            const ordered = Object.keys(tokensList).sort(
+              (a, b) =>
+                tokensList[a].price_change_percentage_24h -
+                tokensList[b].price_change_percentage_24h
+            );
+
+            setOrderedTokens(ordered);
+          } else if (isAsc === false) {
+            const orderedDesc = Object.keys(tokensList)
+              .sort(
+                (a, b) =>
+                  tokensList[a].price_change_percentage_24h -
+                  tokensList[b].price_change_percentage_24h
+              )
+              .reverse();
+
+            setOrderedTokens(orderedDesc);
+          }
+          break;
+
+        default:
+          setOrderedTokens({ ...tokensList });
+      }
+    } else {
+      setOrderedTokens({ ...tokensList });
     }
-  } else {
-    setState({...tokensList})
-  }
-}
+  };
 
- 
   return (
     <React.Fragment>
       <DonutChartWallet tokens={tokens}></DonutChartWallet>
-      {/* {tokens !== undefined && Object.keys(tokens).length > 0 && */}
-        <AddTokenModal tokens={tokens} addToken={addToken}></AddTokenModal>
-      {/* } */}
+      <AddTokenModal tokens={tokens} addToken={addToken}></AddTokenModal>
 
       <Table variant="simple" colorScheme="teal">
         <Thead>
           <Tr>
             <Th>Index</Th>
             <Th>
-              <Flex alignItems='center'>
-                <div>Symbol</div> 
+              <Flex alignItems="center">
+                <div>Symbol</div>
                 <IconButton
                   aria-label="sort"
-                  onClick={() => {
+                  onClick={() =>
                     dispatch({
-                      type: '[TOKEN] SET_SORT',
+                      type: "[TOKEN] SET_SORT",
                       sort: {
-                        isAsc: !sort.isAsc,
-                        filter: 'symbol'
-                      }
+                        isAsc: !sort?.isAsc,
+                        filter: "symbol",
+                      },
                     })
-                    return sortTokens(tokens) 
-                  }} 
+                  }
                   variant="none"
                   _focus={false}
-                  icon={sort.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />}
-              />
+                  icon={sort?.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                />
               </Flex>
             </Th>
-            <Th isNumeric>% 24h</Th>
+            <Th isNumeric>
+              <Flex alignItems="center">
+                <div>% 24h</div>
+                <IconButton
+                  aria-label="sort"
+                  onClick={() =>
+                    dispatch({
+                      type: "[TOKEN] SET_SORT",
+                      sort: {
+                        isAsc: !sort?.isAsc,
+                        filter: "24h_percentage",
+                      },
+                    })
+                  }
+                  variant="none"
+                  _focus={false}
+                  icon={sort?.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                />
+              </Flex>
+            </Th>
             <Th isNumeric>Price</Th>
             <Th isNumeric>Balance</Th>
             <Th isNumeric>Amount</Th>
@@ -345,20 +372,28 @@ const sortTokens = (tokensList) => {
           </Tr>
         </Thead>
         <Tbody>
-          {tokens !== undefined &&
-            Object.keys(tokens).length > 0 &&
-            Object.keys(tokens).map((key, i) => (
-              <Token
-                key={`idToken_${i + 1}`}
-                index={i}
-                token={{ ...tokens[key], symbol: key }}
-                deleteToken={deleteToken}
-                deletePressed={deletePressed}
-              ></Token>
-            ))}
+          {(orderedTokens.length > 0
+            ? orderedTokens
+            : Object.keys(tokens).length > 0
+            ? Object.keys(tokens)
+            : []
+          ).map((key, i) => (
+            <Token
+              key={`idToken_${i + 1}`}
+              index={i}
+              token={{ ...tokens[key], symbol: key }}
+              deleteToken={deleteToken}
+              deletePressed={deletePressed}
+            ></Token>
+          ))}
         </Tbody>
       </Table>
-      <DeleteTokenAlert deleteToken={deleteToken} symbol={showDeleteModal.symbol} onClose={onClose} isOpen={isOpen}></DeleteTokenAlert>
+      <DeleteTokenAlert
+        deleteToken={deleteToken}
+        symbol={showDeleteModal.symbol}
+        onClose={onClose}
+        isOpen={isOpen}
+      ></DeleteTokenAlert>
       {showDeleteToast && (
         <TokenToast
           actionStatus="error"
@@ -366,15 +401,6 @@ const sortTokens = (tokensList) => {
           description="We've deleted your token."
         ></TokenToast>
       )}
-      {/* {(tokens !== undefined && Object.keys(tokens).length > 0) &&
-        Object.keys(tokens).map((key, i) => (
-          <Token
-            key={`idToken_${i + 1}`}
-            index={i}
-            token={{...tokens[key], symbol: key}}
-            deleteToken={deleteToken}
-          ></Token>
-        ))} */}
     </React.Fragment>
   );
 };
