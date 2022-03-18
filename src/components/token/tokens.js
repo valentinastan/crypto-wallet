@@ -45,7 +45,6 @@ const Tokens = () => {
   const walletState = useGlobalState().walletState;
   const [store, dispatch] = useStore();
   const sort = store.tokenState?.sort;
-  console.log("sort", sort);
 
   const getNetwork = () => {
     if (walletState.networkId !== null) {
@@ -220,33 +219,35 @@ const Tokens = () => {
         (token) => token.symbol.toUpperCase() === symbol.toUpperCase()
       );
       let balance = await getBalance(symbol);
-      console.log('BALANCE', balance, symbol)
 
       if (priceInfo !== undefined && priceInfo.length > 0) {
         newValues[symbol] = {
           balance: balance || 0,
+          name: priceInfo[0].name,
           price: priceInfo[0].price,
           image: priceInfo[0].image,
           price_change_percentage_24h: priceInfo[0].price_change_percentage_24h,
-          amount: calculateTokenAmount(balance, priceInfo[0].price)
+          amount: calculateTokenAmount(balance, priceInfo[0].price),
         };
       } else {
         if (tokens?.hasOwnProperty(symbol) && tokens[symbol].price !== null) {
           newValues[symbol] = {
             balance: balance || 0,
+            name: tokens[symbol].name,
             price: tokens[symbol].price,
-            image: tokens[symbol]?.image,
+            image: tokens[symbol].image,
             price_change_percentage_24h:
-              tokens[symbol]?.price_change_percentage_24h,
-            amount: calculateTokenAmount(balance, tokens[symbol].price)
+              tokens[symbol].price_change_percentage_24h,
+            amount: calculateTokenAmount(balance, tokens[symbol].price),
           };
         } else {
           newValues[symbol] = {
             balance: balance || 0,
+            name: null,
             price: null,
             image: null,
             price_change_percentage_24h: null,
-            amount: null
+            amount: null,
           };
         }
       }
@@ -276,17 +277,31 @@ const Tokens = () => {
   };
 
   const sortTokens = (tokensList) => {
-    console.log("intru in sort", sort);
     if (sort !== undefined) {
       const { isAsc, filter } = sort;
 
       switch (filter) {
-        case "symbol":
+        case "name":
           if (isAsc === true) {
-            const ordered = Object.keys(tokensList).sort();
+            const ordered = Object.keys(tokensList).sort((a, b) =>
+              tokensList[a].name > tokensList[b].name
+                ? 1
+                : tokensList[b].name > tokensList[a].name
+                ? -1
+                : 0
+            );
+
             setOrderedTokens(ordered);
           } else if (isAsc === false) {
-            const orderedDesc = Object.keys(tokensList).sort().reverse();
+            const orderedDesc = Object.keys(tokensList)
+              .sort((a, b) =>
+                tokensList[a].name > tokensList[b].name
+                  ? 1
+                  : tokensList[b].name > tokensList[a].name
+                  ? -1
+                  : 0
+              )
+              .reverse();
             setOrderedTokens(orderedDesc);
           }
           break;
@@ -314,19 +329,13 @@ const Tokens = () => {
         case "price":
           if (isAsc === true) {
             const ordered = Object.keys(tokensList).sort(
-              (a, b) =>
-                tokensList[a].price -
-                tokensList[b].price
+              (a, b) => tokensList[a].price - tokensList[b].price
             );
 
             setOrderedTokens(ordered);
           } else if (isAsc === false) {
             const orderedDesc = Object.keys(tokensList)
-              .sort(
-                (a, b) =>
-                  tokensList[a].price -
-                  tokensList[b].price
-              )
+              .sort((a, b) => tokensList[a].price - tokensList[b].price)
               .reverse();
 
             setOrderedTokens(orderedDesc);
@@ -335,19 +344,13 @@ const Tokens = () => {
         case "balance":
           if (isAsc === true) {
             const ordered = Object.keys(tokensList).sort(
-              (a, b) =>
-                tokensList[a].balance -
-                tokensList[b].balance
+              (a, b) => tokensList[a].balance - tokensList[b].balance
             );
 
             setOrderedTokens(ordered);
           } else if (isAsc === false) {
             const orderedDesc = Object.keys(tokensList)
-              .sort(
-                (a, b) =>
-                  tokensList[a].balance -
-                  tokensList[b].balance
-              )
+              .sort((a, b) => tokensList[a].balance - tokensList[b].balance)
               .reverse();
 
             setOrderedTokens(orderedDesc);
@@ -356,19 +359,13 @@ const Tokens = () => {
         case "amount":
           if (isAsc === true) {
             const ordered = Object.keys(tokensList).sort(
-              (a, b) =>
-                tokensList[a].amount -
-                tokensList[b].amount
+              (a, b) => tokensList[a].amount - tokensList[b].amount
             );
 
             setOrderedTokens(ordered);
           } else if (isAsc === false) {
             const orderedDesc = Object.keys(tokensList)
-              .sort(
-                (a, b) =>
-                  tokensList[a].amount -
-                  tokensList[b].amount
-              )
+              .sort((a, b) => tokensList[a].amount - tokensList[b].amount)
               .reverse();
 
             setOrderedTokens(orderedDesc);
@@ -402,7 +399,7 @@ const Tokens = () => {
                       type: "[TOKEN] SET_SORT",
                       sort: {
                         isAsc: !sort?.isAsc,
-                        filter: "symbol",
+                        filter: "name",
                       },
                     })
                   }

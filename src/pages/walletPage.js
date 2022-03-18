@@ -3,10 +3,12 @@ import Tokens from "../components/token/tokens";
 import NavBar from "../components/navBar/navBar";
 import './pages.css'
 import { useDispatch } from "../state-management/stores/store";
+import { useNavigate } from "react-router-dom";
 
 
 const WalletPage = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate();
   // const web3 = new Web3(Web3.givenProvider); 
 
   // const target_chain = Object.assign({}, web3.eth.Contract.currentProvider);
@@ -15,15 +17,18 @@ const WalletPage = () => {
   // console.log('current', currentNetworkId)
 
   window.ethereum.on('accountsChanged', (accounts) => {
-    dispatch({
-      type: '[WALLET] Set Address',
-      address: accounts[0]
-    })
-
+    if(accounts[0] !== undefined) {
+      dispatch({
+        type: '[WALLET] Set Address',
+        address: accounts[0]
+      })
+    } else {
+      localStorage.removeItem('address');
+      navigate('/')
+    }
   });
 
   window.ethereum.on('chainChanged', function (networkId) {
-    console.log('llalal', networkId)
     dispatch({
       type: '[WALLET] Set Network',
       networkId: parseInt(networkId, 16),
@@ -31,7 +36,6 @@ const WalletPage = () => {
   })
 
   window.ethereum.on('connect', (network) => {
-    console.log('la connetc', network)
     return dispatch({
       type: '[WALLET] Set Network',
       networkId: parseInt(network.chainId, 16),
@@ -44,7 +48,6 @@ const WalletPage = () => {
     <React.Fragment>
       <div className="walletPage">
         <NavBar></NavBar>
-        {/* <SwitchTheme></SwitchTheme> */}
         <Tokens></Tokens>
       </div>
     </React.Fragment>

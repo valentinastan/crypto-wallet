@@ -8,12 +8,14 @@ import {
   IconButton,
   useDisclosure,
   Fade,
-  Collapse
+  Collapse,
+  Flex
 } from "@chakra-ui/react";
 import './css/token.css'
 import { ChevronDownIcon, ChevronUpIcon, MinusIcon } from "@chakra-ui/icons";
 import LineChartToken from "../charts/lineChartToken";
 import { stylingDecimals } from "./token-helpers";
+import "./css/token.css";
 
 const Token = (props) => {
   const [showChart, setShowChart] = useState(false)
@@ -42,7 +44,10 @@ const Token = (props) => {
             ml={-1}
             mr={2}
           />
-          <div className="token-symbol">{props.token.symbol}</div>
+          <Flex direction="column">
+            <div className="token-symbol">{props.token.symbol}</div>
+            <div className="token-name">{props.token.name}</div>
+          </Flex>
           </HStack>
         </Td>
         <Td isNumeric className={props?.token?.price_change_percentage_24h > 0 ? 'green-price' : props?.token?.price_change_percentage_24h < 0 ? 'red-price' : ''}>
