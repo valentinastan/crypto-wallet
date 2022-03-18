@@ -12,7 +12,7 @@ const initialState = {
     sort: {},
   }
 }
- console.log('STATE', initialState)
+
 const Store = React.createContext();
 const Dispatch = React.createContext();
 

@@ -13,7 +13,6 @@ import {
 import './css/token.css'
 import { ChevronDownIcon, ChevronUpIcon, MinusIcon } from "@chakra-ui/icons";
 import LineChartToken from "../charts/lineChartToken";
-import { calculateTokenAmount } from "./token-helpers";
 import { stylingDecimals } from "./token-helpers";
 
 const Token = (props) => {
@@ -56,7 +55,7 @@ const Token = (props) => {
           {stylingDecimals(props?.token?.balance || 0)}
         </Td>
         <Td isNumeric>
-          {stylingDecimals(calculateTokenAmount(props.token.balance, props.token.price) || 0)} $
+          {stylingDecimals(props?.token?.amount || 0)} $
         </Td>
         <Td isNumeric>
           <IconButton

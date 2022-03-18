@@ -20,8 +20,11 @@ export const stylingDecimals = (numericValue) => {
       return parseFloat(numericValue).toFixed(2)
     } else if(numericValue > 0.0001) {
       return parseFloat(numericValue).toFixed(4)
-    } else {
+    } else if(numericValue < 0.00000000001) {
+      return parseFloat(numericValue).toFixed(2)
+    }
+    else {
       return parseFloat(numericValue).toFixed(6)
     }
-  } else return 0
+  } else return parseFloat(numericValue).toFixed(2)
 }

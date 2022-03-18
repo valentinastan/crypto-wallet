@@ -3,7 +3,6 @@ import { getDonutChartOptions } from "./donutChartWalletOptions";
 import ReactApexChart from "react-apexcharts";
 import { Center, useColorModeValue } from "@chakra-ui/react";
 import {
-  calculateTokenAmount,
   calculateWalletAmount,
 } from "../token/token-helpers";
 
@@ -14,13 +13,15 @@ const DonutChartWallet = (props) => {
 
   const tokensAmount = tokensSymbol
     .map((symbol) => {
-      let amount = parseFloat(
-        calculateTokenAmount(
-          props.tokens[symbol].balance,
-          props.tokens[symbol].price
-        )
-      );
-      if (amount > 0) {
+      // let amount = parseFloat(
+      //   calculateTokenAmount(
+      //     props.tokens[symbol].balance,
+      //     props.tokens[symbol].price
+      //   )
+      // );
+      let amount = parseFloat(props.tokens[symbol].amount)
+   
+      if (amount !== undefined && amount > 0) {
         unsortedAmounts.push({ amount, symbol });
         return amount;
       } else return undefined;

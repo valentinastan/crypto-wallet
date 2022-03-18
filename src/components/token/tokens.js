@@ -27,6 +27,7 @@ import TokenToast from "../tokenToast";
 import DonutChartWallet from "../charts/donutChartWallet";
 import { useGlobalState, useStore } from "../../state-management/stores/store";
 import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
+import { calculateTokenAmount } from "./token-helpers";
 
 const Tokens = () => {
   const currentWallet = localStorage.getItem("address");
@@ -219,29 +220,33 @@ const Tokens = () => {
         (token) => token.symbol.toUpperCase() === symbol.toUpperCase()
       );
       let balance = await getBalance(symbol);
+      console.log('BALANCE', balance, symbol)
 
       if (priceInfo !== undefined && priceInfo.length > 0) {
         newValues[symbol] = {
-          balance,
+          balance: balance || 0,
           price: priceInfo[0].price,
           image: priceInfo[0].image,
           price_change_percentage_24h: priceInfo[0].price_change_percentage_24h,
+          amount: calculateTokenAmount(balance, priceInfo[0].price)
         };
       } else {
         if (tokens?.hasOwnProperty(symbol) && tokens[symbol].price !== null) {
           newValues[symbol] = {
-            balance,
+            balance: balance || 0,
             price: tokens[symbol].price,
             image: tokens[symbol]?.image,
             price_change_percentage_24h:
               tokens[symbol]?.price_change_percentage_24h,
+            amount: calculateTokenAmount(balance, tokens[symbol].price)
           };
         } else {
           newValues[symbol] = {
-            balance,
+            balance: balance || 0,
             price: null,
             image: null,
             price_change_percentage_24h: null,
+            amount: null
           };
         }
       }
@@ -306,6 +311,69 @@ const Tokens = () => {
             setOrderedTokens(orderedDesc);
           }
           break;
+        case "price":
+          if (isAsc === true) {
+            const ordered = Object.keys(tokensList).sort(
+              (a, b) =>
+                tokensList[a].price -
+                tokensList[b].price
+            );
+
+            setOrderedTokens(ordered);
+          } else if (isAsc === false) {
+            const orderedDesc = Object.keys(tokensList)
+              .sort(
+                (a, b) =>
+                  tokensList[a].price -
+                  tokensList[b].price
+              )
+              .reverse();
+
+            setOrderedTokens(orderedDesc);
+          }
+          break;
+        case "balance":
+          if (isAsc === true) {
+            const ordered = Object.keys(tokensList).sort(
+              (a, b) =>
+                tokensList[a].balance -
+                tokensList[b].balance
+            );
+
+            setOrderedTokens(ordered);
+          } else if (isAsc === false) {
+            const orderedDesc = Object.keys(tokensList)
+              .sort(
+                (a, b) =>
+                  tokensList[a].balance -
+                  tokensList[b].balance
+              )
+              .reverse();
+
+            setOrderedTokens(orderedDesc);
+          }
+          break;
+        case "amount":
+          if (isAsc === true) {
+            const ordered = Object.keys(tokensList).sort(
+              (a, b) =>
+                tokensList[a].amount -
+                tokensList[b].amount
+            );
+
+            setOrderedTokens(ordered);
+          } else if (isAsc === false) {
+            const orderedDesc = Object.keys(tokensList)
+              .sort(
+                (a, b) =>
+                  tokensList[a].amount -
+                  tokensList[b].amount
+              )
+              .reverse();
+
+            setOrderedTokens(orderedDesc);
+          }
+          break;
 
         default:
           setOrderedTokens({ ...tokensList });
@@ -364,9 +432,66 @@ const Tokens = () => {
                 />
               </Flex>
             </Th>
-            <Th isNumeric>Price</Th>
-            <Th isNumeric>Balance</Th>
-            <Th isNumeric>Amount</Th>
+            <Th isNumeric>
+              <Flex alignItems="center">
+                <div>Price</div>
+                <IconButton
+                  aria-label="sort"
+                  onClick={() =>
+                    dispatch({
+                      type: "[TOKEN] SET_SORT",
+                      sort: {
+                        isAsc: !sort?.isAsc,
+                        filter: "price",
+                      },
+                    })
+                  }
+                  variant="none"
+                  _focus={false}
+                  icon={sort?.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                />
+              </Flex>
+            </Th>
+            <Th isNumeric>
+              <Flex alignItems="center">
+                <div>Balance</div>
+                <IconButton
+                  aria-label="sort"
+                  onClick={() =>
+                    dispatch({
+                      type: "[TOKEN] SET_SORT",
+                      sort: {
+                        isAsc: !sort?.isAsc,
+                        filter: "balance",
+                      },
+                    })
+                  }
+                  variant="none"
+                  _focus={false}
+                  icon={sort?.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                />
+              </Flex>
+            </Th>
+            <Th isNumeric>
+              <Flex alignItems="center">
+                <div>Amount</div>
+                <IconButton
+                  aria-label="sort"
+                  onClick={() =>
+                    dispatch({
+                      type: "[TOKEN] SET_SORT",
+                      sort: {
+                        isAsc: !sort?.isAsc,
+                        filter: "amount",
+                      },
+                    })
+                  }
+                  variant="none"
+                  _focus={false}
+                  icon={sort?.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />}
+                />
+              </Flex>
+            </Th>
             <Th></Th>
             <Th></Th>
           </Tr>
