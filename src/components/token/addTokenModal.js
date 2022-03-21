@@ -21,9 +21,10 @@ import {
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import { useGlobalState } from "../../state-management/stores/store";
+import { sortTokens } from "./token-helpers";
 
 const AddTokenModal = (props) => {
-  const networkId = useGlobalState().walletState.networkId
+  const networkId = useGlobalState().walletState.networkId;
   const [value, setValue] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [scrollBehavior] = useState("inside");
@@ -36,47 +37,56 @@ const AddTokenModal = (props) => {
     useState();
 
   const [filteredTokens, setFilteredTokens] = useState([]);
+  const [sortedFilteredTokens, setSortedFilteredTokens] = useState([]);
+  var defaultSortParams = {
+    isAsc: true,
+    filter: "name",
+  };
 
   useEffect(() => {
-    if(networkId) {
-      updateUnimportedTokens()
+    if (networkId) {
+      updateUnimportedTokens();
     }
   }, [networkId, userTokens]);
 
   const updateUnimportedTokens = () => {
-    if(networkId) {
+    if (networkId) {
       switch (networkId) {
         case 1:
-          return setFilteredTokens(Object.keys(allEthTokens).filter((key) => !(key in userTokens)));
+          return setFilteredTokens(
+            Object.keys(allEthTokens).filter((key) => !(key in userTokens))
+          );
         case 56:
-          return setFilteredTokens(Object.keys(allBnbTokens).filter((key) => !(key in userTokens)));
+          return setFilteredTokens(
+            Object.keys(allBnbTokens).filter((key) => !(key in userTokens))
+          );
         default:
           return [];
       }
-
     }
-  }
+  };
 
   useEffect(() => {
-    if(userTokens && networkId) {
+    if (userTokens && networkId) {
       let newVal = {};
       getPricesRequest({
-        tokens: filteredTokens, 
+        tokens: filteredTokens,
         networkId,
       }).then((res) => {
         if (res !== undefined && res.length > 0) {
           res.map((token) => {
-            return newVal[token.symbol.toUpperCase()] = { ...token };
+            return (newVal[token.symbol.toUpperCase()] = { ...token });
           });
         }
         setUnimportedTokensWithDetails(newVal);
+        sortTokens(defaultSortParams, newVal, setSortedFilteredTokens);
       });
     }
   }, [filteredTokens]);
 
   value === ""
-    ? (searchResultTokens = filteredTokens)
-    : (searchResultTokens = filteredTokens.filter((key) =>
+    ? (searchResultTokens = sortedFilteredTokens)
+    : (searchResultTokens = sortedFilteredTokens.filter((key) =>
         key.includes(value)
       ));
 

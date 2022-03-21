@@ -27,7 +27,7 @@ import TokenToast from "../tokenToast";
 import DonutChartWallet from "../charts/donutChartWallet";
 import { useGlobalState, useStore } from "../../state-management/stores/store";
 import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
-import { calculateTokenAmount } from "./token-helpers";
+import { calculateTokenAmount, sortTokens } from "./token-helpers";
 
 const Tokens = () => {
   const currentWallet = localStorage.getItem("address");
@@ -91,7 +91,7 @@ const Tokens = () => {
   }, [currentSymbolsState]);
 
   useEffect(() => {
-    sortTokens(tokens);
+    sortTokens(sort, tokens, setOrderedTokens);
   }, [sort, currentSymbolsState]);
 
   const getBalance = async (tokenSymbol) => {
@@ -276,109 +276,109 @@ const Tokens = () => {
     }
   };
 
-  const sortTokens = (tokensList) => {
-    if (sort !== undefined) {
-      const { isAsc, filter } = sort;
+  // const sortTokens = (tokensList) => {
+  //   if (sort !== undefined) {
+  //     const { isAsc, filter } = sort;
 
-      switch (filter) {
-        case "name":
-          if (isAsc === true) {
-            const ordered = Object.keys(tokensList).sort((a, b) =>
-              tokensList[a].name > tokensList[b].name
-                ? 1
-                : tokensList[b].name > tokensList[a].name
-                ? -1
-                : 0
-            );
+  //     switch (filter) {
+  //       case "name":
+  //         if (isAsc === true) {
+  //           const ordered = Object.keys(tokensList).sort((a, b) =>
+  //             tokensList[a].name > tokensList[b].name
+  //               ? 1
+  //               : tokensList[b].name > tokensList[a].name
+  //               ? -1
+  //               : 0
+  //           );
 
-            setOrderedTokens(ordered);
-          } else if (isAsc === false) {
-            const orderedDesc = Object.keys(tokensList)
-              .sort((a, b) =>
-                tokensList[a].name > tokensList[b].name
-                  ? 1
-                  : tokensList[b].name > tokensList[a].name
-                  ? -1
-                  : 0
-              )
-              .reverse();
-            setOrderedTokens(orderedDesc);
-          }
-          break;
-        case "24h_percentage":
-          if (isAsc === true) {
-            const ordered = Object.keys(tokensList).sort(
-              (a, b) =>
-                tokensList[a].price_change_percentage_24h -
-                tokensList[b].price_change_percentage_24h
-            );
+  //           setOrderedTokens(ordered);
+  //         } else if (isAsc === false) {
+  //           const orderedDesc = Object.keys(tokensList)
+  //             .sort((a, b) =>
+  //               tokensList[a].name > tokensList[b].name
+  //                 ? 1
+  //                 : tokensList[b].name > tokensList[a].name
+  //                 ? -1
+  //                 : 0
+  //             )
+  //             .reverse();
+  //           setOrderedTokens(orderedDesc);
+  //         }
+  //         break;
+  //       case "24h_percentage":
+  //         if (isAsc === true) {
+  //           const ordered = Object.keys(tokensList).sort(
+  //             (a, b) =>
+  //               tokensList[a].price_change_percentage_24h -
+  //               tokensList[b].price_change_percentage_24h
+  //           );
 
-            setOrderedTokens(ordered);
-          } else if (isAsc === false) {
-            const orderedDesc = Object.keys(tokensList)
-              .sort(
-                (a, b) =>
-                  tokensList[a].price_change_percentage_24h -
-                  tokensList[b].price_change_percentage_24h
-              )
-              .reverse();
+  //           setOrderedTokens(ordered);
+  //         } else if (isAsc === false) {
+  //           const orderedDesc = Object.keys(tokensList)
+  //             .sort(
+  //               (a, b) =>
+  //                 tokensList[a].price_change_percentage_24h -
+  //                 tokensList[b].price_change_percentage_24h
+  //             )
+  //             .reverse();
 
-            setOrderedTokens(orderedDesc);
-          }
-          break;
-        case "price":
-          if (isAsc === true) {
-            const ordered = Object.keys(tokensList).sort(
-              (a, b) => tokensList[a].price - tokensList[b].price
-            );
+  //           setOrderedTokens(orderedDesc);
+  //         }
+  //         break;
+  //       case "price":
+  //         if (isAsc === true) {
+  //           const ordered = Object.keys(tokensList).sort(
+  //             (a, b) => tokensList[a].price - tokensList[b].price
+  //           );
 
-            setOrderedTokens(ordered);
-          } else if (isAsc === false) {
-            const orderedDesc = Object.keys(tokensList)
-              .sort((a, b) => tokensList[a].price - tokensList[b].price)
-              .reverse();
+  //           setOrderedTokens(ordered);
+  //         } else if (isAsc === false) {
+  //           const orderedDesc = Object.keys(tokensList)
+  //             .sort((a, b) => tokensList[a].price - tokensList[b].price)
+  //             .reverse();
 
-            setOrderedTokens(orderedDesc);
-          }
-          break;
-        case "balance":
-          if (isAsc === true) {
-            const ordered = Object.keys(tokensList).sort(
-              (a, b) => tokensList[a].balance - tokensList[b].balance
-            );
+  //           setOrderedTokens(orderedDesc);
+  //         }
+  //         break;
+  //       case "balance":
+  //         if (isAsc === true) {
+  //           const ordered = Object.keys(tokensList).sort(
+  //             (a, b) => tokensList[a].balance - tokensList[b].balance
+  //           );
 
-            setOrderedTokens(ordered);
-          } else if (isAsc === false) {
-            const orderedDesc = Object.keys(tokensList)
-              .sort((a, b) => tokensList[a].balance - tokensList[b].balance)
-              .reverse();
+  //           setOrderedTokens(ordered);
+  //         } else if (isAsc === false) {
+  //           const orderedDesc = Object.keys(tokensList)
+  //             .sort((a, b) => tokensList[a].balance - tokensList[b].balance)
+  //             .reverse();
 
-            setOrderedTokens(orderedDesc);
-          }
-          break;
-        case "amount":
-          if (isAsc === true) {
-            const ordered = Object.keys(tokensList).sort(
-              (a, b) => tokensList[a].amount - tokensList[b].amount
-            );
+  //           setOrderedTokens(orderedDesc);
+  //         }
+  //         break;
+  //       case "amount":
+  //         if (isAsc === true) {
+  //           const ordered = Object.keys(tokensList).sort(
+  //             (a, b) => tokensList[a].amount - tokensList[b].amount
+  //           );
 
-            setOrderedTokens(ordered);
-          } else if (isAsc === false) {
-            const orderedDesc = Object.keys(tokensList)
-              .sort((a, b) => tokensList[a].amount - tokensList[b].amount)
-              .reverse();
+  //           setOrderedTokens(ordered);
+  //         } else if (isAsc === false) {
+  //           const orderedDesc = Object.keys(tokensList)
+  //             .sort((a, b) => tokensList[a].amount - tokensList[b].amount)
+  //             .reverse();
 
-            setOrderedTokens(orderedDesc);
-          }
-          break;
+  //           setOrderedTokens(orderedDesc);
+  //         }
+  //         break;
 
-        default:
-          setOrderedTokens({ ...tokensList });
-      }
-    } else {
-      setOrderedTokens({ ...tokensList });
-    }
-  };
+  //       default:
+  //         setOrderedTokens({ ...tokensList });
+  //     }
+  //   } else {
+  //     setOrderedTokens({ ...tokensList });
+  //   }
+  // };
 
   return (
     <React.Fragment>

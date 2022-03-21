@@ -28,3 +28,108 @@ export const stylingDecimals = (numericValue) => {
     }
   } else return parseFloat(numericValue).toFixed(2)
 }
+
+export const sortTokens = (sort, tokensList, setOrderedTokens) => {
+  console.log('---', sort, tokensList, setOrderedTokens)
+  if (sort !== undefined) {
+    const { isAsc, filter } = sort;
+
+    switch (filter) {
+      case "name":
+        if (isAsc === true) {
+          const ordered = Object.keys(tokensList).sort((a, b) =>
+            tokensList[a].name > tokensList[b].name
+              ? 1
+              : tokensList[b].name > tokensList[a].name
+              ? -1
+              : 0
+          );
+
+          return setOrderedTokens(ordered);
+        } else if (isAsc === false) {
+          const orderedDesc = Object.keys(tokensList)
+            .sort((a, b) =>
+              tokensList[a].name > tokensList[b].name
+                ? 1
+                : tokensList[b].name > tokensList[a].name
+                ? -1
+                : 0
+            )
+            .reverse();
+          return setOrderedTokens(orderedDesc);
+        }
+        break;
+      case "24h_percentage":
+        if (isAsc === true) {
+          const ordered = Object.keys(tokensList).sort(
+            (a, b) =>
+              tokensList[a].price_change_percentage_24h -
+              tokensList[b].price_change_percentage_24h
+          );
+
+          return setOrderedTokens(ordered);
+        } else if (isAsc === false) {
+          const orderedDesc = Object.keys(tokensList)
+            .sort(
+              (a, b) =>
+                tokensList[a].price_change_percentage_24h -
+                tokensList[b].price_change_percentage_24h
+            )
+            .reverse();
+
+          return setOrderedTokens(orderedDesc);
+        }
+        break;
+      case "price":
+        if (isAsc === true) {
+          const ordered = Object.keys(tokensList).sort(
+            (a, b) => tokensList[a].price - tokensList[b].price
+          );
+
+          return setOrderedTokens(ordered);
+        } else if (isAsc === false) {
+          const orderedDesc = Object.keys(tokensList)
+            .sort((a, b) => tokensList[a].price - tokensList[b].price)
+            .reverse();
+
+          return setOrderedTokens(orderedDesc);
+        }
+        break;
+      case "balance":
+        if (isAsc === true) {
+          const ordered = Object.keys(tokensList).sort(
+            (a, b) => tokensList[a].balance - tokensList[b].balance
+          );
+
+          return setOrderedTokens(ordered);
+        } else if (isAsc === false) {
+          const orderedDesc = Object.keys(tokensList)
+            .sort((a, b) => tokensList[a].balance - tokensList[b].balance)
+            .reverse();
+
+          return setOrderedTokens(orderedDesc);
+        }
+        break;
+      case "amount":
+        if (isAsc === true) {
+          const ordered = Object.keys(tokensList).sort(
+            (a, b) => tokensList[a].amount - tokensList[b].amount
+          );
+
+          return setOrderedTokens(ordered);
+        } else if (isAsc === false) {
+          const orderedDesc = Object.keys(tokensList)
+            .sort((a, b) => tokensList[a].amount - tokensList[b].amount)
+            .reverse();
+
+          return setOrderedTokens(orderedDesc);
+        }
+        break;
+
+      default:
+        return setOrderedTokens({ ...tokensList });
+    }
+  } else {
+    return setOrderedTokens({ ...tokensList });
+  }
+};
