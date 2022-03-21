@@ -87,7 +87,7 @@ const AddTokenModal = (props) => {
   value === ""
     ? (searchResultTokens = sortedFilteredTokens)
     : (searchResultTokens = sortedFilteredTokens.filter((key) =>
-        key.includes(value)
+      key.includes(value) || unimportedTokensWithDetails[key].name.toUpperCase().includes(value)
       ));
 
   const OverlayOne = () => (
