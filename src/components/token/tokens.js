@@ -92,6 +92,7 @@ const Tokens = () => {
   }, [currentSymbolsState]);
 
   useEffect(() => {
+    setShowDeleteToast(false);
     sortTokens(sort, tokens, setOrderedTokens);
   }, [sort, currentSymbolsState]);
 
@@ -277,6 +278,22 @@ const Tokens = () => {
     }
   };
 
+  const handleSort = (action) => {
+    const {
+      type,
+      isAsc,
+      filter
+    } = action
+    setShowDeleteToast(false)
+    dispatch({
+      type,
+      sort: {
+        isAsc,
+        filter,
+      },
+    })
+  } 
+
   return (
     <React.Fragment>
       {Object.keys(tokens).length > 0 ? (
@@ -293,18 +310,23 @@ const Tokens = () => {
                     <IconButton
                       aria-label="sort"
                       onClick={() =>
-                        dispatch({
+                        handleSort({
                           type: "[TOKEN] SET_SORT",
-                          sort: {
-                            isAsc: !sort?.isAsc,
-                            filter: "name",
-                          },
+                          isAsc: !sort?.isAsc,
+                          filter: "name",
                         })
+                        // dispatch({
+                        //   type: "[TOKEN] SET_SORT",
+                        //   sort: {
+                        //     isAsc: !sort?.isAsc,
+                        //     filter: "name",
+                        //   },
+                        // })
                       }
                       variant="none"
                       _focus={false}
                       icon={
-                        sort?.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />
+                        (sort?.isAsc && sort?.filter === "name") ? <ChevronUpIcon /> : <ChevronDownIcon />
                       }
                     />
                   </Flex>
@@ -314,19 +336,25 @@ const Tokens = () => {
                     <div>% 24h</div>
                     <IconButton
                       aria-label="sort"
-                      onClick={() =>
-                        dispatch({
+                      onClick={() => 
+                        handleSort({
                           type: "[TOKEN] SET_SORT",
-                          sort: {
-                            isAsc: !sort?.isAsc,
-                            filter: "24h_percentage",
-                          },
+                          isAsc: !sort?.isAsc,
+                          filter: "24h_percentage",
                         })
+                        // return dispatch({
+                        //   type: "[TOKEN] SET_SORT",
+                        //   sort: {
+                        //     isAsc: !sort?.isAsc,
+                        //     filter: "24h_percentage",
+                        //   },
+                        // })
+                      
                       }
                       variant="none"
                       _focus={false}
                       icon={
-                        sort?.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />
+                        (sort?.isAsc && sort?.filter === "24h_percentage") ? <ChevronUpIcon /> : <ChevronDownIcon />
                       }
                     />
                   </Flex>
@@ -337,18 +365,22 @@ const Tokens = () => {
                     <IconButton
                       aria-label="sort"
                       onClick={() =>
-                        dispatch({
+                        handleSort({
                           type: "[TOKEN] SET_SORT",
-                          sort: {
-                            isAsc: !sort?.isAsc,
-                            filter: "price",
-                          },
+                          isAsc: !sort?.isAsc,
+                          filter: "price",
                         })
+                        // dispatch({
+                        //   type: "[TOKEN] SET_SORT",
+                        //   sort: {
+                        //     isAsc: !sort?.isAsc,
+                        //     filter: "price",
+                        //   },
                       }
                       variant="none"
                       _focus={false}
                       icon={
-                        sort?.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />
+                        (sort?.isAsc && sort?.filter === "price") ? <ChevronUpIcon /> : <ChevronDownIcon />
                       }
                     />
                   </Flex>
@@ -359,18 +391,23 @@ const Tokens = () => {
                     <IconButton
                       aria-label="sort"
                       onClick={() =>
-                        dispatch({
+                        handleSort({
                           type: "[TOKEN] SET_SORT",
-                          sort: {
-                            isAsc: !sort?.isAsc,
-                            filter: "balance",
-                          },
+                          isAsc: !sort?.isAsc,
+                          filter: "balance",
                         })
+                        // dispatch({
+                        //   type: "[TOKEN] SET_SORT",
+                        //   sort: {
+                        //     isAsc: !sort?.isAsc,
+                        //     filter: "balance",
+                        //   },
+                        // })
                       }
                       variant="none"
                       _focus={false}
                       icon={
-                        sort?.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />
+                        (sort?.isAsc && sort?.filter === "balance")? <ChevronUpIcon /> : <ChevronDownIcon />
                       }
                     />
                   </Flex>
@@ -381,18 +418,23 @@ const Tokens = () => {
                     <IconButton
                       aria-label="sort"
                       onClick={() =>
-                        dispatch({
+                        handleSort({
                           type: "[TOKEN] SET_SORT",
-                          sort: {
-                            isAsc: !sort?.isAsc,
-                            filter: "amount",
-                          },
+                          isAsc: !sort?.isAsc,
+                          filter: "amount",
                         })
+                        // dispatch({
+                        //   type: "[TOKEN] SET_SORT",
+                        //   sort: {
+                        //     isAsc: !sort?.isAsc,
+                        //     filter: "amount",
+                        //   },
+                        // })
                       }
                       variant="none"
                       _focus={false}
                       icon={
-                        sort?.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />
+                        (sort?.isAsc && sort?.filter === "amount") ? <ChevronUpIcon /> : <ChevronDownIcon />
                       }
                     />
                   </Flex>
