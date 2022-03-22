@@ -28,6 +28,7 @@ import DonutChartWallet from "../charts/donutChartWallet";
 import { useGlobalState, useStore } from "../../state-management/stores/store";
 import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 import { calculateTokenAmount, sortTokens } from "./token-helpers";
+import Loader from "../loader";
 
 const Tokens = () => {
   const currentWallet = localStorage.getItem("address");
@@ -276,240 +277,151 @@ const Tokens = () => {
     }
   };
 
-  // const sortTokens = (tokensList) => {
-  //   if (sort !== undefined) {
-  //     const { isAsc, filter } = sort;
-
-  //     switch (filter) {
-  //       case "name":
-  //         if (isAsc === true) {
-  //           const ordered = Object.keys(tokensList).sort((a, b) =>
-  //             tokensList[a].name > tokensList[b].name
-  //               ? 1
-  //               : tokensList[b].name > tokensList[a].name
-  //               ? -1
-  //               : 0
-  //           );
-
-  //           setOrderedTokens(ordered);
-  //         } else if (isAsc === false) {
-  //           const orderedDesc = Object.keys(tokensList)
-  //             .sort((a, b) =>
-  //               tokensList[a].name > tokensList[b].name
-  //                 ? 1
-  //                 : tokensList[b].name > tokensList[a].name
-  //                 ? -1
-  //                 : 0
-  //             )
-  //             .reverse();
-  //           setOrderedTokens(orderedDesc);
-  //         }
-  //         break;
-  //       case "24h_percentage":
-  //         if (isAsc === true) {
-  //           const ordered = Object.keys(tokensList).sort(
-  //             (a, b) =>
-  //               tokensList[a].price_change_percentage_24h -
-  //               tokensList[b].price_change_percentage_24h
-  //           );
-
-  //           setOrderedTokens(ordered);
-  //         } else if (isAsc === false) {
-  //           const orderedDesc = Object.keys(tokensList)
-  //             .sort(
-  //               (a, b) =>
-  //                 tokensList[a].price_change_percentage_24h -
-  //                 tokensList[b].price_change_percentage_24h
-  //             )
-  //             .reverse();
-
-  //           setOrderedTokens(orderedDesc);
-  //         }
-  //         break;
-  //       case "price":
-  //         if (isAsc === true) {
-  //           const ordered = Object.keys(tokensList).sort(
-  //             (a, b) => tokensList[a].price - tokensList[b].price
-  //           );
-
-  //           setOrderedTokens(ordered);
-  //         } else if (isAsc === false) {
-  //           const orderedDesc = Object.keys(tokensList)
-  //             .sort((a, b) => tokensList[a].price - tokensList[b].price)
-  //             .reverse();
-
-  //           setOrderedTokens(orderedDesc);
-  //         }
-  //         break;
-  //       case "balance":
-  //         if (isAsc === true) {
-  //           const ordered = Object.keys(tokensList).sort(
-  //             (a, b) => tokensList[a].balance - tokensList[b].balance
-  //           );
-
-  //           setOrderedTokens(ordered);
-  //         } else if (isAsc === false) {
-  //           const orderedDesc = Object.keys(tokensList)
-  //             .sort((a, b) => tokensList[a].balance - tokensList[b].balance)
-  //             .reverse();
-
-  //           setOrderedTokens(orderedDesc);
-  //         }
-  //         break;
-  //       case "amount":
-  //         if (isAsc === true) {
-  //           const ordered = Object.keys(tokensList).sort(
-  //             (a, b) => tokensList[a].amount - tokensList[b].amount
-  //           );
-
-  //           setOrderedTokens(ordered);
-  //         } else if (isAsc === false) {
-  //           const orderedDesc = Object.keys(tokensList)
-  //             .sort((a, b) => tokensList[a].amount - tokensList[b].amount)
-  //             .reverse();
-
-  //           setOrderedTokens(orderedDesc);
-  //         }
-  //         break;
-
-  //       default:
-  //         setOrderedTokens({ ...tokensList });
-  //     }
-  //   } else {
-  //     setOrderedTokens({ ...tokensList });
-  //   }
-  // };
-
   return (
     <React.Fragment>
-      <DonutChartWallet tokens={tokens}></DonutChartWallet>
-      <AddTokenModal tokens={tokens} addToken={addToken}></AddTokenModal>
-
-      <Table variant="simple" colorScheme="teal">
-        <Thead>
-          <Tr>
-            <Th>Index</Th>
-            <Th>
-              <Flex alignItems="center">
-                <div>Symbol</div>
-                <IconButton
-                  aria-label="sort"
-                  onClick={() =>
-                    dispatch({
-                      type: "[TOKEN] SET_SORT",
-                      sort: {
-                        isAsc: !sort?.isAsc,
-                        filter: "name",
-                      },
-                    })
-                  }
-                  variant="none"
-                  _focus={false}
-                  icon={sort?.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                />
-              </Flex>
-            </Th>
-            <Th isNumeric>
-              <Flex alignItems="center">
-                <div>% 24h</div>
-                <IconButton
-                  aria-label="sort"
-                  onClick={() =>
-                    dispatch({
-                      type: "[TOKEN] SET_SORT",
-                      sort: {
-                        isAsc: !sort?.isAsc,
-                        filter: "24h_percentage",
-                      },
-                    })
-                  }
-                  variant="none"
-                  _focus={false}
-                  icon={sort?.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                />
-              </Flex>
-            </Th>
-            <Th isNumeric>
-              <Flex alignItems="center">
-                <div>Price</div>
-                <IconButton
-                  aria-label="sort"
-                  onClick={() =>
-                    dispatch({
-                      type: "[TOKEN] SET_SORT",
-                      sort: {
-                        isAsc: !sort?.isAsc,
-                        filter: "price",
-                      },
-                    })
-                  }
-                  variant="none"
-                  _focus={false}
-                  icon={sort?.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                />
-              </Flex>
-            </Th>
-            <Th isNumeric>
-              <Flex alignItems="center">
-                <div>Balance</div>
-                <IconButton
-                  aria-label="sort"
-                  onClick={() =>
-                    dispatch({
-                      type: "[TOKEN] SET_SORT",
-                      sort: {
-                        isAsc: !sort?.isAsc,
-                        filter: "balance",
-                      },
-                    })
-                  }
-                  variant="none"
-                  _focus={false}
-                  icon={sort?.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                />
-              </Flex>
-            </Th>
-            <Th isNumeric>
-              <Flex alignItems="center">
-                <div>Amount</div>
-                <IconButton
-                  aria-label="sort"
-                  onClick={() =>
-                    dispatch({
-                      type: "[TOKEN] SET_SORT",
-                      sort: {
-                        isAsc: !sort?.isAsc,
-                        filter: "amount",
-                      },
-                    })
-                  }
-                  variant="none"
-                  _focus={false}
-                  icon={sort?.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />}
-                />
-              </Flex>
-            </Th>
-            <Th></Th>
-            <Th></Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {(orderedTokens.length > 0
-            ? orderedTokens
-            : Object.keys(tokens).length > 0
-            ? Object.keys(tokens)
-            : []
-          ).map((key, i) => (
-            <Token
-              key={`idToken_${i + 1}`}
-              index={i}
-              token={{ ...tokens[key], symbol: key }}
-              deleteToken={deleteToken}
-              deletePressed={deletePressed}
-            ></Token>
-          ))}
-        </Tbody>
-      </Table>
+      {Object.keys(tokens).length > 0 ? (
+        <>
+          <DonutChartWallet tokens={tokens}></DonutChartWallet>
+          <AddTokenModal tokens={tokens} addToken={addToken}></AddTokenModal>
+          <Table variant="simple" colorScheme="teal">
+            <Thead>
+              <Tr>
+                <Th>Index</Th>
+                <Th>
+                  <Flex alignItems="center">
+                    <div>Symbol</div>
+                    <IconButton
+                      aria-label="sort"
+                      onClick={() =>
+                        dispatch({
+                          type: "[TOKEN] SET_SORT",
+                          sort: {
+                            isAsc: !sort?.isAsc,
+                            filter: "name",
+                          },
+                        })
+                      }
+                      variant="none"
+                      _focus={false}
+                      icon={
+                        sort?.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />
+                      }
+                    />
+                  </Flex>
+                </Th>
+                <Th isNumeric>
+                  <Flex alignItems="center">
+                    <div>% 24h</div>
+                    <IconButton
+                      aria-label="sort"
+                      onClick={() =>
+                        dispatch({
+                          type: "[TOKEN] SET_SORT",
+                          sort: {
+                            isAsc: !sort?.isAsc,
+                            filter: "24h_percentage",
+                          },
+                        })
+                      }
+                      variant="none"
+                      _focus={false}
+                      icon={
+                        sort?.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />
+                      }
+                    />
+                  </Flex>
+                </Th>
+                <Th isNumeric>
+                  <Flex alignItems="center">
+                    <div>Price</div>
+                    <IconButton
+                      aria-label="sort"
+                      onClick={() =>
+                        dispatch({
+                          type: "[TOKEN] SET_SORT",
+                          sort: {
+                            isAsc: !sort?.isAsc,
+                            filter: "price",
+                          },
+                        })
+                      }
+                      variant="none"
+                      _focus={false}
+                      icon={
+                        sort?.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />
+                      }
+                    />
+                  </Flex>
+                </Th>
+                <Th isNumeric>
+                  <Flex alignItems="center">
+                    <div>Balance</div>
+                    <IconButton
+                      aria-label="sort"
+                      onClick={() =>
+                        dispatch({
+                          type: "[TOKEN] SET_SORT",
+                          sort: {
+                            isAsc: !sort?.isAsc,
+                            filter: "balance",
+                          },
+                        })
+                      }
+                      variant="none"
+                      _focus={false}
+                      icon={
+                        sort?.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />
+                      }
+                    />
+                  </Flex>
+                </Th>
+                <Th isNumeric>
+                  <Flex alignItems="center">
+                    <div>Amount</div>
+                    <IconButton
+                      aria-label="sort"
+                      onClick={() =>
+                        dispatch({
+                          type: "[TOKEN] SET_SORT",
+                          sort: {
+                            isAsc: !sort?.isAsc,
+                            filter: "amount",
+                          },
+                        })
+                      }
+                      variant="none"
+                      _focus={false}
+                      icon={
+                        sort?.isAsc ? <ChevronUpIcon /> : <ChevronDownIcon />
+                      }
+                    />
+                  </Flex>
+                </Th>
+                <Th></Th>
+                <Th></Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {(orderedTokens.length > 0
+                ? orderedTokens
+                : Object.keys(tokens).length > 0
+                ? Object.keys(tokens)
+                : []
+              ).map((key, i) => (
+                <Token
+                  key={`idToken_${i + 1}`}
+                  index={i}
+                  token={{ ...tokens[key], symbol: key }}
+                  deleteToken={deleteToken}
+                  deletePressed={deletePressed}
+                ></Token>
+              ))}
+            </Tbody>
+          </Table>
+        </>
+      ) : (
+        <Loader show={true}></Loader>
+      )}
       <DeleteTokenAlert
         deleteToken={deleteToken}
         symbol={showDeleteModal.symbol}
