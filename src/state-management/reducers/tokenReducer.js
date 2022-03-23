@@ -1,7 +1,7 @@
 export default function tokenReducer(state, action) {
   switch(action.type) {
     case '[TOKEN] SET_SORT':
-      state = {...state, sort: action.sort}
+     state = {...state, sort: action.sort}
 
       return {...state}
     // case 'GET_TOKENS':

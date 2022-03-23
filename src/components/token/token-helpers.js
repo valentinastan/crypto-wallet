@@ -30,7 +30,6 @@ export const stylingDecimals = (numericValue) => {
 }
 
 export const sortTokens = (sort, tokensList, setOrderedTokens) => {
-  console.log('---', sort, tokensList, setOrderedTokens)
   if (sort !== undefined) {
     const { isAsc, filter } = sort;
 

@@ -204,7 +204,7 @@ const Tokens = () => {
         ) {
           saveTokens(currentSymbolsState, "INDEX");
         }
-      }, 10000);
+      }, 90000);
     }
     return () => {
       clearInterval(nIntervId);
@@ -284,6 +284,7 @@ const Tokens = () => {
       isAsc,
       filter
     } = action
+    
     setShowDeleteToast(false)
     dispatch({
       type,
@@ -312,7 +313,7 @@ const Tokens = () => {
                       onClick={() =>
                         handleSort({
                           type: "[TOKEN] SET_SORT",
-                          isAsc: !sort?.isAsc,
+                          isAsc: (sort.filter === undefined || sort.filter !== 'name') ? true : !sort?.isAsc,
                           filter: "name",
                         })
                         // dispatch({
@@ -339,7 +340,7 @@ const Tokens = () => {
                       onClick={() => 
                         handleSort({
                           type: "[TOKEN] SET_SORT",
-                          isAsc: !sort?.isAsc,
+                          isAsc: (sort.filter === undefined || sort.filter !== '24h_percentage') ? true : !sort?.isAsc,
                           filter: "24h_percentage",
                         })
                         // return dispatch({
@@ -367,7 +368,7 @@ const Tokens = () => {
                       onClick={() =>
                         handleSort({
                           type: "[TOKEN] SET_SORT",
-                          isAsc: !sort?.isAsc,
+                          isAsc: (sort.filter === undefined || sort.filter !== 'price') ? true : !sort?.isAsc,
                           filter: "price",
                         })
                         // dispatch({
@@ -393,7 +394,7 @@ const Tokens = () => {
                       onClick={() =>
                         handleSort({
                           type: "[TOKEN] SET_SORT",
-                          isAsc: !sort?.isAsc,
+                          isAsc: (sort.filter === undefined || sort.filter !== 'balance') ? true : !sort?.isAsc,
                           filter: "balance",
                         })
                         // dispatch({
@@ -420,7 +421,7 @@ const Tokens = () => {
                       onClick={() =>
                         handleSort({
                           type: "[TOKEN] SET_SORT",
-                          isAsc: !sort?.isAsc,
+                          isAsc: (sort.filter === undefined || sort.filter !== 'amount') ? true : !sort?.isAsc,
                           filter: "amount",
                         })
                         // dispatch({
