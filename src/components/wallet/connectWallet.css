@@ -13,6 +13,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #0E0042;
-  background: linear-gradient(to left, rgba(62, 51, 103), rgba(14, 0, 66, 1));
+  /* background-color: #0E0042; */
+  /* background: linear-gradient(to right, #1A202C, #23323C, #2D444B, #36565B, #3F686B, #497A7B, #528C8A, #5C9E9A, #65B0AA, #6EC2BA, #78D4C9, #81E6D9 */
+  /* ); */
+  /* background: linear-gradient(to left, rgba(62, 51, 103), rgba(14, 0, 66, 1)); */
 }

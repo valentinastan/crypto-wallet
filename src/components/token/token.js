@@ -9,7 +9,9 @@ import {
   useDisclosure,
   Fade,
   Collapse,
-  Flex
+  ScaleFade,
+  Flex,
+  SlideFade
 } from "@chakra-ui/react";
 import './css/token.css'
 import { ChevronDownIcon, ChevronUpIcon, MinusIcon } from "@chakra-ui/icons";
@@ -86,9 +88,9 @@ const Token = (props) => {
       {showChart &&  
         <Tr>
           <Td colSpan='8'>
-          <Collapse in={isOpen} animateOpacity>
+          <SlideFade in={isOpen}>
             <LineChartToken tokenSymbol={props.token.symbol}></LineChartToken>
-          </Collapse>
+          </SlideFade >
           </Td>
         </Tr>
       }
