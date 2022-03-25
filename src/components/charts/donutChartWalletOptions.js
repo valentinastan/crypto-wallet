@@ -1,4 +1,6 @@
+import { Tag, TagLabel } from "@chakra-ui/react";
 import { calculateTokenPercentage, stylingDecimals } from "../token/token-helpers";
+import './donutChart.css'
 
 export const getDonutChartOptions = (themeColor, walletAmount) => {
   return {
@@ -17,19 +19,23 @@ export const getDonutChartOptions = (themeColor, walletAmount) => {
       show: true,
       fontSize: '13px',
       labels: {
-        colors: themeColor,
+        colors: 'white',//themeColor,
         useSeriesColors: false,
       },
       itemMargin: {
         horizontal: 0,
-        vertical: 15
+        vertical: 15,
       },
-      height: '100%',
+      width: 250,
+      // height: 100,
       formatter: function(val, option) {
         const amount = stylingDecimals(calculateTokenPercentage(option.w.globals.series[option.seriesIndex], walletAmount))
-        return `${val}: ${amount} %`
+      //   return "<Tag size='lg' colorScheme='red' borderRadius='full'>" +
+      //       "<TagLabel>Segun</TagLabel>" + 
+      //  " </Tag>"
+      //   // return <h1>lalal</h1>
+        return '<span class="donutChartLegend">' + `${val} <span class="donutChartLegendValue"> + ${amount} %` + '</span>' + '</span>'
       },
-
     },
     dataLabels: {
       enabled: true,

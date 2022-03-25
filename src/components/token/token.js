@@ -33,6 +33,7 @@ const Token = (props) => {
         _hover={{ 
         bg:bg, 
         color:color,
+        fontWeight: '500',
         }}
         opacity={(!props.token.balance || props.token.balance <= 0.00001) ? 0.33 : 1}
       >
@@ -53,7 +54,7 @@ const Token = (props) => {
           </HStack>
         </Td>
         <Td isNumeric className={props?.token?.price_change_percentage_24h > 0 ? 'green-price' : props?.token?.price_change_percentage_24h < 0 ? 'red-price' : ''}>
-          {parseFloat(props?.token?.price_change_percentage_24h || 0).toFixed(2)}%
+          {parseFloat(props?.token?.price_change_percentage_24h || 0).toFixed(2)} %
         </Td>
         <Td isNumeric>
           {stylingDecimals(props?.token?.price || 0)} $

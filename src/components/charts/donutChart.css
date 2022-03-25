@@ -1,0 +1,26 @@
+.donutChartLegend {
+  background-color: #2D3748;
+  padding: 5px 14px 5px 14px;
+  border: 2px solid #2D3748;
+  border-radius: 30px;
+  width: 100%;
+  margin-left: 5px;
+}
+
+.donutChartLegendValue {
+  background-color: #004D4D;
+  padding: 4px 8px 4px 8px;
+  border: 2px solid #2D3748;
+  border-radius: 25px;
+  width: 100%;
+  margin-left: 5px;
+}
+
+.apexcharts-legend-text {
+  width: 100%;
+
+} 
+
+.container > *:first-child
+{
+}

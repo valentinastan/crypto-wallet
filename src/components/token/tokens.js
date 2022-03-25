@@ -20,6 +20,7 @@ import {
   useDisclosure,
   IconButton,
   Flex,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import AddTokenModal from "./addTokenModal";
 import DeleteTokenAlert from "./deleteTokenAlert";
@@ -37,6 +38,8 @@ const Tokens = () => {
   const [currentSymbolsState, setCurrentSymbols] = useState(
     Object.keys(tokens)
   );
+
+  const selectedSortColor = useColorModeValue('black', 'white')
 
   const [showDeleteModal, setShowDeleteModal] = useState({ symbol: "" });
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -306,7 +309,7 @@ const Tokens = () => {
               <Tr>
                 <Th>Index</Th>
                 <Th>
-                  <Flex alignItems="center">
+                  <Flex alignItems="center" style={sort.filter === 'name' ? {color: selectedSortColor} : {}}>
                     <div>Symbol</div>
                     <IconButton
                       aria-label="sort"
@@ -333,7 +336,7 @@ const Tokens = () => {
                   </Flex>
                 </Th>
                 <Th isNumeric>
-                  <Flex alignItems="center">
+                  <Flex alignItems="center" style={sort.filter === '24h_percentage' ? {color: selectedSortColor, justifyContent: 'flex-end'} : {justifyContent: 'flex-end'}}>
                     <div>% 24h</div>
                     <IconButton
                       aria-label="sort"
@@ -361,7 +364,7 @@ const Tokens = () => {
                   </Flex>
                 </Th>
                 <Th isNumeric>
-                  <Flex alignItems="center">
+                  <Flex alignItems="center" style={sort.filter === 'price' ? {color: selectedSortColor, justifyContent: 'flex-end'} : {justifyContent: 'flex-end'}}>
                     <div>Price</div>
                     <IconButton
                       aria-label="sort"
@@ -387,7 +390,7 @@ const Tokens = () => {
                   </Flex>
                 </Th>
                 <Th isNumeric>
-                  <Flex alignItems="center">
+                  <Flex alignItems="center" style={sort.filter === 'balance' ? {color: selectedSortColor, justifyContent: 'flex-end'} : {justifyContent: 'flex-end'}}>
                     <div>Balance</div>
                     <IconButton
                       aria-label="sort"
@@ -414,7 +417,7 @@ const Tokens = () => {
                   </Flex>
                 </Th>
                 <Th isNumeric>
-                  <Flex alignItems="center">
+                  <Flex alignItems="center" style={sort.filter === 'amount' ? {color: selectedSortColor, justifyContent: 'flex-end'} : {justifyContent: 'flex-end'}}>
                     <div>Amount</div>
                     <IconButton
                       aria-label="sort"
