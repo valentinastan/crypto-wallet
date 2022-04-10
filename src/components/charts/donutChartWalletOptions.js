@@ -33,7 +33,7 @@ export const getDonutChartOptions = (themeColor, walletAmount) => {
       //       "<TagLabel>Segun</TagLabel>" + 
       //  " </Tag>"
       //   // return <h1>lalal</h1>
-        return "<span class='donutChartLegend'>" + `${val} <span class='donutChartLegendValue'> ${amount} %` + "</span>" + "</span>"
+        return `<span class='donutChartLegend'> ${val} <span class='donutChartLegendValue'> ${amount} % </span></span>`
       },
     },
     dataLabels: {
