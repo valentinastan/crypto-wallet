@@ -1,24 +1,20 @@
 import React from 'react'
 import ConnectWallet from '../components/wallet/connectWallet'
-import { useStore } from '../state-management/stores/store'
-import FluidAnimation from 'react-fluid-animation'
 import Sky from './sky'
-import DatGui, { DatNumber, DatSelect, DatButton } from "react-dat-gui";
-
 import "../../node_modules/react-dat-gui/dist/index.css";
 
 const ConnectWalletPage = () => {
-  const [state, ] = useStore()
+  // const [state, ] = useStore()
 
-  const defaultConfig = {
-    textureDownsample: 1,
-    densityDissipation: 0.98,
-    velocityDissipation: 0.99,
-    pressureDissipation: 0.8,
-    pressureIterations: 25,
-    curl: 30,
-    splatRadius: 0.005
-  }
+  // const defaultConfig = {
+  //   textureDownsample: 1,
+  //   densityDissipation: 0.98,
+  //   velocityDissipation: 0.99,
+  //   pressureDissipation: 0.8,
+  //   pressureIterations: 25,
+  //   curl: 30,
+  //   splatRadius: 0.005
+  // }
 
   // return (
   //   <div

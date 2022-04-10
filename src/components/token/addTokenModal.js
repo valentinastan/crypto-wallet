@@ -47,6 +47,7 @@ const AddTokenModal = (props) => {
     if (networkId) {
       updateUnimportedTokens();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [networkId, userTokens]);
 
   const updateUnimportedTokens = () => {
@@ -82,6 +83,7 @@ const AddTokenModal = (props) => {
         sortTokens(defaultSortParams, newVal, setSortedFilteredTokens);
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredTokens]);
 
   value === ""

@@ -83,6 +83,7 @@ const Tokens = () => {
         }
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletState.address, networkId]);
 
   useEffect(() => {
@@ -93,11 +94,13 @@ const Tokens = () => {
     return () => {
       clearInterval(nIntervId);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentSymbolsState]);
 
   useEffect(() => {
     setShowDeleteToast(false);
     sortTokens(sort, tokens, setOrderedTokens);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sort, currentSymbolsState]);
 
   const getBalance = async (tokenSymbol) => {

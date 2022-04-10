@@ -7,9 +7,6 @@ import {
   useColorModeValue,
   IconButton,
   useDisclosure,
-  Fade,
-  Collapse,
-  ScaleFade,
   Flex,
   SlideFade
 } from "@chakra-ui/react";
