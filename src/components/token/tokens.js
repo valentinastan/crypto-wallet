@@ -63,6 +63,7 @@ const Tokens = () => {
   let nIntervId;
 
   useEffect(() => {
+    setShowDeleteToast(false);
     if (networkId) {
       getTokensByWallet({ currentWallet, networkId }).then((tokensSnapshot) => {
         if (tokensSnapshot.empty) {
