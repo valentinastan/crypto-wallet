@@ -88,7 +88,7 @@ const Tokens = () => {
 
   useEffect(() => {
     if (currentSymbolsState.length > 0) {
-      let symbols = [...currentSymbolsState];
+      // let symbols = [...currentSymbolsState];
       refreshPrices();
     }
     return () => {

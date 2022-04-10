@@ -36,6 +36,7 @@ const LineChartToken = (props) => {
         }
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [daysAgo, networkId]);
 
   return (

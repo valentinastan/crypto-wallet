@@ -2,7 +2,6 @@ import React from "react";
 import Sky from "react-sky";
 
 import btc from "./btc.png";
-import eth from "./eth.png";
 import ethBlue from "./eth-blue.png";
 import ethGold from "./eth-gold.png";
 import btcBlue from "./btc-blue.png"
