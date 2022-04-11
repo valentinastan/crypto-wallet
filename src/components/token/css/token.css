@@ -14,3 +14,11 @@
 .red-price {
   color: brown;
 }
+
+@media only screen and (max-width: 667px) { 
+  .logout-button {
+    padding: 0px 6px !important;
+    font-size: 12px !important;
+    /* height: ; */
+  }
+}

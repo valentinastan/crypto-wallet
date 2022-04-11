@@ -54,13 +54,13 @@ const Token = (props) => {
           {parseFloat(props?.token?.price_change_percentage_24h || 0).toFixed(2)} %
         </Td>
         <Td isNumeric>
-          {stylingDecimals(props?.token?.price || 0)} $
+          $ {stylingDecimals(props?.token?.price || 0)}
         </Td>
         <Td isNumeric>
           {stylingDecimals(props?.token?.balance || 0)}
         </Td>
         <Td isNumeric>
-          {stylingDecimals(props?.token?.amount || 0)} $
+          $ {stylingDecimals(props?.token?.amount || 0)}
         </Td>
         <Td isNumeric>
           <IconButton

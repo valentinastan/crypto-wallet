@@ -1,26 +1,72 @@
 .donutChartLegend {
   background-color: #2D3748;
-  padding: 5px 14px 5px 14px;
+  padding: 2px 14px 2px 14px;
   border: 2px solid #2D3748;
   border-radius: 30px;
-  width: 100%;
   margin-left: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.lightModeLegend {
+  background-color: white;
+  border: 2px solid #2C7A7B;
+  color: #2D3748;
 }
 
 .donutChartLegendValue {
   background-color: #004D4D;
-  padding: 4px 8px 4px 8px;
+  padding: 4px 10px 4px 10px;
   border: 2px solid #2D3748;
   border-radius: 25px;
-  width: 100%;
   margin-left: 5px;
+}
+
+.lightModeLegendValue {
+  background-color: #006c6c;
+  border: 2px solid;
+  color: white;
 }
 
 .apexcharts-legend-text {
   width: 100%;
-
 } 
 
-.container > *:first-child
-{
+.apexcharts-legend-series {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+@media only screen and (min-width: 375px) and (max-width: 667px) { 
+  .donutChartLegend {
+    background-color: #2D3748;
+    padding: 3px 0;
+    border: 0px solid #2D3748;
+    border-radius: 30px;
+    margin-left: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 11px;
+  }
+
+  .donutChartLegendValue {
+    background-color: #004D4D;
+    padding: 0px;
+    border: 0px solid #2D3748;
+    border-radius: 25px;
+    margin-left: 2px;
+  }
+  
+  #SvgjsText1082 {
+    font-size: 18px;
+  }
+
+  #SvgjsText1083 {
+    font-size: 15px !important;
+  }
 }

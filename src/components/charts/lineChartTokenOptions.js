@@ -1,6 +1,9 @@
+let random =  Math.random()
+
 export const lineChartOptions= {
   chart: {
-    id: 'mainChart',
+    id: 'mainChart' + random,
+    // group: 'token',
     toolbar: { //incons +/-
      show: true,
      autoSelected: 'pan',
@@ -37,7 +40,8 @@ export const lineChartOptions= {
         colors: "#c8cfca",
         fontSize: "12px"
       }
-    }
+    },
+    tickAmount: 4
   },
   legend: {
     show: false
@@ -81,11 +85,12 @@ export const lineChartOptions= {
 export const optionsLine = {
   chart: {
     id: 'selectionChart',
+    // group: 'token',
     // height: 130,
     // type: 'bar', //bar
     foreColor: "#ccc",
     brush:{
-      target: 'mainChart',
+      target: 'mainChart' + random,
       enabled: true
     },
     selection: {
@@ -129,5 +134,5 @@ export const optionsLine = {
       formatter: (val) => {return parseFloat(val).toFixed(2);},
     },
     tickAmount: 2
-  }
+  },
 } 

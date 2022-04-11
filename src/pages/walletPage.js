@@ -4,6 +4,7 @@ import NavBar from "../components/navBar/navBar";
 import './pages.css'
 import { useDispatch } from "../state-management/stores/store";
 import { useNavigate } from "react-router-dom";
+import Footer from "../components/footer";
 
 
 const WalletPage = () => {
@@ -49,6 +50,7 @@ const WalletPage = () => {
       <div className="walletPage">
         <NavBar></NavBar>
         <Tokens></Tokens>
+        <Footer></Footer>
       </div>
     </React.Fragment>
   );

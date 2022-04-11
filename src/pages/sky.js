@@ -1,12 +1,12 @@
 import React from "react";
 import Sky from "react-sky";
 
-import btc from "./btc.png";
-import ethBlue from "./eth-blue.png";
-import ethGold from "./eth-gold.png";
-import btcBlue from "./btc-blue.png"
-import ltc from "./ltc.png";
-import doge from "./doge.png"
+import btc from "../images/btc.png";
+import ethBlue from "../images/eth-blue.png";
+import ethGold from "../images/eth-gold.png";
+import btcBlue from "../images/btc-blue.png"
+import ltc from "../images/ltc.png";
+import doge from "../images/doge.png"
 
 const SkyComponent = () => {
   return (

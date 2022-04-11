@@ -21,6 +21,7 @@ import {
   IconButton,
   Flex,
   useColorModeValue,
+  TableContainer,
 } from "@chakra-ui/react";
 import AddTokenModal from "./addTokenModal";
 import DeleteTokenAlert from "./deleteTokenAlert";
@@ -307,167 +308,170 @@ const Tokens = () => {
       {Object.keys(tokens).length > 0 ? (
         <>
           <DonutChartWallet tokens={tokens}></DonutChartWallet>
+          {console.log('tokens', tokens)}
           <AddTokenModal tokens={tokens} addToken={addToken}></AddTokenModal>
-          <Table variant="simple" colorScheme="teal">
-            <Thead>
-              <Tr>
-                <Th>Index</Th>
-                <Th>
-                  <Flex alignItems="center" style={sort.filter === 'name' ? {color: selectedSortColor} : {}}>
-                    <div>Symbol</div>
-                    <IconButton
-                      aria-label="sort"
-                      onClick={() =>
-                        handleSort({
-                          type: "[TOKEN] SET_SORT",
-                          isAsc: (sort.filter === undefined || sort.filter !== 'name') ? true : !sort?.isAsc,
-                          filter: "name",
-                        })
-                        // dispatch({
-                        //   type: "[TOKEN] SET_SORT",
-                        //   sort: {
-                        //     isAsc: !sort?.isAsc,
-                        //     filter: "name",
-                        //   },
-                        // })
-                      }
-                      variant="none"
-                      _focus={false}
-                      icon={
-                        (sort?.isAsc && sort?.filter === "name") ? <ChevronUpIcon /> : <ChevronDownIcon />
-                      }
-                    />
-                  </Flex>
-                </Th>
-                <Th isNumeric>
-                  <Flex alignItems="center" style={sort.filter === '24h_percentage' ? {color: selectedSortColor, justifyContent: 'flex-end'} : {justifyContent: 'flex-end'}}>
-                    <div>% 24h</div>
-                    <IconButton
-                      aria-label="sort"
-                      onClick={() => 
-                        handleSort({
-                          type: "[TOKEN] SET_SORT",
-                          isAsc: (sort.filter === undefined || sort.filter !== '24h_percentage') ? true : !sort?.isAsc,
-                          filter: "24h_percentage",
-                        })
-                        // return dispatch({
-                        //   type: "[TOKEN] SET_SORT",
-                        //   sort: {
-                        //     isAsc: !sort?.isAsc,
-                        //     filter: "24h_percentage",
-                        //   },
-                        // })
-                      
-                      }
-                      variant="none"
-                      _focus={false}
-                      icon={
-                        (sort?.isAsc && sort?.filter === "24h_percentage") ? <ChevronUpIcon /> : <ChevronDownIcon />
-                      }
-                    />
-                  </Flex>
-                </Th>
-                <Th isNumeric>
-                  <Flex alignItems="center" style={sort.filter === 'price' ? {color: selectedSortColor, justifyContent: 'flex-end'} : {justifyContent: 'flex-end'}}>
-                    <div>Price</div>
-                    <IconButton
-                      aria-label="sort"
-                      onClick={() =>
-                        handleSort({
-                          type: "[TOKEN] SET_SORT",
-                          isAsc: (sort.filter === undefined || sort.filter !== 'price') ? true : !sort?.isAsc,
-                          filter: "price",
-                        })
-                        // dispatch({
-                        //   type: "[TOKEN] SET_SORT",
-                        //   sort: {
-                        //     isAsc: !sort?.isAsc,
-                        //     filter: "price",
-                        //   },
-                      }
-                      variant="none"
-                      _focus={false}
-                      icon={
-                        (sort?.isAsc && sort?.filter === "price") ? <ChevronUpIcon /> : <ChevronDownIcon />
-                      }
-                    />
-                  </Flex>
-                </Th>
-                <Th isNumeric>
-                  <Flex alignItems="center" style={sort.filter === 'balance' ? {color: selectedSortColor, justifyContent: 'flex-end'} : {justifyContent: 'flex-end'}}>
-                    <div>Balance</div>
-                    <IconButton
-                      aria-label="sort"
-                      onClick={() =>
-                        handleSort({
-                          type: "[TOKEN] SET_SORT",
-                          isAsc: (sort.filter === undefined || sort.filter !== 'balance') ? true : !sort?.isAsc,
-                          filter: "balance",
-                        })
-                        // dispatch({
-                        //   type: "[TOKEN] SET_SORT",
-                        //   sort: {
-                        //     isAsc: !sort?.isAsc,
-                        //     filter: "balance",
-                        //   },
-                        // })
-                      }
-                      variant="none"
-                      _focus={false}
-                      icon={
-                        (sort?.isAsc && sort?.filter === "balance")? <ChevronUpIcon /> : <ChevronDownIcon />
-                      }
-                    />
-                  </Flex>
-                </Th>
-                <Th isNumeric>
-                  <Flex alignItems="center" style={sort.filter === 'amount' ? {color: selectedSortColor, justifyContent: 'flex-end'} : {justifyContent: 'flex-end'}}>
-                    <div>Amount</div>
-                    <IconButton
-                      aria-label="sort"
-                      onClick={() =>
-                        handleSort({
-                          type: "[TOKEN] SET_SORT",
-                          isAsc: (sort.filter === undefined || sort.filter !== 'amount') ? true : !sort?.isAsc,
-                          filter: "amount",
-                        })
-                        // dispatch({
-                        //   type: "[TOKEN] SET_SORT",
-                        //   sort: {
-                        //     isAsc: !sort?.isAsc,
-                        //     filter: "amount",
-                        //   },
-                        // })
-                      }
-                      variant="none"
-                      _focus={false}
-                      icon={
-                        (sort?.isAsc && sort?.filter === "amount") ? <ChevronUpIcon /> : <ChevronDownIcon />
-                      }
-                    />
-                  </Flex>
-                </Th>
-                <Th></Th>
-                <Th></Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {(orderedTokens.length > 0
-                ? orderedTokens
-                : Object.keys(tokens).length > 0
-                ? Object.keys(tokens)
-                : []
-              ).map((key, i) => (
-                <Token
-                  key={`idToken_${i + 1}`}
-                  index={i}
-                  token={{ ...tokens[key], symbol: key }}
-                  deleteToken={deleteToken}
-                  deletePressed={deletePressed}
-                ></Token>
-              ))}
-            </Tbody>
-          </Table>
+          <TableContainer >
+            <Table variant="simple" colorScheme="teal"  >
+              <Thead>
+                <Tr>
+                  <Th>Index</Th>
+                  <Th>
+                    <Flex alignItems="center" style={sort.filter === 'name' ? {color: selectedSortColor} : {}}>
+                      <div>Symbol</div>
+                      <IconButton
+                        aria-label="sort"
+                        onClick={() =>
+                          handleSort({
+                            type: "[TOKEN] SET_SORT",
+                            isAsc: (sort.filter === undefined || sort.filter !== 'name') ? true : !sort?.isAsc,
+                            filter: "name",
+                          })
+                          // dispatch({
+                          //   type: "[TOKEN] SET_SORT",
+                          //   sort: {
+                          //     isAsc: !sort?.isAsc,
+                          //     filter: "name",
+                          //   },
+                          // })
+                        }
+                        variant="none"
+                        _focus={false}
+                        icon={
+                          (sort?.isAsc && sort?.filter === "name") ? <ChevronUpIcon /> : <ChevronDownIcon />
+                        }
+                      />
+                    </Flex>
+                  </Th>
+                  <Th isNumeric>
+                    <Flex alignItems="center" style={sort.filter === '24h_percentage' ? {color: selectedSortColor, justifyContent: 'flex-end'} : {justifyContent: 'flex-end'}}>
+                      <div>% 24h</div>
+                      <IconButton
+                        aria-label="sort"
+                        onClick={() => 
+                          handleSort({
+                            type: "[TOKEN] SET_SORT",
+                            isAsc: (sort.filter === undefined || sort.filter !== '24h_percentage') ? true : !sort?.isAsc,
+                            filter: "24h_percentage",
+                          })
+                          // return dispatch({
+                          //   type: "[TOKEN] SET_SORT",
+                          //   sort: {
+                          //     isAsc: !sort?.isAsc,
+                          //     filter: "24h_percentage",
+                          //   },
+                          // })
+                        
+                        }
+                        variant="none"
+                        _focus={false}
+                        icon={
+                          (sort?.isAsc && sort?.filter === "24h_percentage") ? <ChevronUpIcon /> : <ChevronDownIcon />
+                        }
+                      />
+                    </Flex>
+                  </Th>
+                  <Th isNumeric>
+                    <Flex alignItems="center" style={sort.filter === 'price' ? {color: selectedSortColor, justifyContent: 'flex-end'} : {justifyContent: 'flex-end'}}>
+                      <div>Price</div>
+                      <IconButton
+                        aria-label="sort"
+                        onClick={() =>
+                          handleSort({
+                            type: "[TOKEN] SET_SORT",
+                            isAsc: (sort.filter === undefined || sort.filter !== 'price') ? true : !sort?.isAsc,
+                            filter: "price",
+                          })
+                          // dispatch({
+                          //   type: "[TOKEN] SET_SORT",
+                          //   sort: {
+                          //     isAsc: !sort?.isAsc,
+                          //     filter: "price",
+                          //   },
+                        }
+                        variant="none"
+                        _focus={false}
+                        icon={
+                          (sort?.isAsc && sort?.filter === "price") ? <ChevronUpIcon /> : <ChevronDownIcon />
+                        }
+                      />
+                    </Flex>
+                  </Th>
+                  <Th isNumeric>
+                    <Flex alignItems="center" style={sort.filter === 'balance' ? {color: selectedSortColor, justifyContent: 'flex-end'} : {justifyContent: 'flex-end'}}>
+                      <div>Balance</div>
+                      <IconButton
+                        aria-label="sort"
+                        onClick={() =>
+                          handleSort({
+                            type: "[TOKEN] SET_SORT",
+                            isAsc: (sort.filter === undefined || sort.filter !== 'balance') ? true : !sort?.isAsc,
+                            filter: "balance",
+                          })
+                          // dispatch({
+                          //   type: "[TOKEN] SET_SORT",
+                          //   sort: {
+                          //     isAsc: !sort?.isAsc,
+                          //     filter: "balance",
+                          //   },
+                          // })
+                        }
+                        variant="none"
+                        _focus={false}
+                        icon={
+                          (sort?.isAsc && sort?.filter === "balance")? <ChevronUpIcon /> : <ChevronDownIcon />
+                        }
+                      />
+                    </Flex>
+                  </Th>
+                  <Th isNumeric>
+                    <Flex alignItems="center" style={sort.filter === 'amount' ? {color: selectedSortColor, justifyContent: 'flex-end'} : {justifyContent: 'flex-end'}}>
+                      <div>Amount</div>
+                      <IconButton
+                        aria-label="sort"
+                        onClick={() =>
+                          handleSort({
+                            type: "[TOKEN] SET_SORT",
+                            isAsc: (sort.filter === undefined || sort.filter !== 'amount') ? true : !sort?.isAsc,
+                            filter: "amount",
+                          })
+                          // dispatch({
+                          //   type: "[TOKEN] SET_SORT",
+                          //   sort: {
+                          //     isAsc: !sort?.isAsc,
+                          //     filter: "amount",
+                          //   },
+                          // })
+                        }
+                        variant="none"
+                        _focus={false}
+                        icon={
+                          (sort?.isAsc && sort?.filter === "amount") ? <ChevronUpIcon /> : <ChevronDownIcon />
+                        }
+                      />
+                    </Flex>
+                  </Th>
+                  <Th></Th>
+                  <Th></Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {(orderedTokens.length > 0
+                  ? orderedTokens
+                  : Object.keys(tokens).length > 0
+                  ? Object.keys(tokens)
+                  : []
+                ).map((key, i) => (
+                  <Token
+                    key={`idToken_${i + 1}`}
+                    index={i}
+                    token={{ ...tokens[key], symbol: key }}
+                    deleteToken={deleteToken}
+                    deletePressed={deletePressed}
+                  ></Token>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
         </>
       ) : (
         <Loader show={true}></Loader>

@@ -42,6 +42,7 @@ const DonutChartWallet = (props) => {
         </Center>
       )}
       {series.length > 0 && (
+        // <div className="apex-donut">
         <ReactApexChart
           options={{
             ...getDonutChartOptions(themeColor, walletAmount),
@@ -52,6 +53,7 @@ const DonutChartWallet = (props) => {
           width="100%"
           height="60%"
         />
+        // </div>
       )}
     </React.Fragment>
   );

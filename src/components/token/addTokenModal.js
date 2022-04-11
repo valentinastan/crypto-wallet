@@ -55,11 +55,15 @@ const AddTokenModal = (props) => {
       switch (networkId) {
         case 1:
           return setFilteredTokens(
-            Object.keys(allEthTokens).filter((key) => !(key in userTokens))
+            Object.keys(allEthTokens).filter(
+              (key) => !Object.keys(userTokens).includes(key)
+            )
           );
         case 56:
           return setFilteredTokens(
-            Object.keys(allBnbTokens).filter((key) => !(key in userTokens))
+            Object.keys(allBnbTokens).filter(
+              (key) => !Object.keys(userTokens).includes(key)
+            )
           );
         default:
           return [];
@@ -88,8 +92,10 @@ const AddTokenModal = (props) => {
 
   value === ""
     ? (searchResultTokens = sortedFilteredTokens)
-    : (searchResultTokens = sortedFilteredTokens.filter((key) =>
-      key.includes(value) || unimportedTokensWithDetails[key].name.toUpperCase().includes(value)
+    : (searchResultTokens = sortedFilteredTokens.filter(
+        (key) =>
+          key.includes(value) ||
+          unimportedTokensWithDetails[key].name.toUpperCase().includes(value)
       ));
 
   const OverlayOne = () => (
@@ -107,8 +113,9 @@ const AddTokenModal = (props) => {
       <Button
         colorScheme="teal"
         size="sm"
-        height="40px"
-        width="120px"
+        // size={['xs', 'sm']}
+        height={["30px", "44px"]}
+        width={["60px", "105px"]}
         border="2px"
         // borderColor='green.500'
         onClick={() => {

@@ -23,17 +23,20 @@ export const getDonutChartOptions = (themeColor, walletAmount) => {
       },
       itemMargin: {
         horizontal: 0,
-        vertical: 15,
+        vertical: 10,
       },
-      width: 250,
-      // height: 100,
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      // width: 250,
+      height: '50%',
       formatter: function(val, option) {
+        const theme = localStorage.getItem('chakra-ui-color-mode')
+        const lightModeLegend = theme === 'light' ? 'lightModeLegend' : ''
+        const lightModeLegendValue = theme === 'light' ? 'lightModeLegendValue' : ''
+
         const amount = stylingDecimals(calculateTokenPercentage(option.w.globals.series[option.seriesIndex], walletAmount))
-      //   return "<Tag size='lg' colorScheme='red' borderRadius='full'>" +
-      //       "<TagLabel>Segun</TagLabel>" + 
-      //  " </Tag>"
-      //   // return <h1>lalal</h1>
-        return `<span class='donutChartLegend'> ${val} <span class='donutChartLegendValue'> ${amount} % </span></span>`
+          return `<span class='donutChartLegend ${lightModeLegend}'> <span>${val}</span> <span class='donutChartLegendValue  ${lightModeLegendValue}'> ${amount} % </span></span>`
       },
     },
     dataLabels: {
@@ -73,6 +76,7 @@ export const getDonutChartOptions = (themeColor, walletAmount) => {
       pie: {
         // expandOnClick: false,
         donut: {
+          // height: '60%',
           labels: {
             show: true,
             name: {
@@ -86,7 +90,7 @@ export const getDonutChartOptions = (themeColor, walletAmount) => {
               color: themeColor,
               offsetY: +15,
               formatter: function (val) {
-                  return stylingDecimals(parseFloat(val)) + ' $'
+                return stylingDecimals(parseFloat(val)) + ' $'
               }
             },
             total: {
@@ -95,13 +99,13 @@ export const getDonutChartOptions = (themeColor, walletAmount) => {
               fontSize: '30px',
               color: '#F0B90B', //'#ffa500',
               formatter: function (w) {
-                  const total = w.globals.seriesTotals.reduce((a, b) => {
-                      return a + b
-                  }, 0)
-                  return stylingDecimals(total) + ' $'
+                const total = w.globals.seriesTotals.reduce((a, b) => {
+                    return a + b
+                }, 0)
+                return stylingDecimals(total) + ' $'
               }
             }
-          }
+          },
         }
       }
     }

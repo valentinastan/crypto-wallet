@@ -6,6 +6,7 @@ import { getHistoricalMarketDataRequest } from "../../requests/token";
 import ethConstants from "../../constants/ethChain/const";
 import bnbConstants from "../../constants/bnbChain/const";
 import { useGlobalState } from "../../state-management/stores/store";
+import Loader from "../loader";
 
 const LineChartToken = (props) => {
   const [historicalPrices, setHistoricalPrices] = useState([
@@ -16,6 +17,7 @@ const LineChartToken = (props) => {
   ]);
   const [daysAgo, setDaysAgo] = useState("30");
   const networkId = useGlobalState().walletState.networkId;
+  console.log('aici', useGlobalState().walletState, props)
 
   useEffect(() => {
     if (networkId) {
@@ -30,6 +32,7 @@ const LineChartToken = (props) => {
           console.log("No matching documents.");
           // return;
         } else {
+          console.log('SET')
           setHistoricalPrices([
             { name: `${props.tokenSymbol} price`, data: tokensSnapshot },
           ]);
@@ -41,7 +44,8 @@ const LineChartToken = (props) => {
 
   return (
     <React.Fragment>
-      {historicalPrices[0].data.length > 0 && (
+      {historicalPrices[0].data.length > 0 ? (
+        <>
         <Stack direction="row" spacing={1} align="center" justify="end">
           <Button
             colorScheme="teal"
@@ -100,8 +104,43 @@ const LineChartToken = (props) => {
             Max
           </Button>
         </Stack>
-      )}
-      {historicalPrices[0].data.length > 0 && (
+        <ReactApexChart
+          options={{
+            ...lineChartOptions, 
+            // chart: {
+            //   id: 'mainChart' + props.tokenSymbol,
+            //   // type: "area"
+            // },
+            // group: props.tokenSymbol,
+          }}
+          series={historicalPrices}
+          type="area"
+          width="99%"
+          height="500px"
+          group= {props.tokenSymbol}
+        />
+        <ReactApexChart
+         options={{
+          ...optionsLine, 
+          // chart: {
+          //   id: 'selectionChart' + props.tokenSymbol,
+          // },
+          // group: props.tokenSymbol,
+          // brush: {
+          //   target: 'mainChart' + props.tokenSymbol,
+          //   enabled: true
+          // },
+        }}
+          series={historicalPrices}
+          type="area"
+          height="130px"
+          group= {props.tokenSymbol}
+        />
+    </>
+      ) :  
+        <Loader show={true}></Loader>
+      }
+      {/* {historicalPrices[0].data.length > 0 && (
         <ReactApexChart
           options={lineChartOptions}
           series={historicalPrices}
@@ -117,7 +156,7 @@ const LineChartToken = (props) => {
           type="area"
           height="130px"
         />
-      )}
+      )} */}
     </React.Fragment>
   );
 };
