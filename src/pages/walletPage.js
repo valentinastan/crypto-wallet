@@ -19,6 +19,7 @@ const WalletPage = () => {
 
   window.ethereum.on('accountsChanged', (accounts) => {
     if(accounts[0] !== undefined) {
+      localStorage.setItem('address', accounts[0])
       dispatch({
         type: '[WALLET] Set Address',
         address: accounts[0]

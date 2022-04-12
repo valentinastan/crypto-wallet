@@ -46,6 +46,7 @@ const Tokens = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showDeleteToast, setShowDeleteToast] = useState(false);
   const [selectedToken, setSelectedToken] = useState('');
+  const [zeroDocuments, setZeroDocuments] = useState(false);
 
   const web3 = new Web3(Web3.givenProvider);
   const walletState = useGlobalState().walletState;
@@ -71,6 +72,7 @@ const Tokens = () => {
         if (tokensSnapshot.empty) {
           console.log("No matching documents.");
           setState({});
+          setZeroDocuments(true)
           // return;
         } else {
           const tokensSymbol = [];
@@ -81,16 +83,14 @@ const Tokens = () => {
 
           saveTokens(tokensSymbol, "INDEX");
           setCurrentSymbols(tokensSymbol);
-          //refreshPrices()
         }
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [walletState.address, networkId]);
 
   useEffect(() => {
     if (currentSymbolsState.length > 0) {
-      // let symbols = [...currentSymbolsState];
       refreshPrices();
     }
     return () => {
@@ -180,7 +180,9 @@ const Tokens = () => {
       } else {
         delete tokens[showDeleteModal.symbol];
         setState({ ...tokens });
+        
         let symbols = Object.keys(tokens);
+        symbols.length === 0 && setZeroDocuments(true)
         setCurrentSymbols([...symbols]);
 
         setShowDeleteModal({ symbol: "" });
@@ -306,10 +308,9 @@ const Tokens = () => {
 
   return (
     <React.Fragment>
-      {Object.keys(tokens).length > 0 ? (
+      {(Object.keys(tokens).length > 0 || zeroDocuments) ? (
         <>
           <DonutChartWallet tokens={tokens}></DonutChartWallet>
-          {console.log('tokens', tokens)}
           <AddTokenModal tokens={tokens} addToken={addToken}></AddTokenModal>
           <TableContainer >
             <Table variant="simple" colorScheme="teal"  >
