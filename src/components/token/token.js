@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Tr,
   Td,
@@ -17,12 +17,14 @@ import { stylingDecimals } from "./token-helpers";
 import "./css/token.css";
 
 const Token = (props) => {
-  const [showChart, setShowChart] = useState(false)
-
   const bg = useColorModeValue('#EDF2F7', '#212938')
   const color = useColorModeValue('#3182ce', 'white')
 
-  const { isOpen, onToggle } = useDisclosure()
+  const { isOpen, onToggle, onClose } = useDisclosure()
+
+  useEffect(() => {
+    props.token.symbol !== props.selectedToken && onClose()
+  }, [props.selectedToken])
 
   return (
     <React.Fragment>
@@ -75,19 +77,19 @@ const Token = (props) => {
           <IconButton
             onClick={() => {
               onToggle()
-              return setShowChart(!showChart)}}
+              return props.setSelectedToken(props.token.symbol)}}
             variant="ghost"
             colorScheme="teal"
             aria-label="View Token"
-            icon={!showChart ? <ChevronDownIcon /> : <ChevronUpIcon />}
+            icon={!isOpen ? <ChevronDownIcon /> : <ChevronUpIcon />}
           />
         </Td>
       </Tr>
-      {showChart &&  
+      {isOpen && props.token.symbol === props.selectedToken &&
         <Tr>
           <Td colSpan='8'>
           <SlideFade in={isOpen}>
-            <LineChartToken tokenSymbol={props.token.symbol}></LineChartToken>
+            <LineChartToken tokenSymbol={props.token.symbol} ></LineChartToken>
           </SlideFade >
           </Td>
         </Tr>

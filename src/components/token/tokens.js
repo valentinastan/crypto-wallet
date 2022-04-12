@@ -45,6 +45,7 @@ const Tokens = () => {
   const [showDeleteModal, setShowDeleteModal] = useState({ symbol: "" });
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showDeleteToast, setShowDeleteToast] = useState(false);
+  const [selectedToken, setSelectedToken] = useState('');
 
   const web3 = new Web3(Web3.givenProvider);
   const walletState = useGlobalState().walletState;
@@ -467,6 +468,8 @@ const Tokens = () => {
                     token={{ ...tokens[key], symbol: key }}
                     deleteToken={deleteToken}
                     deletePressed={deletePressed}
+                    selectedToken={selectedToken}
+                    setSelectedToken={setSelectedToken}
                   ></Token>
                 ))}
               </Tbody>
