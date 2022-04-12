@@ -62,11 +62,19 @@
     margin-left: 2px;
   }
   
-  #SvgjsText1082 {
-    font-size: 18px;
+  text {
+    font-size: 15px !important;
   }
 
-  #SvgjsText1083 {
+  .apexcharts-pie-area {
+    font-size: 15px !important;
+  }
+
+  .apexcharts-series .apexcharts-pie-series {
+    font-size: 15px !important;
+  }
+
+  .apexcharts-pie text {
     font-size: 15px !important;
   }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
   Tr,
   Td,
@@ -24,6 +24,7 @@ const Token = (props) => {
 
   useEffect(() => {
     props.token.symbol !== props.selectedToken && onClose()
+     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.selectedToken])
 
   return (
