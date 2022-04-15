@@ -14,6 +14,15 @@ export const calculateWalletAmount = (amounts) => {
   return amounts.reduce((partialSum, tokenAmount) => partialSum + tokenAmount, 0)
 }
 
+export const getNetwork = (web3, walletState) => {
+  if (walletState.networkId !== null) {
+    return walletState.networkId;
+  } else {
+    const target_chain = Object.assign({}, web3.eth.Contract.currentProvider);
+    return parseInt(target_chain.networkVersion);
+  }
+};
+
 export const stylingDecimals = (numericValue) => {
   if(numericValue) {
     if(numericValue > 1) {

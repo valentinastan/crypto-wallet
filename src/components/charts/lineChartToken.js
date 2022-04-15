@@ -17,7 +17,6 @@ const LineChartToken = (props) => {
   ]);
   const [daysAgo, setDaysAgo] = useState("30");
   const networkId = useGlobalState().walletState.networkId;
-  console.log('aici', useGlobalState().walletState, props)
 
   useEffect(() => {
     if (networkId) {
@@ -32,7 +31,6 @@ const LineChartToken = (props) => {
           console.log("No matching documents.");
           // return;
         } else {
-          console.log('SET')
           setHistoricalPrices([
             { name: `${props.tokenSymbol} price`, data: tokensSnapshot },
           ]);
@@ -46,100 +44,100 @@ const LineChartToken = (props) => {
     <React.Fragment>
       {historicalPrices[0].data.length > 0 ? (
         <>
-        <Stack direction="row" spacing={1} align="center" justify="end">
-          <Button
-            colorScheme="teal"
-            variant="ghost"
-            onClick={() => setDaysAgo("1")}
-          >
-            24h
-          </Button>
-          <Button
-            colorScheme="teal"
-            variant="ghost"
-            onClick={() => setDaysAgo("7")}
-          >
-            7d
-          </Button>
-          <Button
-            colorScheme="teal"
-            variant="ghost"
-            onClick={() => setDaysAgo("14")}
-          >
-            14d
-          </Button>
-          <Button
-            colorScheme="teal"
-            variant="ghost"
-            onClick={() => setDaysAgo("30")}
-          >
-            30d
-          </Button>
-          <Button
-            colorScheme="teal"
-            variant="ghost"
-            onClick={() => setDaysAgo("90")}
-          >
-            90d
-          </Button>
-          <Button
-            colorScheme="teal"
-            variant="ghost"
-            onClick={() => setDaysAgo("180")}
-          >
-            180d
-          </Button>
-          <Button
-            colorScheme="teal"
-            variant="ghost"
-            onClick={() => setDaysAgo("365")}
-          >
-            1y
-          </Button>
-          <Button
-            colorScheme="teal"
-            variant="ghost"
-            onClick={() => setDaysAgo("max")}
-          >
-            Max
-          </Button>
-        </Stack>
-        <ReactApexChart
-          options={{
-            ...lineChartOptions, 
-            // chart: {
-            //   id: 'mainChart' + props.tokenSymbol,
-            //   // type: "area"
-            // },
-            // group: props.tokenSymbol,
-          }}
-          series={historicalPrices}
-          type="area"
-          width="99%"
-          height="500px"
-          group= {props.tokenSymbol}
-        />
-        <ReactApexChart
-         options={{
-          ...optionsLine, 
-          // chart: {
-          //   id: 'selectionChart' + props.tokenSymbol,
-          // },
-          // group: props.tokenSymbol,
-          // brush: {
-          //   target: 'mainChart' + props.tokenSymbol,
-          //   enabled: true
-          // },
-        }}
-          series={historicalPrices}
-          type="area"
-          height="130px"
-          group= {props.tokenSymbol}
-        />
-    </>
-      ) :  
+          <Stack direction="row" spacing={1} align="center" justify="end">
+            <Button
+              colorScheme="teal"
+              variant="ghost"
+              onClick={() => setDaysAgo("1")}
+            >
+              24h
+            </Button>
+            <Button
+              colorScheme="teal"
+              variant="ghost"
+              onClick={() => setDaysAgo("7")}
+            >
+              7d
+            </Button>
+            <Button
+              colorScheme="teal"
+              variant="ghost"
+              onClick={() => setDaysAgo("14")}
+            >
+              14d
+            </Button>
+            <Button
+              colorScheme="teal"
+              variant="ghost"
+              onClick={() => setDaysAgo("30")}
+            >
+              30d
+            </Button>
+            <Button
+              colorScheme="teal"
+              variant="ghost"
+              onClick={() => setDaysAgo("90")}
+            >
+              90d
+            </Button>
+            <Button
+              colorScheme="teal"
+              variant="ghost"
+              onClick={() => setDaysAgo("180")}
+            >
+              180d
+            </Button>
+            <Button
+              colorScheme="teal"
+              variant="ghost"
+              onClick={() => setDaysAgo("365")}
+            >
+              1y
+            </Button>
+            <Button
+              colorScheme="teal"
+              variant="ghost"
+              onClick={() => setDaysAgo("max")}
+            >
+              Max
+            </Button>
+          </Stack>
+          <ReactApexChart
+            options={{
+              ...lineChartOptions,
+              // chart: {
+              //   id: 'mainChart' + props.tokenSymbol,
+              //   // type: "area"
+              // },
+              // group: props.tokenSymbol,
+            }}
+            series={historicalPrices}
+            type="area"
+            width="99%"
+            height="500px"
+            group={props.tokenSymbol}
+          />
+          <ReactApexChart
+            options={{
+              ...optionsLine,
+              // chart: {
+              //   id: 'selectionChart' + props.tokenSymbol,
+              // },
+              // group: props.tokenSymbol,
+              // brush: {
+              //   target: 'mainChart' + props.tokenSymbol,
+              //   enabled: true
+              // },
+            }}
+            series={historicalPrices}
+            type="area"
+            height="130px"
+            group={props.tokenSymbol}
+          />
+        </>
+      ) : (
         <Loader show={true}></Loader>
-      }
+      )}
       {/* {historicalPrices[0].data.length > 0 && (
         <ReactApexChart
           options={lineChartOptions}
