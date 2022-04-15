@@ -121,6 +121,7 @@ const AddTokenModal = (props) => {
         onClick={() => {
           setOverlay(<OverlayOne />);
           onOpen();
+          setValue("");
         }}
       >
         <AddIcon />
