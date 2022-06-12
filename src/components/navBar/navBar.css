@@ -1,0 +1,15 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.header img {
+  height: 60px;
+  max-width: fit-content;
+  align-self: center;
+}
+
+.header div {
+  align-self: center;
+}
