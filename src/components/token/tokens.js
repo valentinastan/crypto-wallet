@@ -101,23 +101,36 @@ const Tokens = () => {
       let MyContract;
       switch (networkId) {
         case 1: //eth chain
-          MyContract = new web3.eth.Contract(
-            ethConstants[tokenSymbol].tokenABI,
-            ethConstants[tokenSymbol].tokenAddress,
-            {
-              from: currentWallet,
+          if (tokenSymbol === "ETH") {
+            return ethers.utils.formatEther(
+              await web3.eth.getBalance(currentWallet, function (err, result) {
+                if (err) {
+                  console.log(err);
+                } else {
+                  return result;
+                }
+              })
+            );
+          } else {
+            MyContract = new web3.eth.Contract(
+              ethConstants[tokenSymbol].tokenABI,
+              ethConstants[tokenSymbol].tokenAddress,
+              {
+                from: currentWallet,
+              }
+            );
+  
+            try {
+              const tokenBalance = await MyContract.methods
+                .balanceOf(currentWallet)
+                .call();
+              console.log(ethers.utils.formatEther(tokenBalance));
+              return ethers.utils.formatEther(tokenBalance);
+            } catch (ex) {
+              console.log(ex); //he doesn't have this token
             }
-          );
-
-          try {
-            const tokenBalance = await MyContract.methods
-              .balanceOf(currentWallet)
-              .call();
-            return ethers.utils.formatEther(tokenBalance);
-          } catch (ex) {
-            console.log(ex); //he doesn't have this token
           }
-
+  
           break;
         case 56: //binance chain
           MyContract = new web3.eth.Contract(
@@ -127,7 +140,7 @@ const Tokens = () => {
               from: currentWallet,
             }
           );
-
+  
           try {
             const tokenBalance = await MyContract.methods
               .balanceOf(currentWallet)
@@ -136,16 +149,16 @@ const Tokens = () => {
           } catch (ex) {
             console.log(ex);
           }
-
+  
           break;
         case 137: //polygon chain
           break;
-
+  
         default:
           break;
       }
     }
-
+  
     // var MyContract = new web3.eth.Contract(
     //   constants[tokenSymbol].tokenABI,
     //   constants[tokenSymbol].tokenAddress,

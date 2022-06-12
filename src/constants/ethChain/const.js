@@ -19,6 +19,9 @@ import contractSUPER from './contracts/contract-SUPER.json'
 import contractPYR from './contracts/contract-PYR.json'
 
 const constants = {
+  ETH: {
+    coingeckoId: 'ethereum'
+  },
   GNO: {
     coingeckoId: 'gnosis',
     tokenAddress: '0x6810e776880c02933d47db1b9fc05908e5386b96',
