@@ -8,8 +8,8 @@ import bnbConstants from '../constants/bnbChain/const'
 export async function addTokenRequest(params) {
   const walletsRef = collection(dbStore, "wallets");
   
-  //Check if this token already exists
-  const existingTokenForThisWallet = query(walletsRef, where("walletAddress", "==" , params.walletAddress), where("tokenSymbol", "==", params.tokenSymbol), where("networkId", "==", parseInt(params.networkId)));
+  const existingTokenForThisWallet = query(walletsRef, where("walletAddress", "==" , params.walletAddress), 
+    where("tokenSymbol", "==", params.tokenSymbol), where("networkId", "==", parseInt(params.networkId)));
   const querySnapshot = await getDocs(existingTokenForThisWallet);
   
   if(querySnapshot.empty) {
@@ -18,7 +18,6 @@ export async function addTokenRequest(params) {
       tokenSymbol: params.tokenSymbol,
       networkId: params.networkId
     });
-    console.log("Document written with ID: ", docRef.id);
   
     const docRefCreated = doc(dbStore, "wallets", docRef.id);
     const docSnap = await getDoc(docRefCreated);
@@ -30,18 +29,18 @@ export async function addTokenRequest(params) {
 
 export async function getTokensByWallet(params) {
   const walletsRef = collection(dbStore, "wallets");
-console.log('params', params)
-  const currentWalletTokens = query(walletsRef, where("walletAddress", "==" , params.currentWallet), where("networkId", "==", parseInt(params.networkId)));
+
+  const currentWalletTokens = query(walletsRef, where("walletAddress", "==" , params.currentWallet), 
+    where("networkId", "==", parseInt(params.networkId)));
   const querySnapshot = await getDocs(currentWalletTokens);
-  console.log(querySnapshot)
   return querySnapshot
 }
 
 export async function deleteTokenRequest(params) {
   const walletsRef = collection(dbStore, "wallets");
-  console.log('params ', params)
 
-  const existingTokenForThisWallet = query(walletsRef, where("walletAddress", "==" , params.currentWallet), where("tokenSymbol", "==", params.symbol), where("networkId", "==", parseInt(params.networkId)));
+  const existingTokenForThisWallet = query(walletsRef, where("walletAddress", "==" , params.currentWallet), 
+    where("tokenSymbol", "==", params.symbol), where("networkId", "==", parseInt(params.networkId)));
   const querySnapshot = await getDocs(existingTokenForThisWallet);
 
   let deletedId = '';
@@ -50,7 +49,7 @@ export async function deleteTokenRequest(params) {
   const result = await deleteDoc(doc(dbStore, "wallets", deletedId));
   if(result === undefined) 
    return true 
-   else return false
+   else return falseF
 }
 
 export async function getPricesRequest(params) {

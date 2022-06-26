@@ -42,7 +42,7 @@ const ConnectWallet = () => {
         type: '[WALLET] Set Address',
         address,
       })
-      setCurrentAccount(accounts[0]) //!! de modificat
+      setCurrentAccount(accounts[0]) 
 
       const networkId = getNetwork(web3, {networkId: null});
       dispatch({
@@ -56,7 +56,7 @@ const ConnectWallet = () => {
 
   const connectWalletButton = () => {
     return <div className="connect-wallet">
-      <Button onClick={connectWalletHandler} variant="outlined" /*color="primary"*/>
+      <Button onClick={connectWalletHandler} variant="outlined">
         Connect Wallet
       </Button>
     </div>
