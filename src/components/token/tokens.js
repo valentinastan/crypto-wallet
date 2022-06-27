@@ -28,7 +28,7 @@ import DeleteTokenAlert from "./deleteTokenAlert";
 import TokenToast from "../tokenToast";
 import DonutChartWallet from "../charts/donutChartWallet";
 import { useGlobalState, useStore } from "../../state-management/stores/store";
-import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
+import { AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
 import { calculateTokenAmount, sortTokens } from "./token-helpers";
 import Loader from "../loader";
 
@@ -343,7 +343,7 @@ const Tokens = () => {
                         variant="none"
                         _focus={false}
                         icon={
-                          (sort?.isAsc && sort?.filter === "name") ? <ChevronUpIcon /> : <ChevronDownIcon />
+                          (sort?.isAsc && sort?.filter === "name") ? <AiOutlineUp /> : <AiOutlineDown />
                         }
                       />
                     </Flex>
@@ -371,7 +371,7 @@ const Tokens = () => {
                         variant="none"
                         _focus={false}
                         icon={
-                          (sort?.isAsc && sort?.filter === "24h_percentage") ? <ChevronUpIcon /> : <ChevronDownIcon />
+                          (sort?.isAsc && sort?.filter === "24h_percentage") ? <AiOutlineUp /> : <AiOutlineDown />
                         }
                       />
                     </Flex>
@@ -397,7 +397,7 @@ const Tokens = () => {
                         variant="none"
                         _focus={false}
                         icon={
-                          (sort?.isAsc && sort?.filter === "price") ? <ChevronUpIcon /> : <ChevronDownIcon />
+                          (sort?.isAsc && sort?.filter === "price") ? <AiOutlineUp /> : <AiOutlineDown />
                         }
                       />
                     </Flex>
@@ -424,7 +424,7 @@ const Tokens = () => {
                         variant="none"
                         _focus={false}
                         icon={
-                          (sort?.isAsc && sort?.filter === "balance")? <ChevronUpIcon /> : <ChevronDownIcon />
+                          (sort?.isAsc && sort?.filter === "balance")? <AiOutlineUp /> : <AiOutlineDown />
                         }
                       />
                     </Flex>
@@ -451,7 +451,7 @@ const Tokens = () => {
                         variant="none"
                         _focus={false}
                         icon={
-                          (sort?.isAsc && sort?.filter === "amount") ? <ChevronUpIcon /> : <ChevronDownIcon />
+                          (sort?.isAsc && sort?.filter === "amount") ? <AiOutlineUp /> : <AiOutlineDown />
                         }
                       />
                     </Flex>

@@ -11,7 +11,7 @@ import {
   SlideFade
 } from "@chakra-ui/react";
 import './css/token.css'
-import { ChevronDownIcon, ChevronUpIcon, MinusIcon } from "@chakra-ui/icons";
+import { AiOutlineMinus, AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
 import LineChartToken from "../charts/lineChartToken";
 import { stylingDecimals } from "./token-helpers";
 import "./css/token.css";
@@ -71,7 +71,7 @@ const Token = (props) => {
             variant="ghost"
             colorScheme="red"
             aria-label="Delete Token"
-            icon={<MinusIcon />}
+            icon={<AiOutlineMinus />}
           />
         </Td>
         <Td>
@@ -82,7 +82,7 @@ const Token = (props) => {
             variant="ghost"
             colorScheme="teal"
             aria-label="View Token"
-            icon={!isOpen ? <ChevronDownIcon /> : <ChevronUpIcon />}
+            icon={!isOpen ? <AiOutlineDown /> : <AiOutlineUp />}
           />
         </Td>
       </Tr>

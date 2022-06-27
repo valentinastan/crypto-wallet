@@ -19,7 +19,7 @@ import {
   Tbody,
   Divider,
 } from "@chakra-ui/react";
-import { AddIcon } from "@chakra-ui/icons";
+import { AiOutlinePlus } from 'react-icons/ai';
 import { useGlobalState } from "../../state-management/stores/store";
 import { sortTokens } from "./token-helpers";
 
@@ -124,7 +124,8 @@ const AddTokenModal = (props) => {
           setValue("");
         }}
       >
-        <AddIcon />
+        {/* <AddIcon /> */}
+        <AiOutlinePlus/>
       </Button>
 
       <Modal
