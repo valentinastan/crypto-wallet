@@ -49,7 +49,7 @@ export async function deleteTokenRequest(params) {
   const result = await deleteDoc(doc(dbStore, "wallets", deletedId));
   if(result === undefined) 
    return true 
-   else return falseF
+   else return false
 }
 
 export async function getPricesRequest(params) {

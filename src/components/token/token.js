@@ -11,7 +11,7 @@ import {
   SlideFade
 } from "@chakra-ui/react";
 import './css/token.css'
-import { AiOutlineMinus, AiOutlineDown, AiOutlineUp } from 'react-icons/ai';
+import { FaAngleDown, FaAngleUp, FaMinus } from 'react-icons/fa';
 import LineChartToken from "../charts/lineChartToken";
 import { stylingDecimals } from "./token-helpers";
 import "./css/token.css";
@@ -71,7 +71,7 @@ const Token = (props) => {
             variant="ghost"
             colorScheme="red"
             aria-label="Delete Token"
-            icon={<AiOutlineMinus />}
+            icon={<FaMinus />}
           />
         </Td>
         <Td>
@@ -82,7 +82,7 @@ const Token = (props) => {
             variant="ghost"
             colorScheme="teal"
             aria-label="View Token"
-            icon={!isOpen ? <AiOutlineDown /> : <AiOutlineUp />}
+            icon={!isOpen ? <FaAngleDown /> : <FaAngleUp />}
           />
         </Td>
       </Tr>
