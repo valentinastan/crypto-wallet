@@ -3,7 +3,7 @@ import './donutChart.css'
 
 export const getDonutChartOptions = (themeColor, walletAmount) => {
   return {
-    colors: ["#00cdcd", "#009a9a", "#006767", "#004d4d", "#003434"],
+    colors: ["#00cdcd", "#009a9a", "#008181", "#006767", "#004d4d", "#003434"],
     chart: {
       width: "100%"
     },
@@ -58,7 +58,7 @@ export const getDonutChartOptions = (themeColor, walletAmount) => {
     //   }
     // },
     fill: {
-      colors: ["#00cdcd", "#009a9a", "#006767", "#004d4d", "#003434"]
+      colors: ["#00cdcd", "#009a9a", "#008181", "#006767", "#004d4d", "#003434"]
     },
     tooltip: {
       enabled: true,

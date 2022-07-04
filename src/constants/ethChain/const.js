@@ -1,7 +1,7 @@
 import contractGNO from './contracts/contract-GNO.json'
 import contractUSDT from './contracts/contract-USDT.json'
 import contractBYTES from './contracts/contract-BYTES.json'
-import contractLUNA from './contracts/contract-LUNA.json'
+import contractPKR from './contracts/contract-PKR.json'
 import contractUNI from './contracts/contract-UNI.json'
 import contractSHIB from './contracts/contract-SHIB.json'
 import contractCRO from './contracts/contract-CRO.json'
@@ -37,10 +37,10 @@ const constants = {
     tokenAddress: '0x7d647b1A0dcD5525e9C6B3D14BE58f27674f8c95',
     tokenABI: contractBYTES,
   },
-  LUNA: {
-    coingeckoId: 'terra-luna',
-    tokenAddress: '0xbd31ea8212119f94a611fa969881cba3ea06fa3d',
-    tokenABI: contractLUNA,
+  PKR: {
+    coingeckoId: 'polker',
+    tokenAddress: '0x001a8ffcb0f03e99141652ebcdecdb0384e3bd6c',
+    tokenABI: contractPKR,
   },
   UNI: {
     coingeckoId: 'uniswap',

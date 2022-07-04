@@ -1,6 +1,6 @@
 import contractUSDT from './contracts/contract-USDT.json'
 import contractALU from './contracts/contract-ALU.json'
-import contractLUNA from './contracts/contract-LUNA.json'
+import contractPKR from './contracts/contract-PKR.json'
 import contractUNI from './contracts/contract-UNI.json'
 import contractDAI from './contracts/contract-DAI.json'
 import contractMATIC from './contracts/contract-MATIC.json'
@@ -12,6 +12,14 @@ import contractFINA from './contracts/contract-FINA.json'
 import contractMGOD from './contracts/contract-MGOD.json'
 import contractBUSD from './contracts/contract-BUSD.json'
 import contractSUPER from './contracts/contract-SUPER.json'
+import contractEGLD from './contracts/contract-EGLD.json'
+import contractCAKE from './contracts/contract-CAKE.json'
+import contractNRV from './contracts/contract-NRV.json'
+import contractVAI from './contracts/contract-VAI.json'
+import contractXVS from './contracts/contract-XVS.json'
+import contractTKO from './contracts/contract-TKO.json'
+import contractBELT from './contracts/contract-BELT.json'
+import contractALPACA from './contracts/contract-ALPACA.json'
 
 const constants = {
   USDT: {
@@ -29,10 +37,10 @@ const constants = {
     tokenAddress: '0x426c72701833fddbdfc06c944737c6031645c708',
     tokenABI: contractFINA,
   },
-  LUNA: {
-    coingeckoId: 'terra-luna',
-    tokenAddress: '0x156ab3346823B651294766e23e6Cf87254d68962',
-    tokenABI: contractLUNA,
+  PKR: {
+    coingeckoId: 'polker',
+    tokenAddress: '0xc49DDe62B4A0810074721fAcA54Aab52369f486a',
+    tokenABI: contractPKR,
   },
   UNI: {
     coingeckoId: 'uniswap',
@@ -83,6 +91,46 @@ const constants = {
     coingeckoId: 'superfarm',
     tokenAddress: '0x51ba0b044d96c3abfca52b64d733603ccc4f0d4d',
     tokenABI: contractSUPER
+  },
+  EGLD: {
+    coingeckoId: 'elrond-erd-2',
+    tokenAddress: '0xbf7c81fff98bbe61b40ed186e4afd6ddd01337fe',
+    tokenABI: contractEGLD
+  },
+  CAKE: {
+    coingeckoId: 'pancakeswap-token',
+    tokenAddress: '0x0e09fabb73bd3ade0a17ecc321fd13a19e81ce82',
+    tokenABI: contractCAKE
+  },
+  NRV: {
+    coingeckoId: 'nerve-finance',
+    tokenAddress: '0x42f6f551ae042cbe50c739158b4f0cac0edb9096',
+    tokenABI: contractNRV
+  },
+  VAI: {
+    coingeckoId: 'vai',
+    tokenAddress: '0x4bd17003473389a42daf6a0a729f6fdb328bbbd7',
+    tokenABI: contractVAI
+  },
+  ALPACA: {
+    coingeckoId: 'alpaca-finance',
+    tokenAddress: '0x8f0528ce5ef7b51152a59745befdd91d97091d2f',
+    tokenABI: contractALPACA
+  },
+  TKO: {
+    coingeckoId: 'tokocrypto',
+    tokenAddress: '0x9f589e3eabe42ebc94a44727b3f3531c0c877809',
+    tokenABI: contractTKO
+  },
+  XVS: {
+    coingeckoId: 'venus',
+    tokenAddress: '0xcf6bb5389c92bdda8a3747ddb454cb7a64626c63',
+    tokenABI: contractXVS
+  },
+  BELT: {
+    coingeckoId: 'belt',
+    tokenAddress: '0xe0e514c71282b6f4e823703a39374cf58dc3ea4f',
+    tokenABI: contractBELT
   },
 }
 
